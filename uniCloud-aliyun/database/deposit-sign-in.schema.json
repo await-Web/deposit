@@ -21,27 +21,15 @@
 		},
 		"calendar_data": {
 			"bsonType": "array",
-			"description": "打卡日历",
-			"permission": {
-				"read": "auth.uid == doc.user_id",
-				"write": "auth.uid == doc.user_id"
-			}
+			"description": "打卡日历"
 		},
 		"date": {
 			"bsonType": "string",
-			"description": "签到的日期",
-			"permission": {
-				"read": "auth.uid == doc.user_id",
-				"write": true
-			}
+			"description": "签到的日期"
 		},
 		"info": {
 			"bsonType": "string",
-			"description": "记录文本",
-			"permission": {
-				"read": "auth.uid == doc.user_id",
-				"write": true
-			}
+			"description": "记录文本"
 		},
 		"ip": {
 			"bsonType": "string",

@@ -12,7 +12,7 @@
 	onLaunch(() => {
 		console.log('App onLaunch')
 		let expired = uni.getStorageSync('uni_id_token_expired')
-		if (expired - Date.now() > 1000 * 60 * 60 * 1) return
+		// if (expired - Date.now() > 1000 * 60 * 60 * 1) return
 		uni.login({
 			success: (res) => {
 				uniIdCo.loginByWeixin({

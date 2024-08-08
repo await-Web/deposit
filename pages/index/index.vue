@@ -34,7 +34,7 @@
 			</view>
 		</view>
 		<uni-popup ref="inputDialog" type="dialog">
-			<uni-popup-dialog ref="inputClose" mode="input" title="存钱" :value="money" placeholder="请输入存钱金额"
+			<uni-popup-dialog ref="inputClose" mode="input" title="存钱" v-model="money" placeholder="请输入存钱金额"
 				@confirm="confirm" before-close @close="close"></uni-popup-dialog>
 		</uni-popup>
 	</view>
@@ -53,7 +53,7 @@
 		data() {
 			return {
 				info: '',
-				money: 0,
+				money: '',
 				calendar_data: [],
 				check_ins: [],
 				todayTotalMoney: 0,
@@ -78,7 +78,6 @@
 				}).then(res => {
 					this.close()
 					let data = res.result.data || []
-					let totalMoney = 0
 					this.calendar_data = data
 					this.handleDeposit()
 				});
@@ -86,7 +85,6 @@
 			/* 弹窗 */
 			calendarChange() {
 				this.$nextTick(() => {
-					this.money = 0
 					this.$refs.inputDialog.open()
 				})
 			},
@@ -95,40 +93,42 @@
 					this.$refs.inputDialog.close()
 				})
 			},
+			//新增
+			async addData() {
+				this.check_ins.push({
+					money: this.money,
+					info: '已存钱'
+				})
+				await depositTable.add({
+					date: this.tools.getDate(new Date()).fullDate,
+					info: '已存钱',
+					calendar_data: this.check_ins
+				})
+				this.init()
+			},
 			/* 点击确认 */
 			async confirm(e) {
-				if (isNaN(e)) return this.tools.toast('请输入数字')
+				if (!Number(e)) return this.tools.toast('不可以输入汉字或小于1的数字')
 				uni.showLoading({
 					title: '正在存钱',
 					mask: true
 				})
 				this.money = e
-				this.check_ins.push({
-					money: this.money
-				})
-				let todayData = await db.collection('deposit-sign-in').where({
-					date: this.tools.getDate(new Date()).fullDate
-				}).get()
-				let item = todayData?.result?.data[0] || {}
-				if (todayData?.result?.data.length) {
+				if (this.calendar_data.length) {
+					let curId = this.calendar_data[0]._id
 					uniCloud.callFunction({
 						name: 'updateDeposit',
 						data: {
-							id: item._id,
+							id: curId,
 							money: this.money
 						}
 					}).then(() => {
 						this.init()
 					});
 				} else {
-					await depositTable.add({
-						date: this.tools.getDate(new Date()).fullDate,
-						info: '已存钱',
-						calendar_data: this.check_ins
-					})
+					this.addData()
 				}
 				uni.hideLoading()
-				this.init()
 			},
 			/* 处理今日，累计存钱 */
 			handleDeposit() {
