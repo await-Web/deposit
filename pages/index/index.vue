@@ -39,6 +39,8 @@
 		</uni-popup>
 	</view>
 </template>
+<!-- 哪里获取不到 -->
+
 
 <script>
 	const currentUser = uniCloud.getCurrentUserInfo().uid
@@ -62,10 +64,14 @@
 		},
 		onShow() {
 			this.init()
+
+
 		},
 		methods: {
 			/* 初始化数据 */
+			//  喜你在      没看懂  你演示了什么  你新增一个试试，我没看到问题啊
 			init() {
+				console.log("初始化刷新");
 				uni.showLoading({
 					title: '正在加载',
 					mask: true
@@ -93,6 +99,10 @@
 					this.$refs.inputDialog.close()
 				})
 			},
+
+
+			//数据库存时间格式，最好用时间戳，要是用时间格式，需要做时区偏差 好的 回去研究一下我退了 谢谢您
+
 			//新增
 			async addData() {
 				this.check_ins.push({

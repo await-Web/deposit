@@ -130,7 +130,7 @@ export const useUserStore = defineStore('user', () => {
 		})
 	}
 	//登录成功操作
-	function loginSuccess(e = {}) {
+	async function loginSuccess(e = {}) {
 		const {
 			showToast = true, toastText = '登录成功', autoBack = true, uniIdRedirectUrl = '', passwordConfirmed
 		} = e
@@ -142,7 +142,7 @@ export const useUserStore = defineStore('user', () => {
 				duration: 1000
 			});
 		}
-		updateUserInfo()
+		await updateUserInfo()
 		uni.$emit('uni-id-pages-login-success')
 	}
 	return {
