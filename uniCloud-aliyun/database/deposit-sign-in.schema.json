@@ -1,0 +1,54 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": "auth.uid == doc.user_id",
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"user_id": {
+			"bsonType": "string",
+			"description": "打卡存钱",
+			"foreignKey": "uni-id-users._id",
+			"defaultValue": {
+				"$env": "uid"
+			}
+		},
+		"calendar_data": {
+			"bsonType": "array",
+			"description": "打卡日历",
+			"permission": {
+				"read": "auth.uid == doc.user_id",
+				"write": "auth.uid == doc.user_id"
+			}
+		},
+		"date": {
+			"bsonType": "string",
+			"description": "签到的日期",
+			"permission": {
+				"read": "auth.uid == doc.user_id",
+				"write": true
+			}
+		},
+		"info": {
+			"bsonType": "string",
+			"description": "记录文本",
+			"permission": {
+				"read": "auth.uid == doc.user_id",
+				"write": true
+			}
+		},
+		"ip": {
+			"bsonType": "string",
+			"forceDefaultValue": {
+				"$env": "clientIP"
+			}
+		}
+	},
+	"version": "0.0.1"
+}
