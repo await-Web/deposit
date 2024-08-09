@@ -11,16 +11,11 @@
 	const uniIdCo = uniCloud.importObject('uni-id-co')
 	const userStore = useUserStore()
 	onLaunch(() => {
-		if ((uniCloud.getCurrentUserInfo().tokenExpired - Date.now()) < 1000 * 60 * 60 * 5) {
-			userStore.logout();
-		};
-
+		if ((uniCloud.getCurrentUserInfo().tokenExpired - Date.now()) < 1000 * 60 * 60 * 5) userStore.logout();
 	})
-
 	onShow(() => {
 		console.log('App Show')
 	})
-
 	onHide(() => {
 		console.log('App Hide')
 	})

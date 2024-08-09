@@ -70,5 +70,11 @@
 			"selectedIconPath": "static/image/self-h.png"
 		}]
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {
+		"loginPage": "pages/login/auto_login",
+		"needLogin": [
+			"pages/index/.*",
+			"pages/my/.*"
+		]
+	}
 }
