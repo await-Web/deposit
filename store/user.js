@@ -1,21 +1,21 @@
 import {
 	ref
-} from 'vue'
+} from "vue"
 import {
 	defineStore
-} from 'pinia'
+} from 'pinia';
 const uniIdCo = uniCloud.importObject("uni-id-co")
 const db = uniCloud.database();
 const usersTable = db.collection('uni-id-users')
-export const useUserStore = defineStore('user', () => {
+export const useUserStore = defineStore("user", () => {
 	let hostUserInfo = uni.getStorageSync('uni-id-pages-userInfo') || {}
-	const userInfo = ref(hostUserInfo)
-	const hasLogin = ref(Object.keys(hostUserInfo).length != 0)
-
-	// data不为空，表示传递要更新的值(注意不是覆盖是合并),什么也不传时，直接查库获取更新
+	const userInfo = ref(hostUserInfo);
+	const hasLogin = ref(Object.keys(hostUserInfo).length != 0);
+	//更新用户信息 data不为空，表示传递要更新的值(注意不是覆盖是合并),什么也不传时，直接查库获取更新
 	async function updateUserInfo(data = false) {
 		if (data) {
 			usersTable.where('_id==$env.uid').update(data).then(e => {
+				// console.log(e);
 				if (e.result.updated) {
 					uni.showToast({
 						title: "更新成功",
@@ -50,7 +50,6 @@ export const useUserStore = defineStore('user', () => {
 				setUserInfo({}, {
 					cover: true
 				})
-				console.error(e.message, e.errCode);
 			}
 		}
 	}
@@ -72,17 +71,34 @@ export const useUserStore = defineStore('user', () => {
 		if (uniCloud.getCurrentUserInfo().tokenExpired > Date.now()) {
 			try {
 				await uniIdCo.logout()
-			} catch (e) {
-				console.error(e);
-			}
+			} catch (e) {}
 		}
 		uni.removeStorageSync('uni_id_token');
 		uni.setStorageSync('uni_id_token_expired', 0)
-
 		uni.$emit('uni-id-pages-logout')
 		setUserInfo({}, {
 			cover: true
 		})
+	}
+	//登录后的操作
+	async function loginSuccess(e = {}) {
+		const {
+			showToast = true, toastText = '登录成功', autoBack = true, uniIdRedirectUrl = '', passwordConfirmed
+		} = e
+		if (showToast) {
+			uni.showToast({
+				title: toastText,
+				icon: 'none',
+				duration: 3000
+			});
+		}
+		await updateUserInfo()
+		uni.$emit('uni-id-pages-login-success')
+		if (autoBack) {
+			loginBack({
+				uniIdRedirectUrl
+			})
+		}
 	}
 
 	function loginBack(e = {}) {
@@ -91,13 +107,11 @@ export const useUserStore = defineStore('user', () => {
 		} = e
 		let delta = 0; //判断需要返回几层
 		let pages = getCurrentPages();
-		// console.log(pages);
 		pages.forEach((page, index) => {
 			if (pages[pages.length - index - 1].route.split('/')[3] == 'login') {
 				delta++
 			}
 		})
-		// console.log('判断需要返回几层:', delta);
 		if (uniIdRedirectUrl) {
 			return uni.redirectTo({
 				url: uniIdRedirectUrl,
@@ -113,45 +127,24 @@ export const useUserStore = defineStore('user', () => {
 		}
 		// #ifdef H5
 		if (e.loginType == 'weixin') {
-			// console.log('window.history', window.history);
 			return window.history.go(-3)
 		}
 		// #endif
-
 		if (delta) {
 			const page = pagesJson.pages[0]
 			return uni.reLaunch({
 				url: `/${page.path}`
 			})
 		}
-
 		uni.navigateBack({
 			delta
 		})
 	}
-	//登录成功操作
-	async function loginSuccess(e = {}) {
-		const {
-			showToast = true, toastText = '登录成功', autoBack = true, uniIdRedirectUrl = '', passwordConfirmed
-		} = e
-		// console.log({toastText,autoBack});
-		if (showToast) {
-			uni.showToast({
-				title: toastText,
-				icon: 'none',
-				duration: 1000
-			});
-		}
-		await updateUserInfo()
-		uni.$emit('uni-id-pages-login-success')
-	}
 	return {
 		userInfo,
 		hasLogin,
-		updateUserInfo,
-		setUserInfo,
-		logout,
 		loginSuccess,
-		loginBack
+		updateUserInfo,
+		logout
 	}
 })
