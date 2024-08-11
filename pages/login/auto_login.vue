@@ -16,11 +16,11 @@
 
 			}
 		},
-		onLoad() {
-			this.login()
+		onLoad(e) {
+			this.login(e)
 		},
 		methods: {
-			async login() {
+			async login(e) {
 				let uniIdRedirectUrl = decodeURIComponent(e.uniIdRedirectUrl);
 				let login = await uni.login()
 				let res = await uniIdCo.loginByWeixin({

@@ -141,7 +141,7 @@
 			],
 			"title": "性别",
 			"permission": {
-				"read": true,
+				"read": "doc._id == auth.uid || 'READ_UNI_ID_USERS' in auth.permission",
 				"write": true
 			}
 		},
@@ -399,11 +399,7 @@
 			"bsonType": "string",
 			"description": "用户名，不允许重复",
 			"title": "用户名",
-			"trim": "both",
-			"permission": {
-				"read": "doc._id == auth.uid || 'READ_UNI_ID_USERS' in auth.permission",
-				"write": true
-			}
+			"trim": "both"
 		},
 		"wx_openid": {
 			"bsonType": "object",
@@ -426,10 +422,6 @@
 					"description": "PC页面扫码登录openid"
 				}
 			}
-			// "permission": {
-			// 	"read": "'READ_UNI_ID_USERS' in auth.permission",
-			// 	"write": "'CREATE_UNI_ID_USERS' in auth.permission || 'UPDATE_UNI_ID_USERS' in auth.permission"
-			// }
 		},
 		"wx_unionid": {
 			"bsonType": "string",

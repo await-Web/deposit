@@ -1,5 +1,4 @@
 <script setup>
-	import 'dayjs/locale/zh-cn';
 	import {
 		onLaunch,
 		onShow,

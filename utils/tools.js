@@ -93,7 +93,6 @@ const tools = {
 	padZero(num) {
 		return num.toString().padStart(2, '0');
 	},
-
 	getCurrentTimeFormatted() {
 		const now = new Date();
 		const hours = now.getHours().toString().padStart(2, '0');
@@ -108,6 +107,15 @@ const tools = {
 			duration: duration,
 			mask: true
 		})
+	},
+	// 将日期字符串转换为时间戳
+	convertToTimestamp(dateString) {
+		let dateArrr = [...dateString.split("-")]
+		let year = dateArrr[0]
+		let month = dateArrr[1]
+		let day = dateArrr[2]
+		const date = new Date(year, month - 1, day); // 月份是从0开始的，所以需要减1
+		return date.getTime(); // 或者可以直接使用 +date
 	}
 }
 export default tools

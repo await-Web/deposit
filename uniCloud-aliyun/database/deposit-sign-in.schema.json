@@ -27,6 +27,10 @@
 			"bsonType": "string",
 			"description": "签到的日期"
 		},
+		"dateTimestamp": {
+			"bsonType": "timestamp",
+			"description": "签到的日期"
+		},
 		"info": {
 			"bsonType": "string",
 			"description": "记录文本"

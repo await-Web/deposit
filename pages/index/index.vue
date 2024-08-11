@@ -43,7 +43,7 @@
 
 
 <script>
-	const currentUser = uniCloud.getCurrentUserInfo().uid
+	// const currentUser = uniCloud.getCurrentUserInfo().uid
 	const db = uniCloud.database();
 	const dbCmd = db.command
 	const depositTable = db.collection('deposit-sign-in')
@@ -62,6 +62,12 @@
 				totalMoney: 0
 			}
 		},
+		computed: {
+			currentUser() {
+				let hostUserInfo = uni.getStorageSync('uni-id-pages-userInfo') || {}
+				return hostUserInfo._id
+			}
+		},
 		onShow() {
 			this.init()
 
@@ -69,24 +75,36 @@
 		},
 		methods: {
 			/* 初始化数据 */
-			//  喜你在      没看懂  你演示了什么  你新增一个试试，我没看到问题啊
-			init() {
-				console.log("初始化刷新");
+			async init() {
+				// console.log(9935, uni.getStorageInfoSync('uni-id-pages-userInfo')._id);
+				// let hostUserInfo = uni.getStorageSync('uni-id-pages-userInfo') || {}
+				// this.currentUser =
+				// 	console.log(774, hostUserInfo);
 				uni.showLoading({
 					title: '正在加载',
 					mask: true
 				})
+				console.log(this.currentUser, 666);
 				uniCloud.callFunction({
 					name: 'initData',
 					data: {
-						user_id: currentUser
-					}
+						user_id: this.currentUser
+					},
 				}).then(res => {
 					this.close()
 					let data = res.result.data || []
 					this.calendar_data = data
+					console.log(this.calendar_data, 658);
 					this.handleDeposit()
 				});
+				// let res = await db.collection('deposit-sign-in').where({
+				// 	user_id: dbCmd.eq(this.currentUser)
+				// }).get()
+
+				// let data = res.result.data || []
+				// this.calendar_data = data
+				// console.log(data, 658);
+				// this.handleDeposit()
 			},
 			/* 弹窗 */
 			calendarChange() {
@@ -100,9 +118,6 @@
 				})
 			},
 
-
-			//数据库存时间格式，最好用时间戳，要是用时间格式，需要做时区偏差 好的 回去研究一下我退了 谢谢您
-
 			//新增
 			async addData() {
 				this.check_ins.push({
@@ -110,6 +125,7 @@
 					info: '已存钱'
 				})
 				await depositTable.add({
+					dateTimestamp: this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate),
 					date: this.tools.getDate(new Date()).fullDate,
 					info: '已存钱',
 					calendar_data: this.check_ins
@@ -145,11 +161,12 @@
 				let arr = this.calendar_data
 				let totalMoney = 0
 				for (let i = 0; i < arr.length; i++) {
-					let calendar = arr[i].calendar_data
-					let today = arr[i].date
+					let calendar = arr[i].calendar_data;
+					let today = arr[i].dateTimestamp;
 					const sum = calendar.reduce((acc, obj) => acc + Number(obj.money), 0);
-					if (today === this.tools.getDate(new Date()).fullDate) this.todayTotalMoney = sum
-					totalMoney += sum
+					if (today === this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate)) this
+						.todayTotalMoney = sum;
+					totalMoney += sum;
 				}
 				this.totalMoney = totalMoney
 				uni.hideLoading()
