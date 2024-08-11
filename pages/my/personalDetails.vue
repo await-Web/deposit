@@ -99,13 +99,22 @@
 		onShow() {
 			this.init()
 		},
+		computed: {
+			userData() {
+				return {
+					'username': userInfo.username,
+					'age': userInfo?.age || "28",
+					'depositType': userInfo?.depositType || "0",
+					'gender': userInfo?.gender || 1
+				}
+			}
+		},
 		methods: {
 			/* 初始化 */
 			init() {
-				this.formData.username = userInfo.username
-				this.formData.age = userInfo?.age || "28"
-				this.formData.depositType = userInfo?.depositType || "0"
-				this.formData.gender = userInfo?.gender || 1
+				this.formData = {
+					...this.userData
+				}
 			},
 			/* 选择存钱类型 */
 			selectChange(e) {
@@ -116,6 +125,9 @@
 			/* 更新信息 */
 			submit() {
 				userStore.updateUserInfo(this.formData)
+				setTimeout(() => {
+					uni.navigateBack()
+				}, 1000)
 			}
 		}
 	}

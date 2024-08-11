@@ -39,11 +39,7 @@
 		</uni-popup>
 	</view>
 </template>
-<!-- 哪里获取不到 -->
-
-
 <script>
-	// const currentUser = uniCloud.getCurrentUserInfo().uid
 	const db = uniCloud.database();
 	const dbCmd = db.command
 	const depositTable = db.collection('deposit-sign-in')
@@ -70,21 +66,14 @@
 		},
 		onShow() {
 			this.init()
-
-
 		},
 		methods: {
 			/* 初始化数据 */
 			async init() {
-				// console.log(9935, uni.getStorageInfoSync('uni-id-pages-userInfo')._id);
-				// let hostUserInfo = uni.getStorageSync('uni-id-pages-userInfo') || {}
-				// this.currentUser =
-				// 	console.log(774, hostUserInfo);
 				uni.showLoading({
 					title: '正在加载',
 					mask: true
 				})
-				console.log(this.currentUser, 666);
 				uniCloud.callFunction({
 					name: 'initData',
 					data: {
@@ -94,17 +83,8 @@
 					this.close()
 					let data = res.result.data || []
 					this.calendar_data = data
-					console.log(this.calendar_data, 658);
 					this.handleDeposit()
 				});
-				// let res = await db.collection('deposit-sign-in').where({
-				// 	user_id: dbCmd.eq(this.currentUser)
-				// }).get()
-
-				// let data = res.result.data || []
-				// this.calendar_data = data
-				// console.log(data, 658);
-				// this.handleDeposit()
 			},
 			/* 弹窗 */
 			calendarChange() {
@@ -117,7 +97,6 @@
 					this.$refs.inputDialog.close()
 				})
 			},
-
 			//新增
 			async addData() {
 				this.check_ins.push({
