@@ -18,7 +18,7 @@
 						</ZjfSelect>
 					</uni-forms-item>
 				</uni-forms>
-				<view class=""
+				<view
 					style="width: 100%;height: 100%;border-radius: 8rpx;background-color: #d9d9d8;margin-bottom: 20rpx;padding: 20rpx;">
 					<text style="color: #333;font-size: 36rpx; font-weight: 600;"
 						class="title">{{depositValue+'说明'}}</text>
@@ -38,7 +38,6 @@
 		useUserStore
 	} from "@/store/user.js"
 	const userStore = useUserStore()
-	const userInfo = userStore.userInfo
 	export default {
 		data() {
 			return {
@@ -100,20 +99,18 @@
 			this.init()
 		},
 		computed: {
-			userData() {
-				return {
-					'username': userInfo.username,
-					'age': userInfo?.age || "28",
-					'depositType': userInfo?.depositType || "0",
-					'gender': userInfo?.gender || 1
-				}
+			userInfo() {
+				return userStore.userInfo
 			}
 		},
 		methods: {
 			/* 初始化 */
 			init() {
 				this.formData = {
-					...this.userData
+					'username': this.userInfo.username,
+					'age': this.userInfo?.age || "28",
+					'depositType': this.userInfo?.depositType || "0",
+					'gender': this.userInfo?.gender || 1
 				}
 			},
 			/* 选择存钱类型 */

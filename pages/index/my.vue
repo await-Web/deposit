@@ -6,7 +6,7 @@
 				<view class="avatar">
 					<view class="box">
 						<view class="inner">
-							<image :src="avatarUrl || '../../static/image/defAvatar.png'" mode=""></image>
+							<image :src="avatar || '../../static/image/defAvatar.png'" mode=""></image>
 							<button open-type="chooseAvatar" @chooseavatar="onChooseAvatar" class="btn">按钮</button>
 							<view class="mask" v-if="uploadState">
 								上传{{percentCompleted}}%
@@ -19,7 +19,7 @@
 					</view>
 				</view>
 				<view class="info">
-					<view class="username">{{userName}}</view>
+					<view class="username">{{username}}</view>
 					<view class="text"> {{ `存钱的第${register_date}天`}}</view>
 				</view>
 			</view>
@@ -68,27 +68,30 @@
 		useUserStore
 	} from "@/store/user.js"
 	const userStore = useUserStore()
-	const userInfo = userStore.userInfo
 	export default {
 		data() {
 			return {
 				uploadState: false,
 				percentCompleted: 0,
-				avatar: ''
+				avatar: '',
+				username: '',
+				register_date: 0
 			}
 		},
 		computed: {
-			userName() {
-				return userInfo.username
-			},
-			avatarUrl() {
-				return userInfo.avatar
-			},
-			register_date() {
-				return this.tools.daysFromTimestamp(userInfo.register_date)
+			userInfo() {
+				return userStore.userInfo
 			}
 		},
+		onShow() {
+			this.init()
+		},
 		methods: {
+			init() {
+				this.avatar = this.userInfo.avatar
+				this.username = this.userInfo.username
+				this.register_date = this.tools.daysFromTimestamp(this.userInfo.register_date)
+			},
 			/* 上传头像 */
 			onChooseAvatar(e) {
 				this.uploadState = true;
@@ -105,7 +108,7 @@
 					let data = {
 						avatar: this.avatar
 					}
-					userStore.updateUserInfo(data)
+					this.userStore.updateUserInfo(data)
 					this.uploadState = false;
 				})
 			},
