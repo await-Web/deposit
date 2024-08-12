@@ -67,6 +67,13 @@
 		onShow() {
 			this.init()
 		},
+		//分享
+		onShareAppMessage() {
+			return {
+				title: '坚持存钱，不做月光族',
+				path: '/pages/index/index'
+			}
+		},
 		methods: {
 			/* 初始化数据 */
 			async init() {
