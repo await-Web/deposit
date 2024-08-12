@@ -108,7 +108,7 @@
 					let data = {
 						avatar: this.avatar
 					}
-					this.userStore.updateUserInfo(data)
+					this.userInfo.updateUserInfo(data)
 					this.uploadState = false;
 				})
 			},
