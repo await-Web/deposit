@@ -71,7 +71,8 @@
 		onShareAppMessage() {
 			return {
 				title: '坚持存钱，不做月光族',
-				path: '/pages/index/index'
+				path: '/pages/index/index',
+				imageUrl: '/static/image/365.png'
 			}
 		},
 		methods: {
