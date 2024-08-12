@@ -79,8 +79,8 @@
 			}
 		},
 		computed: {
-			userInfo() {
-				return userStore.userInfo
+			userData() {
+				return userStore
 			}
 		},
 		onShow() {
@@ -88,9 +88,9 @@
 		},
 		methods: {
 			init() {
-				this.avatar = this.userInfo.avatar
-				this.username = this.userInfo.username
-				this.register_date = this.tools.daysFromTimestamp(this.userInfo.register_date)
+				this.avatar = this.userData.userInfo.avatar
+				this.username = this.userData.userInfo.username
+				this.register_date = this.tools.daysFromTimestamp(this.userData.userInfo.register_date)
 			},
 			/* 上传头像 */
 			onChooseAvatar(e) {
@@ -108,7 +108,7 @@
 					let data = {
 						avatar: this.avatar
 					}
-					userStore.updateUserInfo(data)
+					this.userData.updateUserInfo(data)
 					this.uploadState = false;
 				})
 			},
