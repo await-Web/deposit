@@ -3,18 +3,19 @@
 		<uni-section title="个人资料" type="line">
 			<view class="example">
 				<!-- 基础用法，不包含校验规则 -->
-				<uni-forms ref="baseForm" :modelValue="formData" label-position="top">
-					<uni-forms-item label="昵称" required>
+				<uni-forms ref="form" :modelValue="formData" label-position="top" :rules="rules">
+					<uni-forms-item label="昵称" required name="username">
 						<uni-easyinput v-model="formData.username" placeholder="请输入姓名" />
 					</uni-forms-item>
 					<uni-forms-item label="年龄" required>
-						<uni-easyinput v-model="formData.age" placeholder="请输入年龄" />
+						<uni-easyinput v-model="formData.age" placeholder="请输入年龄" name="age" />
 					</uni-forms-item>
 					<uni-forms-item label="性别" required>
-						<uni-data-checkbox v-model="formData.gender" :localdata="genderList" />
+						<uni-data-checkbox v-model="formData.gender" :localdata="genderList" name="gender" />
 					</uni-forms-item>
 					<uni-forms-item label="选择存钱类型" required label-width="200">
-						<ZjfSelect :options="depositTypeList" v-model="formData.depositType" @change="selectChange">
+						<ZjfSelect :options="depositTypeList" v-model="formData.depositType" @change="selectChange"
+							name="depositType">
 						</ZjfSelect>
 					</uni-forms-item>
 				</uni-forms>
@@ -92,8 +93,56 @@
 				}, {
 					text: '其他',
 					value: 3
-				}]
+				}],
+				rules: {
+					username: {
+						rules: [{
+							required: true,
+							errorMessage: '请填写姓名',
+						}]
+					},
+					age: {
+						rules: [{
+							required: true,
+							errorMessage: '请填写年龄',
+						}, {
+							validateFunction: (rule, value, data, callback) => {
+								// 异步需要返回 Promise 对象
+								return new Promise((resolve, reject) => {
+									setTimeout(() => {
+										if (value >= 18) {
+											// 通过返回 resolve
+											resolve()
+										} else {
+											// 不通过返回 reject(new Error('错误信息'))
+											reject(new Error('年龄必须大于18岁'))
+										}
+									}, 2000)
+								})
+							}
+						}]
+					},
+					gender: {
+						rules: [{
+							required: true,
+							errorMessage: '请选择性别',
+						}]
+					},
+					depositType: {
+						rules: [{
+							required: true,
+							errorMessage: '请选择存钱类型',
+						}]
+					},
+				}
 			}
+		},
+		onReady() {
+			// 需要在onReady中设置规则
+			this.$nextTick(() => {
+				this.$refs.form.setRules(this.rules)
+			})
+
 		},
 		onShow() {
 			this.init()
@@ -121,10 +170,12 @@
 			},
 			/* 更新信息 */
 			submit() {
-				userStore.updateUserInfo(this.formData)
-				setTimeout(() => {
-					uni.navigateBack()
-				}, 1000)
+				this.$refs.form.validate().then(res => {
+					userStore.updateUserInfo(this.formData)
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1000)
+				})
 			}
 		}
 	}
