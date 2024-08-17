@@ -38,7 +38,7 @@ export const useUserStore = defineStore("user", () => {
 			try {
 				let res = await usersTable.where("'_id' == $cloudEnv_uid")
 					.field(
-						'mobile,username,email,avatar,age,gender,depositType,wx_openid.mp as openid,register_date'
+						'mobile,username,email,watermark_count,cumulative,avatar,age,gender,depositType,wx_openid.mp as openid,register_date'
 					)
 					.get()
 				const realNameRes = await uniIdCo.getRealNameInfo()

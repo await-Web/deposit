@@ -42,7 +42,7 @@ function request(config) {
 			data: config.data || null,
 			method: config.method || 'GET',
 			header: header,
-			timeout: define.timeout,
+			timeout: 30000,
 			success: res => {
 				uni.hideLoading()
 				if (res.statusCode === 200) {

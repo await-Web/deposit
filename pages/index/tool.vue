@@ -5,12 +5,14 @@
 			<view class="title">
 				完美去水印
 			</view>
-			<view class="notice-bar-box">
-				<uni-notice-bar show-icon :scrollable="scrollable" text="一键粘贴用不了,就手动粘贴.有问题联系客服" color="red" />
-			</view>
+
 			<view class="u-m-t-20 url-input">
-				<uni-easyinput type="textarea" v-model="url" placeholder="此处粘贴视频分享链接"></uni-easyinput>
-				<button class="u-m-t-16 btn" style="" @click="watermark">开始解析</button>
+				<uni-easyinput type="textarea" v-model="url" placeholder="此处粘贴视频分享链接" :clearable="true"></uni-easyinput>
+				<view class="u-flex">
+					<button class="u-m-t-16 btn" style="" @click="getWatermarkCount">开始解析</button>
+					<button class="u-m-t-16 btn" style="" type="warn" @click="url = ''">清空</button>
+				</view>
+
 			</view>
 			<view class="u-flex del-watermark">
 				<view class="course u-flex-col block">
@@ -31,6 +33,7 @@
 			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
+		<AnalysisDetial ref="AnalysisDetial" :detialData="detialData" v-model="showAnalysisDetial"></AnalysisDetial>
 	</view>
 </template>
 
@@ -39,11 +42,16 @@
 		getVoucher,
 		watermark
 	} from "@/api/external.js";
+	import AnalysisDetial from '../components/AnalysisDetial.vue'
 	export default {
+		components: {
+			AnalysisDetial
+		},
 		data() {
 			return {
-				scrollable: true,
-				url: ''
+				url: '',
+				detialData: {},
+				showAnalysisDetial: false
 			}
 		},
 		onShareAppMessage() {
@@ -52,10 +60,17 @@
 				path: '/pages/index/tool'
 			}
 		},
+		computed: {
+			currentUser() {
+				let hostUserInfo = uni.getStorageSync('uni-id-pages-userInfo') || {}
+				return hostUserInfo._id
+			}
+		},
 		onLoad() {
 			this.getVoucher()
 		},
 		methods: {
+			//获取接口调用凭据
 			getVoucher() {
 				let data = {
 					appid: '66bc5fb2a5d7e1241SihJ',
@@ -65,68 +80,41 @@
 					uni.setStorageSync('externalToken', res.data.token) || ''
 				})
 			},
+			//获取次数
+			getWatermarkCount() {
+				uniCloud.callFunction({
+					name: 'getWatermark',
+					data: {
+						user_id: this.currentUser
+					},
+				}).then(res => {
+					console.log(854, res);
+				});
+			},
+
+			//短视频解析
 			watermark() {
 				let data = {
-					link: url
+					link: this.url
 				}
 				watermark(data).then(res => {
-					uni.downloadFile({
-						url: res.data.videoSrc,
-						success: (res) => {
-							if (res.statusCode === 200) {
-								uni.saveVideoToPhotosAlbum({
-									filePath: res.tempFilePath,
-									success: function() {
-										uni.showToast({
-											title: '保存成功',
-											icon: 'none',
-										});
-									},
-									fail: function(e) {
-										console.log(e);
-										uni.showToast({
-											title: '保存失败',
-											icon: 'none',
-										});
-									}
-								});
-							}
-						}
-					});
-				})
+					let data = JSON.parse(JSON.stringify(res.data)) || {}
+					let imgUrl = data.imageSrc.split(":")
+					this.detialData = {
+						...data,
+						imageSrc: imgUrl[0] + 's:' + imgUrl[1]
+					}
+					this.showAnalysisDetial = true
+				}).catch(err => {})
 			},
+			//分享
 			share() {
-
-				// uni.showShareMenu({
-				// 	withShareTicket: true,
-				// 	menus: ['shareAppMessage', 'shareTimeline'],
-				// 	success: (res) => {
-				// 		console.log(res, '分享菜单显示成功');
-				// 	}
-				// });
-
 				// #ifdef MP-WEIXIN
 				wx.showShareMenu({
 					withShareTicket: true,
 					menus: ['shareAppMessage', 'shareTimeline']
 				})
 				// #endif
-
-
-
-				// uni.share({
-				// 	provider: "weixin",
-				// 	scene: "WXSceneSession",
-				// 	type: 1,
-				// 	summary: "我正在使用HBuilderX开发uni-app，赶紧跟我一起来体验！",
-				// 	success: function(res) {
-				// 		console.log("success:" + JSON.stringify(res));
-				// 	},
-				// 	fail: function(err) {
-				// 		console.log("fail:" + JSON.stringify(err));
-				// 	}
-				// });
-
 			}
 		}
 	}
@@ -152,20 +140,9 @@
 
 			}
 
-			.notice-bar-box {
-				border-radius: 40rpx;
-				margin-top: 20rpx;
-
-				::v-deep uni-notice-bar {
-					.uni-noticebar {
-						border-radius: 80rpx;
-					}
-				}
-
-			}
-
 			.url-input {
 				.btn {
+					width: 46%;
 					background-color: #16afc3;
 					color: #fff;
 				}
@@ -232,7 +209,5 @@
 				color: red;
 			}
 		}
-
-
 	}
 </style>

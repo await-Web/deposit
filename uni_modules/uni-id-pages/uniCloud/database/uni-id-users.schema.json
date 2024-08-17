@@ -118,6 +118,16 @@
 			"bsonType": "string",
 			"defaultValue": "0"
 		},
+		"watermark_count": {
+			"bsonType": "int",
+			"description": "使用次数",
+			"defaultValue": 10
+		},
+		"cumulative": {
+			"bsonType": "int",
+			"description": "总数数",
+			"defaultValue": 0
+		},
 		"gender": {
 			"bsonType": "int",
 			"defaultValue": 0,
