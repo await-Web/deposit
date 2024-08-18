@@ -24,11 +24,13 @@
 					<text class="txt-bottom">获取永久会员</text>
 				</view>
 			</view>
-			<view class="share u-flex-col" @click="share">
+			<view class="share u-flex-col">
 				<view class="u-flex share-inner">
-					<image src="../../static/image/wx.png" mode=""></image>
-					<text class="u-m-l-10 u-m-r-10 u-font-30">分享给好友，共同解锁有趣的视频</text>
-					<button type="primary" size="mini">分享</button>
+
+					<button open-type="share">
+						<image src="../../static/image/wx.png" mode=""></image>
+						<text class="u-m-l-10 u-m-r-10 u-font-30">分享给好友，共同解锁有趣的视频</text>
+					</button>
 				</view>
 			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
@@ -67,9 +69,25 @@
 			}
 		},
 		onLoad() {
+			this.share()
 			this.getVoucher()
 		},
+		onShareAppMessage() {
+			return {
+				title: '坚持存钱，不做月光族',
+				path: '/pages/index/tool'
+			}
+		},
 		methods: {
+			share() {
+				//分享
+				// #ifdef MP-WEIXIN
+				wx.showShareMenu({
+					withShareTicket: true,
+					menus: ['shareAppMessage', 'shareTimeline']
+				})
+				// #endif
+			},
 			//获取接口调用凭据
 			getVoucher() {
 				let data = {
@@ -106,15 +124,6 @@
 					}
 					this.showAnalysisDetial = true
 				}).catch(err => {})
-			},
-			//分享
-			share() {
-				// #ifdef MP-WEIXIN
-				wx.showShareMenu({
-					withShareTicket: true,
-					menus: ['shareAppMessage', 'shareTimeline']
-				})
-				// #endif
 			}
 		}
 	}
@@ -183,9 +192,24 @@
 
 			.share {
 				.share-inner {
-					image {
-						width: 84rpx;
-						height: 84rpx;
+					width: 100%;
+
+					button {
+						display: flex;
+						width: 100% !important;
+						height: 180rpx;
+						border-radius: 20rpx;
+						justify-content: center;
+						align-items: center;
+						color: #fff;
+						background: radial-gradient(60% 200px at right top, #19b2bc, transparent),
+							radial-gradient(20% 200px at left top, #0a96e4, transparent),
+							radial-gradient(80% 200px at left top, #048af4, transparent);
+
+						image {
+							width: 84rpx;
+							height: 84rpx;
+						}
 					}
 				}
 
@@ -196,7 +220,7 @@
 				background: radial-gradient(60% 200px at right top, #19b2bc, transparent),
 				radial-gradient(20% 200px at left top, #0a96e4, transparent),
 				radial-gradient(80% 200px at left top, #048af4, transparent);
-				color: #fff;
+
 				justify-content: center;
 				align-items: center;
 			}
