@@ -14,7 +14,7 @@
 				</view>
 
 			</view>
-			<view class="u-flex del-watermark">
+			<!-- <view class="u-flex del-watermark">
 				<view class="course u-flex-col block">
 					<text class="txt-top">使用教程</text>
 					<text class="txt-bottom">如何去水印</text>
@@ -23,7 +23,7 @@
 					<text class="txt-top">邀请好友</text>
 					<text class="txt-bottom">获取永久会员</text>
 				</view>
-			</view>
+			</view> -->
 			<view class="share u-flex-col">
 				<view class="u-flex share-inner">
 
@@ -105,13 +105,12 @@
 					data: {
 						user_id: this.currentUser
 					},
-				}).then(res => {
-					console.log(854, res);
-				});
+				}).then(res => {});
 			},
 
 			//短视频解析
 			watermark() {
+				if (!this.url) return this.$u.toast("分享链接不能为空")
 				let data = {
 					link: this.url
 				}

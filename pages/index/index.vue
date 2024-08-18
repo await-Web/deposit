@@ -63,7 +63,13 @@
 				return hostUserInfo._id
 			}
 		},
+		onLoad() {
+			uni.hideToast(); // 隐藏弹出提示
+			uni.hideKeyboard(); //  隐藏软键盘
+		},
 		onShow() {
+			uni.hideToast(); // 隐藏弹出提示
+			uni.hideKeyboard(); //  隐藏软键盘
 			// #ifdef MP-WEIXIN
 			wx.showShareMenu({
 				withShareTicket: true,
