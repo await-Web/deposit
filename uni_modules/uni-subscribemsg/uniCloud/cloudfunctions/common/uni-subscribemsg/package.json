@@ -1,5 +1,5 @@
 {
-    "name": "uni-open-bridge-common",
+    "name": "uni-subscribemsg",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -10,10 +10,11 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "uni-open-bridge-common": "file:..\/..\/..\/..\/..\/uni-open-bridge-common\/uniCloud\/cloudfunctions\/common\/uni-open-bridge-common",
         "uni-config-center": "file:..\/..\/..\/..\/..\/uni-config-center\/uniCloud\/cloudfunctions\/common\/uni-config-center"
     },
-    "origin-plugin-dev-name": "uni-open-bridge-common",
-    "origin-plugin-version": "1.2.0",
-    "plugin-dev-name": "uni-open-bridge-common",
-    "plugin-version": "1.2.0"
+    "origin-plugin-dev-name": "uni-subscribemsg",
+    "origin-plugin-version": "1.1.0",
+    "plugin-dev-name": "uni-subscribemsg",
+    "plugin-version": "1.1.0"
 }

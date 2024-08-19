@@ -153,6 +153,15 @@
 				} else {
 					this.addData()
 				}
+				await uni.requestSubscribeMessage({
+					tmplIds: ["MUpCSIdE753RDOqG0XQP07nYAQECCYB5Wd8ChwQbleE"], // 改成你的小程序订阅消息模板id
+					success: () => {
+						uni.showToast({
+							title: "订阅成功",
+							icon: "none"
+						})
+					}
+				});
 				uni.hideLoading()
 			},
 			/* 处理今日，累计存钱 */
