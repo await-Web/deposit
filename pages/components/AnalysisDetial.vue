@@ -104,6 +104,7 @@
 					uni.showLoading({
 						title: '正在下载' + res.progress + '%'
 					})
+					if (res.progress == 100) uni.hideLoading()
 				});
 			},
 			//复制
