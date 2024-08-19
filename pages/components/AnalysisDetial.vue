@@ -6,8 +6,8 @@
 			<view class="title">提取完毕</view>
 		</view>
 		<view class="u-flex-col content  u-p-l-20 u-p-r-20">
-			<u-alert-tips :show="true" type="error" @close="showTips = false" title="视频无法保存点击下方,'复制无水印视频链接'使用手机自带浏览器下载"
-				:close-able="true"></u-alert-tips>
+			<u-alert-tips :show="true" type="error" @close="showTips = false"
+				title="视频无法下载或保存点击下方,'复制无水印视频链接'使用手机自带浏览器下载" :close-able="true"></u-alert-tips>
 			<view class="u-m-t-20 video-box">
 				<video id="myVideo" :src="analysisData.videoSrc" controls></video>
 				<view class="u-flex-col u-m-t-10">
@@ -64,15 +64,11 @@
 			},
 			//处理解析后的数据
 			handleVideo(src, type) {
-				uni.showLoading({
-					title: '正在保存'
-				})
-				uni.downloadFile({
+				var downloadTask = uni.downloadFile({
 					url: src,
 					success: (res) => {
 						if (res.statusCode === 200) {
-							let save = type === 'image' ? 'saveImageToPhotosAlbum' :
-								'saveVideoToPhotosAlbum'
+							let save = type === 'image' ? 'saveImageToPhotosAlbum' : 'saveVideoToPhotosAlbum'
 							try {
 								uni[save]({
 									filePath: res.tempFilePath,
@@ -100,11 +96,15 @@
 						}
 					},
 					fail: () => {
-						this.$u.toast("无法保存到手机")
+						this.$u.toast("下载失败点击下方,复制无水印视频链接")
 						uni.hideLoading()
 					}
 				});
-
+				downloadTask.onProgressUpdate((res) => {
+					uni.showLoading({
+						title: '正在下载' + res.progress + '%'
+					})
+				});
 			},
 			//复制
 			copy(text) {
