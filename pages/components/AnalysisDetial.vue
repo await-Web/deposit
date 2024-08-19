@@ -6,9 +6,8 @@
 			<view class="title">提取完毕</view>
 		</view>
 		<view class="u-flex-col content  u-p-l-20 u-p-r-20">
-			<view class="notice-bar-box">
-				<uni-notice-bar show-icon :scrollable="true" text="无法保存的视频可以点击下方,复制无水印视频链接使用手机自带浏览器下载" color="red" />
-			</view>
+			<u-alert-tips :show="true" type="error" @close="showTips = false" title="视频无法保存点击下方,'复制无水印视频链接'使用手机自带浏览器下载"
+				:close-able="true"></u-alert-tips>
 			<view class="u-m-t-20 video-box">
 				<video id="myVideo" :src="analysisData.videoSrc" controls></video>
 				<view class="u-flex-col u-m-t-10">
@@ -42,7 +41,8 @@
 		},
 		data() {
 			return {
-				show: false
+				show: false,
+				showTips: false
 			}
 		},
 		watch: {
@@ -67,41 +67,44 @@
 				uni.showLoading({
 					title: '正在保存'
 				})
-				try {
-					uni.downloadFile({
-						url: src,
-						success: (res) => {
-							if (res.statusCode === 200) {
-								let save = type === 'image' ? 'saveImageToPhotosAlbum' :
-									'saveVideoToPhotosAlbum'
-								try {
-									uni[save]({
-										filePath: res.tempFilePath,
-										success: function() {
-											uni.showToast({
-												title: '保存成功',
-												icon: 'none',
-											});
-										},
-										fail: function(e) {
-											uni.showToast({
-												title: '无法保存到手机',
-												icon: 'none',
-											});
-										}
-									});
-								} catch {
-									this.$u.toast("无法保存到手机")
-									uni.hideLoading()
-								}
-							} else {
+				uni.downloadFile({
+					url: src,
+					success: (res) => {
+						if (res.statusCode === 200) {
+							let save = type === 'image' ? 'saveImageToPhotosAlbum' :
+								'saveVideoToPhotosAlbum'
+							try {
+								uni[save]({
+									filePath: res.tempFilePath,
+									success: function() {
+										uni.showToast({
+											title: '保存成功',
+											icon: 'none',
+										});
+									},
+									fail: function(e) {
+										this.showTips = true
+										uni.showToast({
+											title: '无法保存到手机',
+											icon: 'none',
+										});
+									}
+								});
+							} catch {
+								this.showTips = true
+								this.$u.toast("无法保存到手机")
 								uni.hideLoading()
 							}
+						} else {
+							uni.hideLoading()
 						}
-					});
-				} catch {
-					uni.hideLoading()
-				}
+					},
+					fail: () => {
+						this.$u.toast("无法保存到手机")
+						uni.hideLoading()
+					}
+				});
+
 			},
 			//复制
 			copy(text) {

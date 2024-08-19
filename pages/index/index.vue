@@ -132,7 +132,8 @@
 			},
 			/* 点击确认 */
 			async confirm(e) {
-				if ((Number(e) < 1) && !Number(e)) return this.tools.toast('请输入大于等于1的数字')
+				let num = Number(e) || 0
+				if (num < 1) return this.tools.toast('请输入大于等于1的数字')
 				uni.showLoading({
 					title: '正在存钱',
 					mask: true

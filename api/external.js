@@ -7,7 +7,7 @@ export function getVoucher(data) {
 	})
 }
 
-// 获取弹窗选择远端接口数据
+// 短视频解析
 export function watermark(data) {
 	return request({
 		url: `https://watermark-api.hlyphp.top/Watermark/Index`,

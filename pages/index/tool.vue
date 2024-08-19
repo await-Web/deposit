@@ -117,9 +117,13 @@
 				watermark(data).then(res => {
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
 					let imgUrl = data.imageSrc.split(":")
+					let videoUrl = data.videoSrc.split(":")
+					let vSrc = ['https'].includes(videoUrl[0]) ? videoUrl[0] + ':' : videoUrl[0] + 's:'
+					let imgSrc = ['https'].includes(imgUrl[0]) ? imgUrl[0] + ':' : imgUrl[0] + 's:'
 					this.detialData = {
 						...data,
-						imageSrc: imgUrl[0] + 's:' + imgUrl[1]
+						imageSrc: imgSrc + imgUrl[1],
+						videoSrc: vSrc + videoUrl[1]
 					}
 					this.showAnalysisDetial = true
 				}).catch(err => {})
