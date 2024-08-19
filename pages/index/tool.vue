@@ -126,7 +126,7 @@
 						videoSrc: vSrc + videoUrl[1]
 					}
 					this.showAnalysisDetial = true
-					await uni.requestSubscribeMessage({
+					uni.requestSubscribeMessage({
 						tmplIds: ["MUpCSIdE753RDOqG0XQP07nYAQECCYB5Wd8ChwQbleE"], // 改成你的小程序订阅消息模板id
 						success: () => {
 							uni.showToast({
