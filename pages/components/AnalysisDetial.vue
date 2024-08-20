@@ -64,40 +64,39 @@
 			},
 			//处理解析后的数据
 			handleVideo(src, type) {
+				if (type === 'video' && !src) src = this.analysisData.imageSrc
+				let save = 'saveVideoToPhotosAlbum'
+				if (type === 'image') save = 'saveImageToPhotosAlbum'
+				if (type === 'video' && !this.analysisData.videoSrc) save = 'saveImageToPhotosAlbum'
 				var downloadTask = uni.downloadFile({
 					url: src,
 					success: (res) => {
 						if (res.statusCode === 200) {
-							let save = type === 'image' ? 'saveImageToPhotosAlbum' : 'saveVideoToPhotosAlbum'
-							try {
-								uni[save]({
-									filePath: res.tempFilePath,
-									success: function() {
-										uni.showToast({
-											title: '保存成功',
-											icon: 'none',
-										});
-									},
-									fail: function(e) {
-										this.showTips = true
-										uni.showToast({
-											title: '无法保存到手机',
-											icon: 'none',
-										});
-									}
-								});
-							} catch {
-								this.showTips = true
-								this.$u.toast("无法保存到手机")
-								uni.hideLoading()
-							}
+							uni[save]({
+								filePath: res.tempFilePath,
+								success: () => {
+									uni.showToast({
+										title: '保存成功',
+										icon: 'none',
+									});
+								},
+								fail: (err) => {
+									this.showTips = true
+									uni.showToast({
+										title: err + '--无法保存到手机,复制无水印视频链接',
+										icon: 'none',
+									});
+								}
+							});
 						} else {
 							uni.hideLoading()
 						}
 					},
-					fail: () => {
-						this.$u.toast("下载失败点击下方,复制无水印视频链接")
-						uni.hideLoading()
+					fail: (err) => {
+						uni.showToast({
+							title: err + '--下载失败',
+							icon: 'none',
+						});
 					}
 				});
 				downloadTask.onProgressUpdate((res) => {

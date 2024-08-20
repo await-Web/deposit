@@ -116,26 +116,27 @@
 				}
 				watermark(data).then(res => {
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
-					let imgUrl = data.imageSrc.split(":")
-					let videoUrl = data.videoSrc.split(":")
-					let vSrc = ['https'].includes(videoUrl[0]) ? videoUrl[0] + ':' : videoUrl[0] + 's:'
-					let imgSrc = ['https'].includes(imgUrl[0]) ? imgUrl[0] + ':' : imgUrl[0] + 's:'
+					let imgUrl = this.ensureHttps(data.imageSrc)
+					let videoUrl = this.ensureHttps(data.videoSrc)
 					this.detialData = {
 						...data,
-						imageSrc: imgSrc + imgUrl[1],
-						videoSrc: vSrc + videoUrl[1]
+						imageSrc: imgUrl,
+						videoSrc: videoUrl
 					}
 					this.showAnalysisDetial = true
-					uni.requestSubscribeMessage({
-						tmplIds: ["MUpCSIdE753RDOqG0XQP07nYAQECCYB5Wd8ChwQbleE"], // 改成你的小程序订阅消息模板id
-						success: () => {
-							uni.showToast({
-								title: "订阅成功",
-								icon: "none"
-							})
-						}
-					});
+					// uni.requestSubscribeMessage({
+					// 	tmplIds: ["MUpCSIdE753RDOqG0XQP07nYAQECCYB5Wd8ChwQbleE"], // 改成你的小程序订阅消息模板id
+					// 	success: () => {
+					// 		uni.showToast({
+					// 			title: "订阅成功",
+					// 			icon: "none"
+					// 		})
+					// 	}
+					// });
 				}).catch(err => {})
+			},
+			ensureHttps(url) {
+				return url.replace(/^http:\/\//i, 'https://');
 			}
 		}
 	}
