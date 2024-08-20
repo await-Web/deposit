@@ -96,7 +96,8 @@
 				uniCloud.callFunction({
 					name: 'initData',
 					data: {
-						user_id: this.currentUser
+						user_id: this.currentUser,
+						curDate: this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate)
 					},
 				}).then(res => {
 					this.close()
