@@ -7,7 +7,10 @@ exports.main = async (event, context) => {
 		money: event.money,
 		info: '已存钱',
 	}
-	await db.collection('deposit-sign-in').doc(event.id).update({
+	await db.collection('deposit-sign-in').where({
+		dateTimestamp: dbCmd.eq(event.curDate),
+		user_id: dbCmd.eq(event.user_id)
+	}).update({
 		calendar_data: dbCmd.push(data)
 	})
 	return data

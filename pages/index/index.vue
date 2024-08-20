@@ -96,8 +96,7 @@
 				uniCloud.callFunction({
 					name: 'initData',
 					data: {
-						user_id: this.currentUser,
-						curDate: this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate)
+						user_id: this.currentUser
 					},
 				}).then(res => {
 					this.close()
@@ -134,19 +133,24 @@
 			/* 点击确认 */
 			async confirm(e) {
 				let num = Number(e) || 0
-				if (num < 1) return this.tools.toast('请输入大于等于1的数字')
+				if (num < 0) return this.tools.toast('请输入大于等于1的数字')
 				uni.showLoading({
 					title: '正在存钱',
 					mask: true
 				})
 				this.money = e
-				if (this.calendar_data.length) {
-					let curId = this.calendar_data[0]._id
+				let isUpdate = false
+				let curTimestamp = this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate)
+				let curData = this.calendar_data.filter(o => o.dateTimestamp === curTimestamp)
+				if (curData.length) {
+					let curId = curData[0].user_id
 					uniCloud.callFunction({
 						name: 'updateDeposit',
 						data: {
 							id: curId,
-							money: this.money
+							money: this.money,
+							curDate: curTimestamp,
+							user_id: this.currentUser
 						}
 					}).then(() => {
 						this.init()
@@ -154,15 +158,6 @@
 				} else {
 					this.addData()
 				}
-				await uni.requestSubscribeMessage({
-					tmplIds: ["MUpCSIdE753RDOqG0XQP07nYAQECCYB5Wd8ChwQbleE"], // 改成你的小程序订阅消息模板id
-					success: () => {
-						uni.showToast({
-							title: "订阅成功",
-							icon: "none"
-						})
-					}
-				});
 				uni.hideLoading()
 			},
 			/* 处理今日，累计存钱 */

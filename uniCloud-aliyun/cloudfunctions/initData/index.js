@@ -7,8 +7,7 @@ exports.main = async (event, context) => {
 		curDate
 	} = event
 	let res = await db.collection('deposit-sign-in').where({
-		user_id: dbCmd.eq(user_id),
-		dateTimestamp: dbCmd.eq(curDate)
+		user_id: dbCmd.eq(user_id)
 	}).get()
 	return res
 };

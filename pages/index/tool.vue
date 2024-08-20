@@ -35,7 +35,8 @@
 			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
-		<AnalysisDetial ref="AnalysisDetial" :detialData="detialData" v-model="showAnalysisDetial"></AnalysisDetial>
+		<AnalysisDetial ref="AnalysisDetial" :detialData="detialData" v-model="showAnalysisDetial" @change="change">
+		</AnalysisDetial>
 	</view>
 </template>
 
@@ -45,6 +46,7 @@
 		watermark
 	} from "@/api/external.js";
 	import AnalysisDetial from '../components/AnalysisDetial.vue'
+	const subscribemsg = uniCloud.importObject('subscribeMessage')
 	export default {
 		components: {
 			AnalysisDetial
@@ -53,19 +55,20 @@
 			return {
 				url: '',
 				detialData: {},
-				showAnalysisDetial: false
+				showAnalysisDetial: false,
+				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk']
 			}
 		},
 		onShareAppMessage() {
 			return {
-				title: '去水印',
+				title: '完美去水印,不限次数',
 				path: '/pages/index/tool'
 			}
 		},
 		computed: {
 			currentUser() {
 				let hostUserInfo = uni.getStorageSync('uni-id-pages-userInfo') || {}
-				return hostUserInfo._id
+				return hostUserInfo
 			}
 		},
 		onLoad() {
@@ -74,7 +77,7 @@
 		},
 		onShareAppMessage() {
 			return {
-				title: '坚持存钱，不做月光族',
+				title: '完美去水印,不限次数',
 				path: '/pages/index/tool'
 			}
 		},
@@ -103,13 +106,17 @@
 				uniCloud.callFunction({
 					name: 'getWatermark',
 					data: {
-						user_id: this.currentUser
+						user_id: this.currentUser._id
 					},
 				}).then(res => {});
 			},
 
 			//短视频解析
 			watermark() {
+				//订阅
+				uni.requestSubscribeMessage({
+					tmplIds: this.subscribeId
+				});
 				if (!this.url) return this.$u.toast("分享链接不能为空")
 				let data = {
 					link: this.url
@@ -124,16 +131,14 @@
 						videoSrc: videoUrl
 					}
 					this.showAnalysisDetial = true
-					// uni.requestSubscribeMessage({
-					// 	tmplIds: ["MUpCSIdE753RDOqG0XQP07nYAQECCYB5Wd8ChwQbleE"], // 改成你的小程序订阅消息模板id
-					// 	success: () => {
-					// 		uni.showToast({
-					// 			title: "订阅成功",
-					// 			icon: "none"
-					// 		})
-					// 	}
-					// });
 				}).catch(err => {})
+			},
+			change(e) {
+				subscribemsg.sendSubscribeMessage({
+					openid: this.currentUser.openid,
+					result: e,
+					tmplIds: this.subscribeId[0]
+				})
 			},
 			ensureHttps(url) {
 				return url.replace(/^http:\/\//i, 'https://');

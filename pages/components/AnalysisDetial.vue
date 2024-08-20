@@ -76,16 +76,23 @@
 								filePath: res.tempFilePath,
 								success: () => {
 									uni.showToast({
-										title: '保存成功',
+										title: '已保存在手机相册中',
 										icon: 'none',
 									});
+									setTimeout(() => {
+										this.$emit('change', '已保存在手机相册中')
+									}, 1000)
 								},
 								fail: (err) => {
 									this.showTips = true
 									uni.showToast({
-										title: err + '--无法保存到手机,复制无水印视频链接',
+										title: '无法保存到手机,复制无水印视频链接',
 										icon: 'none',
 									});
+									setTimeout(() => {
+										this.$emit('change', '无法保存到手机,复制无水印视频链接')
+									}, 1000)
+
 								}
 							});
 						} else {
@@ -94,9 +101,12 @@
 					},
 					fail: (err) => {
 						uni.showToast({
-							title: err + '--下载失败',
+							title: '下载失败',
 							icon: 'none',
 						});
+						setTimeout(() => {
+							this.$emit('change', '下载失败,联系客服')
+						}, 1000)
 					}
 				});
 				downloadTask.onProgressUpdate((res) => {
