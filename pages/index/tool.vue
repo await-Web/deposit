@@ -33,6 +33,9 @@
 					</button>
 				</view>
 			</view>
+			<view class="u-m-t-20">
+				<button type="primary" open-type="contact">联系客服</button>
+			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
 		<AnalysisDetial ref="AnalysisDetial" :detialData="detialData" v-model="showAnalysisDetial" @change="change">
