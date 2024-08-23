@@ -33,10 +33,12 @@
 					@change="calendarChange" :start-date="tools.getYMD()" :endDate="tools.getYMD()" />
 			</view>
 		</view>
-		<uni-popup ref="inputDialog" type="dialog">
-			<uni-popup-dialog ref="inputClose" mode="input" title="存钱" v-model="money" placeholder="请输入存钱金额"
-				@confirm="confirm" before-close @close="close"></uni-popup-dialog>
-		</uni-popup>
+		<u-modal v-model="showModal" title="记录" @confirm="confirm">
+			<view class="slot-content">
+				<ZjfInputNumber v-model="money">
+				</ZjfInputNumber>
+			</view>
+		</u-modal>
 	</view>
 </template>
 <script>
@@ -54,7 +56,8 @@
 				calendar_data: [],
 				check_ins: [],
 				todayTotalMoney: 0,
-				totalMoney: 0
+				totalMoney: 0,
+				showModal: false
 			}
 		},
 		computed: {
@@ -89,6 +92,7 @@
 		methods: {
 			/* 初始化数据 */
 			async init() {
+				this.money = ''
 				uni.showLoading({
 					title: '正在加载',
 					mask: true
@@ -107,14 +111,10 @@
 			},
 			/* 弹窗 */
 			calendarChange() {
-				this.$nextTick(() => {
-					this.$refs.inputDialog.open()
-				})
+				this.showModal = true
 			},
 			close() {
-				this.$nextTick(() => {
-					this.$refs.inputDialog.close()
-				})
+				this.showModal = false
 			},
 			//新增
 			async addData() {
@@ -131,14 +131,13 @@
 				this.init()
 			},
 			/* 点击确认 */
-			async confirm(e) {
-				let num = Number(e) || 0
-				if (num < 0) return this.tools.toast('请输入大于等于1的数字')
+			async confirm() {
+				let num = Number(this.money) || 0
+				if (num <= 0) return this.tools.toast('请输入大于等于0的数字')
 				uni.showLoading({
 					title: '正在存钱',
 					mask: true
 				})
-				this.money = e
 				let isUpdate = false
 				let curTimestamp = this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate)
 				let curData = this.calendar_data.filter(o => o.dateTimestamp === curTimestamp)
@@ -247,5 +246,12 @@
 				font-family: cursive;
 			}
 		}
+	}
+
+	.slot-content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 40rpx 0;
 	}
 </style>
