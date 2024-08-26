@@ -14,11 +14,16 @@
 			</view>
 			<!-- 图片 -->
 			<view class="imgs-box u-flex" v-else>
-				<view class="img-item " v-for="(item,index) in analysisData?.imageAtlas" :key="index">
-					<image :src="item" class="image-sty"></image>
-					<u-button type="primary" size="mini" @click="handleDownloads(item,'img')"
-						style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
-				</view>
+				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper"
+					@scrolltolower="lower" @scroll="scroll">
+					<view class="u-flex scroll-box">
+						<view class="img-item " v-for="(item,index) in analysisData?.imageAtlas" :key="index">
+							<image :src="item" class="image-sty"></image>
+							<u-button type="primary" size="mini" @click="handleDownloads(item,'img')"
+								style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
+						</view>
+					</view>
+				</scroll-view>
 			</view>
 			<!-- 描述 -->
 			<view class="u-flex-col u-m-t-10">
@@ -206,28 +211,36 @@
 		}
 
 		.imgs-box {
-
-			max-height: 800rpx;
-			border: 1px solid red;
+			border: 1px solid #d5d5d5;
 			overflow-y: scroll;
 			flex-wrap: wrap;
 			justify-content: space-between;
 			margin-top: 20rpx;
+			padding: 20rpx;
+			border-radius: 8rpx;
 
-			.img-item {
-				position: relative;
-				width: 48%;
-				height: 400rpx;
-				align-items: center;
-				flex-wrap: wrap;
-				justify-content: space-between;
-				margin-bottom: 10rpx;
+			.scroll-Y {
+				max-height: 800rpx;
 
-				.image-sty {
-					width: 100%;
-					height: 100%;
+				.scroll-box {
+					flex-wrap: wrap;
+					justify-content: space-between;
 				}
 
+				.img-item {
+					position: relative;
+					width: 48%;
+					height: 400rpx;
+					align-items: center;
+					flex-wrap: wrap;
+					justify-content: space-between;
+					margin-bottom: 10rpx;
+
+					.image-sty {
+						width: 100%;
+						height: 100%;
+					}
+				}
 			}
 		}
 	}

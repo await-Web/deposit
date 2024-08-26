@@ -32,12 +32,6 @@
 			"style": {
 				"navigationBarTitleText": "编辑个人资料"
 			}
-		}, {
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
 		},
 		{
 			"path": "pages/login/auto_login",
