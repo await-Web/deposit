@@ -8,18 +8,28 @@
 		<view class="u-flex-col content  u-p-l-20 u-p-r-20">
 			<u-alert-tips :show="true" type="error" @close="showTips = false"
 				title="视频无法下载或保存点击下方,'复制无水印视频链接'使用手机自带浏览器下载" :close-able="true"></u-alert-tips>
-			<view class="u-m-t-20 video-box">
+			<!-- 视频 -->
+			<view class="u-m-t-20 video-box" v-if="analysisData.videoSrc">
 				<video id="myVideo" :src="analysisData.videoSrc" controls></video>
-				<view class="u-flex-col u-m-t-10">
-					<text class="u-font-30 u-m-b-10">{{analysisData.title}}</text>
-					<text>{{analysisData.description}}</text>
+			</view>
+			<!-- 图片 -->
+			<view class="imgs-box u-flex" v-else>
+				<view class="img-item " v-for="(item,index) in analysisData?.imageAtlas" :key="index">
+					<image :src="item" class="image-sty"></image>
+					<u-button type="primary" size="mini" @click="handleDownloads(item,'img')"
+						style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
 				</view>
 			</view>
-			<view class="u-flex btn-box">
+			<!-- 描述 -->
+			<view class="u-flex-col u-m-t-10">
+				<text class="u-font-30 u-m-b-10">{{analysisData.title}}</text>
+				<text>{{analysisData.description}}</text>
+			</view>
+			<view class="u-flex btn-box" v-if="analysisData.videoSrc">
 				<u-button type="primary" size="medium"
-					@click="handleVideo(analysisData.videoSrc,'video')">下载视频</u-button>
+					@click="handleDownloads(analysisData.videoSrc,'video')">下载视频</u-button>
 				<u-button type="primary" size="medium"
-					@click="handleVideo(analysisData.imageSrc,'image')">下载封面</u-button>
+					@click="handleDownloads(analysisData.imageSrc,'img')">下载封面</u-button>
 				<u-button type="success" size="medium" @click="copy(analysisData.videoSrc)">复制无水印视频链接</u-button>
 				<u-button type="success" size="medium" @click="copy(analysisData.imageSrc)">复制无水印封面链接</u-button>
 			</view>
@@ -63,40 +73,13 @@
 				this.$emit("update:modelValue", false);
 			},
 			//处理解析后的数据
-			handleVideo(src, type) {
-				if (type === 'video' && !src) src = this.analysisData.imageSrc
-				let save = 'saveVideoToPhotosAlbum'
-				if (type === 'image') save = 'saveImageToPhotosAlbum'
-				if (type === 'video' && !this.analysisData.videoSrc) save = 'saveImageToPhotosAlbum'
+			handleDownloads(imageUrls, type) {
 				var downloadTask = uni.downloadFile({
-					url: src,
+					url: imageUrls,
 					success: (res) => {
 						if (res.statusCode === 200) {
-							uni[save]({
-								filePath: res.tempFilePath,
-								success: () => {
-									uni.showToast({
-										title: '已保存在手机相册中',
-										icon: 'none',
-									});
-									setTimeout(() => {
-										this.$emit('change', '已保存在手机相册中')
-									}, 1000)
-								},
-								fail: (err) => {
-									this.showTips = true
-									uni.showToast({
-										title: '无法保存到手机,复制无水印视频链接',
-										icon: 'none',
-									});
-									setTimeout(() => {
-										this.$emit('change', '无法保存到手机,复制无水印视频链接')
-									}, 1000)
-
-								}
-							});
-						} else {
-							uni.hideLoading()
+							if (type === 'img') this.handleImage(res.tempFilePath)
+							if (type === 'video') this.handleVideo(res.tempFilePath)
 						}
 					},
 					fail: (err) => {
@@ -115,6 +98,43 @@
 					})
 					if (res.progress == 100) uni.hideLoading()
 				});
+			},
+			// 图片
+			handleImage(tempFilePath) {
+				uni.saveImageToPhotosAlbum({
+					filePath: tempFilePath,
+					success() {
+						uni.showToast({
+							title: '已保存在手机相册中',
+							icon: 'none',
+						});
+					},
+					fail: (err) => {
+						uni.showToast({
+							title: '无法保存到手机,复制无水印视频链接',
+							icon: 'none',
+						});
+					}
+				})
+			},
+
+			//视频
+			handleVideo(tempFilePath) {
+				uni.saveVideoToPhotosAlbum({
+					filePath: tempFilePath,
+					success() {
+						uni.showToast({
+							title: '已保存在手机相册中',
+							icon: 'none',
+						});
+					},
+					fail: (err) => {
+						uni.showToast({
+							title: '无法保存到手机,复制无水印视频链接',
+							icon: 'none',
+						});
+					}
+				})
 			},
 			//复制
 			copy(text) {
@@ -182,6 +202,32 @@
 			::v-deep button {
 				width: 340rpx !important;
 				margin-bottom: 20rpx;
+			}
+		}
+
+		.imgs-box {
+
+			max-height: 800rpx;
+			border: 1px solid red;
+			overflow-y: scroll;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			margin-top: 20rpx;
+
+			.img-item {
+				position: relative;
+				width: 48%;
+				height: 400rpx;
+				align-items: center;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				margin-bottom: 10rpx;
+
+				.image-sty {
+					width: 100%;
+					height: 100%;
+				}
+
 			}
 		}
 	}

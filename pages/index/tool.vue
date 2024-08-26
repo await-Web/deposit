@@ -128,10 +128,12 @@
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
 					let imgUrl = this.ensureHttps(data.imageSrc)
 					let videoUrl = this.ensureHttps(data.videoSrc)
+					let imageAtlas = data.imageAtlas.map(o => this.ensureHttps(o))
 					this.detialData = {
 						...data,
 						imageSrc: imgUrl,
-						videoSrc: videoUrl
+						videoSrc: videoUrl,
+						imageAtlas: imageAtlas
 					}
 					this.showAnalysisDetial = true
 				}).catch(err => {})
