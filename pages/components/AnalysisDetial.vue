@@ -43,6 +43,9 @@
 </template>
 
 <script>
+	// #ifdef MP-WEIXIN
+	const fs = wx.getFileSystemManager()
+	// #endif
 	export default {
 		props: {
 			modelValue: {
@@ -57,7 +60,8 @@
 		data() {
 			return {
 				show: false,
-				showTips: false
+				showTips: false,
+				newTime: +new Date()
 			}
 		},
 		watch: {
@@ -83,18 +87,23 @@
 					url: imageUrls,
 					success: (res) => {
 						if (res.statusCode === 200) {
-							if (type === 'img') this.handleImage(res.tempFilePath)
-							if (type === 'video') this.handleVideo(res.tempFilePath)
+							if (type === 'img') this.saveImage(res.tempFilePath)
+							if (type === 'video') this.handleVideoFile('video', `${this.newTime}.mp4`, res
+								.tempFilePath)
 						}
 					},
 					fail: (err) => {
-						uni.showToast({
-							title: '下载失败',
-							icon: 'none',
-						});
-						setTimeout(() => {
-							this.$emit('change', '下载失败,联系客服')
-						}, 1000)
+						if (err.errMsg == 'downloadFile:fail exceed max file size') {
+							uni.showModal({
+								title: "下载失败",
+								content: "该文件超过200M，无法直接在微信下载，请复制链接去外部浏览器下载",
+								confirmText: "复制链接",
+								showCancel: false
+							})
+						}
+						// setTimeout(() => {
+						// 	this.$emit('change', '下载失败,联系客服')
+						// }, 1000)
 					}
 				});
 				downloadTask.onProgressUpdate((res) => {
@@ -104,11 +113,11 @@
 					if (res.progress == 100) uni.hideLoading()
 				});
 			},
-			// 图片
-			handleImage(tempFilePath) {
+			// 保存图片
+			saveImage(tempFilePath) {
 				uni.saveImageToPhotosAlbum({
 					filePath: tempFilePath,
-					success() {
+					success: () => {
 						uni.showToast({
 							title: '已保存在手机相册中',
 							icon: 'none',
@@ -123,23 +132,56 @@
 				})
 			},
 
-			//视频
-			handleVideo(tempFilePath) {
+			//保存视频
+			saveVideoFile(tempFilePath) {
 				uni.saveVideoToPhotosAlbum({
 					filePath: tempFilePath,
-					success() {
+					success: (res) => {
 						uni.showToast({
 							title: '已保存在手机相册中',
 							icon: 'none',
 						});
 					},
 					fail: (err) => {
+						if (err.errMsg == 'saveVideoToPhotosAlbum:fail cancel') return //取消，不做操作
 						uni.showToast({
 							title: '无法保存到手机,复制无水印视频链接',
 							icon: 'none',
 						});
 					}
 				})
+			},
+			//处理视频文件
+			handleVideoFile(dir, filePath, tempFilePath) {
+				this.handleDirectory(dir)
+				this.$nextTick(() => {
+					fs.saveFile({
+						tempFilePath,
+						filePath: `${wx.env.USER_DATA_PATH}/${dir+'/'+filePath}`,
+						success: (res) => {
+							this.saveVideoFile(res.savedFilePath)
+						},
+						fail(res) {
+							uni.showToast({
+								title: '下载失败，请查看是否打开下载相册权限或联系客服',
+								icon: "none"
+							})
+						}
+					})
+				})
+			},
+			//处理文件目录
+			handleDirectory(url) {
+				//判断文件/目录是否存在
+				try {
+					fs.accessSync(`${wx.env.USER_DATA_PATH}/${url}`)
+				} catch (e) {
+					try {
+						fs.mkdirSync(`${wx.env.USER_DATA_PATH}/${url}`, true)
+					} catch (e) {
+						console.error('fsmkdir', e)
+					}
+				}
 			},
 			//复制
 			copy(text) {

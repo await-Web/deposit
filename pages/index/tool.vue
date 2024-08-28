@@ -3,7 +3,7 @@
 		<view class="statusBar" :style="{height:system.getStatusBarHeight()+'px'}"></view>
 		<view class="tool-content">
 			<view class="title">
-				完美去水印
+				365去水印
 			</view>
 
 			<view class="u-m-t-20 url-input">
@@ -64,7 +64,7 @@
 		},
 		onShareAppMessage() {
 			return {
-				title: '完美去水印,不限次数',
+				title: '免费去水印,不限次数',
 				path: '/pages/index/tool'
 			}
 		},
@@ -80,7 +80,7 @@
 		},
 		onShareAppMessage() {
 			return {
-				title: '完美去水印,不限次数',
+				title: '免费去水印,不限次数',
 				path: '/pages/index/tool'
 			}
 		},
