@@ -13,20 +13,20 @@
 					<uni-forms-item label="性别" required>
 						<uni-data-checkbox v-model="formData.gender" :localdata="genderList" name="gender" />
 					</uni-forms-item>
-					<uni-forms-item label="选择存钱类型" required label-width="200">
+					<!-- <uni-forms-item label="选择存钱类型" required label-width="200">
 						<ZjfSelect :options="depositTypeList" v-model="formData.depositType" @change="selectChange"
 							name="depositType">
 						</ZjfSelect>
-					</uni-forms-item>
+					</uni-forms-item> -->
 				</uni-forms>
-				<view
+				<!-- <view
 					style="width: 100%;height: 100%;border-radius: 8rpx;background-color: #d9d9d8;margin-bottom: 20rpx;padding: 20rpx;">
 					<text style="color: #333;font-size: 36rpx; font-weight: 600;"
 						class="title">{{depositValue+'说明'}}</text>
 					<view class="" style="margin-top: 20rpx;letter-spacing: 2px;line-height: 56rpx;font-size: 32rpx;">
 						{{this.illustrate}}
 					</view>
-				</view>
+				</view> -->
 			</view>
 			<view class="" style="position: fixed;bottom: 0;width: 100%;">
 				<button type="primary" @click="submit()" :loading="loading">提交</button>

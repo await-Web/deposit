@@ -20,7 +20,7 @@
 				</view>
 				<view class="info">
 					<view class="username">{{username}}</view>
-					<view class="text"> {{ `存钱的第${register_date}天`}}</view>
+					<view class="text"> {{ `去水印的第${register_date}天`}}</view>
 				</view>
 			</view>
 			<view class="right" @click="jumPage('/pages/my/personalDetails')">
