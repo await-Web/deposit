@@ -1,257 +1,260 @@
 <template>
-	<view class="index-v">
-		<view class="">
-			<home-head></home-head>
-		</view>
-		<view class="body">
-			<view class="banner">
-				<view class="banner-up">
-					<view class="left">
-						<view class="title-box">
-							<view class="txt">今日存钱</view>
-							<view class="txt money-symbol">￥：<text class="money-sty">{{todayTotalMoney}}</text>
-							</view>
-						</view>
-						<view class="title-box">
-							<view class="txt">累计存钱</view>
-							<view class="txt">￥：<text class="money-sty">{{totalMoney}}</text></view>
-						</view>
-					</view>
-					<view class="right">
-						<image src="../../static/image/deposit.gif" mode="" class="right-image">
-						</image>
-					</view>
-				</view>
-				<view class="bottom-slogan">
-					<!-- 距离暴富还有300天呦！加油宝子！你是最棒的! -->
-					点击下方日历，开始存钱吧！
-				</view>
+	<view class="tool-v">
+		<view class="statusBar" :style="{height:system.getStatusBarHeight()+'px'}"></view>
+		<view class="tool-content">
+			<view class="title">
+				365去水印
 			</view>
 
-			<view class="" style="margin-top: 20rpx;">
-				<uni-calendar class="uni-calendar--hook" :selected="calendar_data" :showMonth="false"
-					@change="calendarChange" :start-date="tools.getYMD()" :endDate="tools.getYMD()" />
+			<view class="u-m-t-20 url-input">
+				<uni-easyinput type="textarea" v-model="url" placeholder="此处粘贴视频分享链接" :clearable="true"></uni-easyinput>
+				<view class="u-flex">
+					<button class="u-m-t-16 btn" style="" @click="watermark">开始解析</button>
+					<button class="u-m-t-16 btn" style="" type="warn" @click="url = ''">清空</button>
+				</view>
+
 			</view>
+			<!-- <view class="u-flex del-watermark">
+				<view class="course u-flex-col block">
+					<text class="txt-top">使用教程</text>
+					<text class="txt-bottom">如何去水印</text>
+				</view>
+				<view class="invitation u-flex-col block">
+					<text class="txt-top">邀请好友</text>
+					<text class="txt-bottom">获取永久会员</text>
+				</view>
+			</view> -->
+			<view class="share u-flex-col">
+				<view class="u-flex share-inner">
+
+					<button open-type="share">
+						<image src="../../static/image/wx.png" mode=""></image>
+						<text class="u-m-l-10 u-m-r-10 u-font-30">分享给好友，共同解锁有趣的视频</text>
+					</button>
+				</view>
+			</view>
+			<view class="u-m-t-20">
+				<button type="primary" open-type="contact">联系客服</button>
+			</view>
+			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
-		<u-modal v-model="showModal" title="记录" @confirm="confirm">
-			<view class="slot-content">
-				<ZjfInputNumber v-model="money">
-				</ZjfInputNumber>
-			</view>
-		</u-modal>
+		<AnalysisDetial ref="AnalysisDetial" :detialData="detialData" v-model="showAnalysisDetial" @change="change">
+		</AnalysisDetial>
 	</view>
 </template>
+
 <script>
-	const db = uniCloud.database();
-	const depositTable = db.collection('deposit-sign-in')
-	import homeHead from '@/components/homeHead.vue'
+	import {
+		getVoucher,
+		watermark
+	} from "@/api/external.js";
+	import AnalysisDetial from '../components/AnalysisDetial.vue'
+	const subscribemsg = uniCloud.importObject('subscribeMessage')
 	export default {
 		components: {
-			homeHead
+			AnalysisDetial
 		},
 		data() {
 			return {
-				info: '',
-				money: '',
-				calendar_data: [],
-				check_ins: [],
-				todayTotalMoney: 0,
-				totalMoney: 0,
-				showModal: false
+				url: '',
+				detialData: {},
+				showAnalysisDetial: false,
+				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk']
+			}
+		},
+		onShareAppMessage() {
+			return {
+				title: '免费去水印,不限次数',
+				path: '/pages/index/index'
 			}
 		},
 		computed: {
 			currentUser() {
 				let hostUserInfo = uni.getStorageSync('uni-id-pages-userInfo') || {}
-				return hostUserInfo._id
+				return hostUserInfo
 			}
 		},
 		onLoad() {
-			uni.hideToast(); // 隐藏弹出提示
-			uni.hideKeyboard(); //  隐藏软键盘
+			this.share()
+			this.getVoucher()
 		},
-		onShow() {
-			uni.hideToast(); // 隐藏弹出提示
-			uni.hideKeyboard(); //  隐藏软键盘
-			// #ifdef MP-WEIXIN
-			wx.showShareMenu({
-				withShareTicket: true,
-				menus: ['shareAppMessage', 'shareTimeline']
-			})
-			// #endif
-			this.init()
-		},
-		//分享
 		onShareAppMessage() {
 			return {
-				title: '坚持存钱，不做月光族',
-				path: '/pages/index/index',
-				imageUrl: '/static/image/365.png'
+				title: '免费去水印,不限次数',
+				path: '/pages/index/index'
 			}
 		},
 		methods: {
-			/* 初始化数据 */
-			async init() {
-				this.money = ''
-				uni.showLoading({
-					title: '正在加载',
-					mask: true
+			share() {
+				//分享
+				// #ifdef MP-WEIXIN
+				wx.showShareMenu({
+					withShareTicket: true,
+					menus: ['shareAppMessage', 'shareTimeline']
 				})
+				// #endif
+			},
+			//获取接口调用凭据
+			getVoucher() {
+				let data = {
+					appid: '66bc5fb2a5d7e1241SihJ',
+					appsecret: '6B0TruSB7SvwczwF4vZ0iTiOXPZOcJST'
+				}
+				getVoucher(data).then(res => {
+					uni.setStorageSync('externalToken', res.data.token) || ''
+				})
+			},
+			//获取次数
+			getWatermarkCount() {
 				uniCloud.callFunction({
-					name: 'initData',
+					name: 'getWatermark',
 					data: {
-						user_id: this.currentUser
+						user_id: this.currentUser._id
 					},
-				}).then(res => {
-					this.close()
-					let data = res.result.data || []
-					this.calendar_data = data
-					this.handleDeposit()
+				}).then(res => {});
+			},
+
+			//短视频解析
+			watermark() {
+				//订阅
+				uni.requestSubscribeMessage({
+					tmplIds: this.subscribeId
 				});
-			},
-			/* 弹窗 */
-			calendarChange() {
-				this.showModal = true
-			},
-			close() {
-				this.showModal = false
-			},
-			//新增
-			async addData() {
-				this.check_ins.push({
-					money: this.money,
-					info: '已存钱'
-				})
-				await depositTable.add({
-					dateTimestamp: this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate),
-					date: this.tools.getDate(new Date()).fullDate,
-					info: '已存钱',
-					calendar_data: this.check_ins
-				})
-				this.init()
-			},
-			/* 点击确认 */
-			async confirm() {
-				let num = Number(this.money) || 0
-				if (num <= 0) return this.tools.toast('请输入大于等于0的数字')
-				uni.showLoading({
-					title: '正在存钱',
-					mask: true
-				})
-				let isUpdate = false
-				let curTimestamp = this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate)
-				let curData = this.calendar_data.filter(o => o.dateTimestamp === curTimestamp)
-				if (curData.length) {
-					let curId = curData[0].user_id
-					uniCloud.callFunction({
-						name: 'updateDeposit',
-						data: {
-							id: curId,
-							money: this.money,
-							curDate: curTimestamp,
-							user_id: this.currentUser
-						}
-					}).then(() => {
-						this.init()
-					});
-				} else {
-					this.addData()
+				if (!this.url) return this.$u.toast("分享链接不能为空")
+				let data = {
+					link: this.url
 				}
-				uni.hideLoading()
+				watermark(data).then(res => {
+					let data = JSON.parse(JSON.stringify(res.data)) || {}
+					let imgUrl = this.ensureHttps(data.imageSrc)
+					let videoUrl = this.ensureHttps(data.videoSrc)
+					let imageAtlas = data.imageAtlas.map(o => this.ensureHttps(o))
+					this.detialData = {
+						...data,
+						imageSrc: imgUrl,
+						videoSrc: videoUrl,
+						imageAtlas: imageAtlas
+					}
+					this.showAnalysisDetial = true
+				}).catch(err => {})
 			},
-			/* 处理今日，累计存钱 */
-			handleDeposit() {
-				let arr = this.calendar_data
-				let totalMoney = 0
-				for (let i = 0; i < arr.length; i++) {
-					let calendar = arr[i].calendar_data;
-					let today = arr[i].dateTimestamp;
-					const sum = calendar.reduce((acc, obj) => acc + Number(obj.money), 0);
-					if (today === this.tools.convertToTimestamp(this.tools.getDate(new Date()).fullDate)) this
-						.todayTotalMoney = sum;
-					totalMoney += sum;
-				}
-				this.totalMoney = totalMoney
-				uni.hideLoading()
+			change(e) {
+				subscribemsg.sendSubscribeMessage({
+					openid: this.currentUser.openid,
+					result: e,
+					tmplIds: this.subscribeId[0]
+				})
+			},
+			ensureHttps(url) {
+				return url.replace(/^http:\/\//i, 'https://');
 			}
 		}
 	}
 </script>
+
 <style lang="scss" scoped>
-	.index-v {
-		display: flex;
-		flex-direction: column;
-		/* #ifdef MP-WEIXIN */
-		height: 100vh;
-		/* #endif */
-		/* #ifndef MP-WEIXIN */
-		height: calc(100vh - 2.85rem);
-		/* #endif */
-		background-color: $background-color
+	page {
+		background-color: #f0f2f6;
 	}
 
-	.body {
-		flex: 1;
-		overflow: hidden;
-		padding: 0rpx 20rpx 20rpx 20rpx;
+	.tool-v {
+		width: 100%;
+		height: 100%;
+		padding: 0 20rpx;
 
-		.banner {
-			width: 100%;
-			height: 300rpx;
-			background-color: #b1befc;
-			border-radius: 20rpx;
-			padding: 0 20rpx;
+		.tool-content {
+			.title {
+				width: 100%;
+				height: 80rpx;
+				text-align: center;
+				font-size: 36rpx;
+				line-height: 80rpx;
 
-			.banner-up {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
+			}
 
-				.left {
-					.title-box {
-						.txt {
-							color: #fff;
-							font-size: 28rpx;
-
-							.money-sty {
-								font-size: 32rpx;
-								color: #ecef67;
-							}
-
-						}
-
-						.money-symbol {
-							margin-bottom: 28rpx;
-						}
-					}
-				}
-
-				.right {
-					width: 220rpx;
-					height: 220rpx;
-
-					.right-image {
-						width: 100%;
-						height: 100%;
-					}
+			.url-input {
+				.btn {
+					width: 46%;
+					background-color: #16afc3;
+					color: #fff;
 				}
 			}
 
-			.bottom-slogan {
+			.del-watermark {
+				width: 100%;
+				justify-content: space-between;
 				margin-top: 20rpx;
-				color: #fffc80;
-				font-size: 34rpx;
+
+				.block {
+					width: 350rpx;
+					height: 160rpx;
+					background-color: blue;
+					color: #fff;
+					border-radius: 20rpx;
+					align-items: center;
+					justify-content: center;
+					font-size: 28rpx;
+
+					.txt-top {
+						font-size: 46rpx;
+					}
+
+					.txt-bottom {
+						font-size: 28rpx;
+					}
+				}
+
+				.course {
+					background-color: blue;
+				}
+
+				.invitation {
+					background-color: red;
+				}
+			}
+
+			.share {
+				.share-inner {
+					width: 100%;
+
+					button {
+						display: flex;
+						width: 100% !important;
+						height: 180rpx;
+						border-radius: 20rpx;
+						justify-content: center;
+						align-items: center;
+						color: #fff;
+						background: radial-gradient(60% 200px at right top, #19b2bc, transparent),
+							radial-gradient(20% 200px at left top, #0a96e4, transparent),
+							radial-gradient(80% 200px at left top, #048af4, transparent);
+
+						image {
+							width: 84rpx;
+							height: 84rpx;
+						}
+					}
+				}
+
+				width: 100%;
+				height: 180rpx;
+				margin-top: 20rpx;
+				border-radius: 20rpx;
+				background: radial-gradient(60% 200px at right top, #19b2bc, transparent),
+				radial-gradient(20% 200px at left top, #0a96e4, transparent),
+				radial-gradient(80% 200px at left top, #048af4, transparent);
+
+				justify-content: center;
+				align-items: center;
+			}
+
+			.statement {
+				width: 100%;
+				height: 80rpx;
+				line-height: 80rpx;
 				text-align: center;
-				font-weight: bold;
-				font-family: cursive;
+				color: red;
 			}
 		}
-	}
-
-	.slot-content {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 40rpx 0;
 	}
 </style>

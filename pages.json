@@ -7,7 +7,7 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/tool",
+			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom",
 				"navigationBarTitleText": "短视频去水印"
@@ -34,7 +34,7 @@
 			}
 		},
 		{
-			"path": "pages/login/auto_login",
+			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
@@ -69,7 +69,7 @@
 			// }, 
 			{
 				"text": "首页",
-				"pagePath": "pages/index/tool",
+				"pagePath": "pages/index/index",
 				"iconPath": "static/image/tool.png",
 				"selectedIconPath": "static/image/tool-h.png"
 			}, {
@@ -81,7 +81,7 @@
 		]
 	},
 	"uniIdRouter": {
-		"loginPage": "pages/login/auto_login",
+		"loginPage": "pages/login/login",
 		"needLogin": [
 			"pages/index/.*",
 			"pages/my/.*"
