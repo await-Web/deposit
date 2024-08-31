@@ -9,7 +9,6 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationStyle": "custom",
 				"navigationBarTitleText": "短视频去水印"
 			}
 		},
@@ -23,8 +22,7 @@
 		{
 			"path": "pages/index/my",
 			"style": {
-				"navigationBarTitleText": "个人中心",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "修改MD5"
 			}
 		},
 		{
@@ -70,13 +68,13 @@
 			{
 				"text": "首页",
 				"pagePath": "pages/index/index",
+				"iconPath": "static/image/home.png",
+				"selectedIconPath": "static/image/home-h.png"
+			}, {
+				"text": "MD5",
+				"pagePath": "pages/index/my",
 				"iconPath": "static/image/tool.png",
 				"selectedIconPath": "static/image/tool-h.png"
-			}, {
-				"text": "我的",
-				"pagePath": "pages/index/my",
-				"iconPath": "static/image/self.png",
-				"selectedIconPath": "static/image/self-h.png"
 			}
 		]
 	},

@@ -1,18 +1,12 @@
 <template>
 	<view class="tool-v">
-		<view class="statusBar" :style="{height:system.getStatusBarHeight()+'px'}"></view>
 		<view class="tool-content">
-			<view class="title">
-				365去水印
-			</view>
-
 			<view class="u-m-t-20 url-input">
 				<uni-easyinput type="textarea" v-model="url" placeholder="此处粘贴视频分享链接" :clearable="true"></uni-easyinput>
 				<view class="u-flex">
 					<button class="u-m-t-16 btn" style="" @click="watermark">开始解析</button>
 					<button class="u-m-t-16 btn" style="" type="warn" @click="url = ''">清空</button>
 				</view>
-
 			</view>
 			<!-- <view class="u-flex del-watermark">
 				<view class="course u-flex-col block">
