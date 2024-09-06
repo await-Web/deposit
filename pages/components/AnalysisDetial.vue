@@ -6,8 +6,6 @@
 			<view class="title">提取完毕</view>
 		</view>
 		<view class="u-flex-col content  u-p-l-20 u-p-r-20">
-			<u-alert-tips :show="true" type="error" @close="showTips = false"
-				title="视频无法下载或保存点击下方,'复制无水印视频链接'使用手机自带浏览器下载" :close-able="true"></u-alert-tips>
 			<!-- 视频 -->
 			<view class="u-m-t-20 video-box" v-if="analysisData.videoSrc">
 				<video id="myVideo" :src="analysisData.videoSrc" controls></video>
@@ -101,9 +99,6 @@
 								showCancel: false
 							})
 						}
-						// setTimeout(() => {
-						// 	this.$emit('change', '下载失败,联系客服')
-						// }, 1000)
 					}
 				});
 				downloadTask.onProgressUpdate((res) => {

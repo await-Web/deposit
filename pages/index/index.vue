@@ -1,26 +1,20 @@
 <template>
 	<view class="tool-v">
+		<u-alert-tips :show="true" type="error" @close="showTips = false" title="批量解析目前仅支持抖音平台"
+			:close-able="true"></u-alert-tips>
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
 				<uni-easyinput type="textarea" v-model="url" placeholder="此处粘贴视频分享链接" :clearable="true"></uni-easyinput>
 				<view class="u-flex">
-					<button class="u-m-t-16 btn" style="" @click="watermark">开始解析</button>
-					<button class="u-m-t-16 btn" style="" type="warn" @click="url = ''">清空</button>
+					<button class="u-m-t-16 btn" @click="watermark">单个解析</button>
+					<button class="u-m-t-16 btn" type="warn" @click="url = ''">清空</button>
 				</view>
 			</view>
-			<!-- <view class="u-flex del-watermark">
-				<view class="course u-flex-col block">
-					<text class="txt-top">使用教程</text>
-					<text class="txt-bottom">如何去水印</text>
-				</view>
-				<view class="invitation u-flex-col block">
-					<text class="txt-top">邀请好友</text>
-					<text class="txt-bottom">获取永久会员</text>
-				</view>
-			</view> -->
+			<view class="batch u-m-t-20 u-m-b-20" @click="authorWorkWatermark">
+				<text>主页批量解析</text>
+			</view>
 			<view class="share u-flex-col">
 				<view class="u-flex share-inner">
-
 					<button open-type="share">
 						<image src="../../static/image/wx.png" mode=""></image>
 						<text class="u-m-l-10 u-m-r-10 u-font-30">分享给好友，共同解锁有趣的视频</text>
@@ -36,11 +30,11 @@
 		</AnalysisDetial>
 	</view>
 </template>
-
 <script>
 	import {
 		getVoucher,
-		watermark
+		watermark,
+		authorWorkWatermark
 	} from "@/api/external.js";
 	import AnalysisDetial from '../components/AnalysisDetial.vue'
 	const subscribemsg = uniCloud.importObject('subscribeMessage')
@@ -50,7 +44,8 @@
 		},
 		data() {
 			return {
-				url: '',
+				url: '8- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihVGccPx/ 4@5.com :3pm',
+				// url: '4- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihpLEcWT/ 4@8.com :1pm',
 				detialData: {},
 				showAnalysisDetial: false,
 				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk']
@@ -132,6 +127,23 @@
 					this.showAnalysisDetial = true
 				}).catch(err => {})
 			},
+			//批量解析
+			authorWorkWatermark() {
+				let data = {
+					appid: '66bc5fb2a5d7e1241SihJ',
+					appsecret: '6B0TruSB7SvwczwF4vZ0iTiOXPZOcJST',
+					link: this.url
+				}
+				authorWorkWatermark(data).then(res => {
+					let data = JSON.parse(JSON.stringify(res.data)) || {}
+					if (res.code == '1') {
+						uni.navigateTo({
+							url: '/pages/batch/index?config=' + encodeURIComponent(JSON
+								.stringify(data))
+						})
+					}
+				})
+			},
 			change(e) {
 				subscribemsg.sendSubscribeMessage({
 					openid: this.currentUser.openid,
@@ -157,13 +169,16 @@
 		padding: 0 20rpx;
 
 		.tool-content {
-			.title {
-				width: 100%;
-				height: 80rpx;
-				text-align: center;
-				font-size: 36rpx;
-				line-height: 80rpx;
 
+			.batch {
+				width: 100%;
+				height: 120rpx;
+				background-image: linear-gradient(45deg, #ff9700, #ed1c24);
+				color: #ffffff;
+				border-radius: 20rpx;
+				text-align: center;
+				line-height: 120rpx;
+				font-size: 32rpx;
 			}
 
 			.url-input {
@@ -171,6 +186,7 @@
 					width: 46%;
 					background-color: #16afc3;
 					color: #fff;
+					font-size: 32rpx;
 				}
 			}
 

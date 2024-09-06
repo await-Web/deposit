@@ -1,0 +1,219 @@
+<template>
+	<view class="batch-v">
+		<mescroll-body ref="mescrollRef" @down="downCallback" :down="downOption" :sticky="false" @up="upCallback"
+			:up="upOption" :bottombar="false" @init="mescrollInit" top="20">
+			<view class="" v-for="(item,index) in dataList" :key="index">
+				<view class="video-box" v-if="item.videoSrc">
+					<button size="mini" type="primary" class="btn"
+						@click="handleDownloads(item.videoSrc,'video')">下载</button>
+					<video :id="'video'+index" :src="item.videoSrc" controls @play="handlePlay(index)"
+						play-btn-position="center" enable-play-gesture vslide-gesture></video>
+				</view>
+			</view>
+		</mescroll-body>
+	</view>
+</template>
+
+<script>
+	// #ifdef MP-WEIXIN
+	const fs = wx.getFileSystemManager()
+	// #endif
+	import {
+		authorWorkWatermark
+	} from "@/api/external.js";
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	export default {
+		mixins: [MescrollMixin],
+		data() {
+			return {
+				newTime: +new Date(),
+				dataList: [],
+				bathData: {},
+				downOption: {
+					use: true,
+					auto: false,
+				},
+				upOption: {
+					use: true,
+					auto: false,
+					page: {
+						num: 0,
+						size: 5,
+						time: null,
+					},
+					empty: {
+						use: true,
+						icon: '',
+						tip: "暂无数据",
+						fixed: false,
+						top: "560rpx",
+					},
+					textNoMore: "没有更多数据",
+				},
+			}
+		},
+		onLoad(e) {
+			this.bathData = JSON.parse(decodeURIComponent(e.config));
+			this.dataList = this.bathData.aweme_list
+		},
+		methods: {
+			//处理解析后的数据
+			handleDownloads(imageUrls, type) {
+				var downloadTask = uni.downloadFile({
+					url: imageUrls,
+					success: (res) => {
+						if (res.statusCode === 200) {
+							if (type === 'img') this.saveImage(res.tempFilePath)
+							if (type === 'video') this.handleVideoFile('video', `${this.newTime}.mp4`, res
+								.tempFilePath)
+						}
+					},
+					fail: (err) => {
+						if (err.errMsg == 'downloadFile:fail exceed max file size') {
+							uni.showModal({
+								title: "下载失败",
+								content: "该文件超过200M，无法直接在微信下载，请复制链接去外部浏览器下载",
+								confirmText: "复制链接",
+								showCancel: false
+							})
+						}
+					}
+				});
+				downloadTask.onProgressUpdate((res) => {
+					uni.showLoading({
+						title: '正在下载' + res.progress + '%'
+					})
+					if (res.progress == 100) uni.hideLoading()
+				});
+			},
+			// 保存图片
+			saveImage(tempFilePath) {
+				uni.saveImageToPhotosAlbum({
+					filePath: tempFilePath,
+					success: () => {
+						uni.showToast({
+							title: '已保存在手机相册中',
+							icon: 'none',
+						});
+					},
+					fail: (err) => {
+						uni.showToast({
+							title: '无法保存到手机,复制无水印视频链接',
+							icon: 'none',
+						});
+					}
+				})
+			},
+
+			//保存视频
+			saveVideoFile(tempFilePath) {
+				uni.saveVideoToPhotosAlbum({
+					filePath: tempFilePath,
+					success: (res) => {
+						uni.showToast({
+							title: '已保存在手机相册中',
+							icon: 'none',
+						});
+					},
+					fail: (err) => {
+						if (err.errMsg == 'saveVideoToPhotosAlbum:fail cancel') return //取消，不做操作
+						uni.showToast({
+							title: '无法保存到手机,复制无水印视频链接',
+							icon: 'none',
+						});
+					}
+				})
+			},
+			//处理视频文件
+			handleVideoFile(dir, filePath, tempFilePath) {
+				this.handleDirectory(dir)
+				this.$nextTick(() => {
+					fs.saveFile({
+						tempFilePath,
+						filePath: `${wx.env.USER_DATA_PATH}/${dir+'/'+filePath}`,
+						success: (res) => {
+							this.saveVideoFile(res.savedFilePath)
+						},
+						fail(res) {
+							uni.showToast({
+								title: '下载失败，请查看是否打开下载相册权限或联系客服',
+								icon: "none"
+							})
+						}
+					})
+				})
+			},
+			//处理文件目录
+			handleDirectory(url) {
+				//判断文件/目录是否存在
+				try {
+					fs.accessSync(`${wx.env.USER_DATA_PATH}/${url}`)
+				} catch (e) {
+					try {
+						fs.mkdirSync(`${wx.env.USER_DATA_PATH}/${url}`, true)
+					} catch (e) {
+						console.error('fsmkdir', e)
+					}
+				}
+			},
+			// 视频播放
+			handlePlay(index) {
+				if (this.playIdx !== '') {
+					let videoContext = uni.createVideoContext(`video${this.playIdx}`)
+					if (index == this.playIdx) return videoContext.play()
+					videoContext.pause()
+				}
+				this.playIdx = index
+			},
+			ensureHttps(url) {
+				return url.replace(/^http:\/\//i, 'https://');
+			},
+			upCallback() {
+				let query = {
+					appid: '66bc5fb2a5d7e1241SihJ',
+					appsecret: '6B0TruSB7SvwczwF4vZ0iTiOXPZOcJST',
+					link: this.bathData.link,
+					max_cursor: this.bathData.max_cursor
+				};
+				authorWorkWatermark(query).then(res => {
+					this.mescroll.endSuccess(res.data.aweme_list.length);
+					this.bathData = res.data || {}
+					let list = this.bathData.aweme_list || [];
+					this.dataList = this.dataList.concat(list)
+				}).catch(err => {
+					this.mescroll.endErr();
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	page {
+		background-color: #f0f2f6;
+	}
+
+	.batch-v {
+		.video-box {
+			position: relative;
+			padding: 0 20rpx;
+			width: 100%;
+			height: 1020rpx;
+			margin-bottom: 20rpx;
+			border-radius: 20rpx;
+
+			::v-deep video {
+				width: 100%;
+				height: 100%;
+				border-radius: 20rpx;
+			}
+
+			.btn {
+				position: absolute;
+				top: 10rpx;
+				left: 30rpx;
+				z-index: 999999;
+			}
+		}
+	}
+</style>

@@ -16,6 +16,24 @@ export function watermark(data) {
 	})
 }
 
+// 主页批量解析
+export function authorWorkWatermark(data) {
+	return request({
+		url: `https://watermark-api.hlyphp.top/AuthorWork/Index`,
+		method: 'POST',
+		data
+	})
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
