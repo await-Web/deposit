@@ -5,8 +5,8 @@
 			<view v-if="videoList.length">
 				<view class="video-box" v-for="(item,index) in videoList" :key="index">
 					<button size="mini" type="primary" class="btn" @click="handleDownloads(item,'video')">下载</button>
-					<video :id="'video'+index" :src="item" controls @play="handlePlay(index)" play-btn-position="center"
-						enable-play-gesture vslide-gesture></video>
+					<video :id="'video'+index" :src="item" controls @play="handlePlay(index)"
+						play-btn-position="center"></video>
 				</view>
 			</view>
 			<waterfallItem :flowData="flowData" @handleDownloads="handleDownloads" v-else>
