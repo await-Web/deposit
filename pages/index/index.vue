@@ -1,6 +1,6 @@
 <template>
 	<view class="tool-v">
-		<u-alert-tips :show="true" type="error" @close="showTips = false" title="批量解析目前仅支持抖音平台"
+		<u-alert-tips :show="true" type="error" @close="showTips = false" title="主页链接请点击红色的批量解析按钮,目前仅支持抖音平台"
 			:close-able="true"></u-alert-tips>
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
@@ -44,8 +44,9 @@
 		},
 		data() {
 			return {
-				url: '8- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihVGccPx/ 4@5.com :3pm',
+				// url: '8- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihVGccPx/ 4@5.com :3pm',
 				// url: '4- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihpLEcWT/ 4@8.com :1pm',
+				url: "",
 				detialData: {},
 				showAnalysisDetial: false,
 				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk']
@@ -142,13 +143,6 @@
 								.stringify(data))
 						})
 					}
-				})
-			},
-			change(e) {
-				subscribemsg.sendSubscribeMessage({
-					openid: this.currentUser.openid,
-					result: e,
-					tmplIds: this.subscribeId[0]
 				})
 			},
 			ensureHttps(url) {
