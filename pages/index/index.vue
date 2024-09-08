@@ -22,7 +22,7 @@
 				</view>
 			</view>
 			<view class="u-m-t-20">
-				<button type="primary" open-type="contact">联系客服</button>
+				<button type="primary" open-type="contact">不懂就问</button>
 			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
@@ -107,9 +107,9 @@
 			//短视频解析
 			watermark() {
 				//订阅
-				uni.requestSubscribeMessage({
-					tmplIds: this.subscribeId
-				});
+				// uni.requestSubscribeMessage({
+				// 	tmplIds: this.subscribeId
+				// });
 				if (!this.url) return this.$u.toast("分享链接不能为空")
 				let data = {
 					link: this.url
@@ -130,6 +130,7 @@
 			},
 			//批量解析
 			authorWorkWatermark() {
+				if (!this.url) return this.$u.toast("分享链接不能为空")
 				let data = {
 					appid: '66bc5fb2a5d7e1241SihJ',
 					appsecret: '6B0TruSB7SvwczwF4vZ0iTiOXPZOcJST',
