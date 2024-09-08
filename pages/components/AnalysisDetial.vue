@@ -1,27 +1,26 @@
 <template>
 	<u-popup ref="popup" width="100%" v-model="show">
-		<view class="statusBar" :style="{height:system.getStatusBarHeight()+'px'}"></view>
 		<view class="title-box">
 			<uni-icons type="closeempty" style="float: left;margin-left: 20rpx;" size='24' @click="close"></uni-icons>
 			<view class="title">提取完毕</view>
 		</view>
 		<view class="u-flex-col content  u-p-l-20 u-p-r-20">
-			<!-- 视频 -->
-			<view class="u-m-t-20 video-box" v-if="analysisData.videoSrc">
-				<video id="myVideo" :src="analysisData.videoSrc" controls></video>
-			</view>
 			<!-- 图片 -->
-			<view class="imgs-box u-flex" v-else>
-				<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper"
-					@scrolltolower="lower" @scroll="scroll">
+			<view class="imgs-box u-flex" v-if="analysisData.imageAtlas.length">
+				<scroll-view scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
+					@scroll="scroll">
 					<view class="u-flex scroll-box">
-						<view class="img-item " v-for="(item,index) in analysisData?.imageAtlas" :key="index">
-							<image :src="item" class="image-sty"></image>
+						<view class="img-item " v-for="(item,index) in analysisData.imageAtlas" :key="index">
+							<image :src="item" class="image-sty" @tap="previewImage(item)"></image>
 							<u-button type="primary" size="mini" @click="handleDownloads(item,'img')"
 								style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
 						</view>
 					</view>
 				</scroll-view>
+			</view>
+			<!-- 视频 -->
+			<view class="u-m-t-20 video-box" v-else>
+				<video id="myVideo" :src="analysisData.videoSrc" controls></video>
 			</view>
 			<!-- 描述 -->
 			<view class="u-flex-col u-m-t-10">
@@ -38,6 +37,7 @@
 			</view>
 		</view>
 	</u-popup>
+
 </template>
 
 <script>
@@ -78,6 +78,12 @@
 		methods: {
 			close() {
 				this.$emit("update:modelValue", false);
+			},
+			// 预览图片
+			previewImage(url) {
+				uni.previewImage({
+					urls: [url]
+				});
 			},
 			//处理解析后的数据
 			handleDownloads(imageUrls, type) {

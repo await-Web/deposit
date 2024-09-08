@@ -26,7 +26,7 @@
 			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
-		<AnalysisDetial ref="AnalysisDetial" :detialData="detialData" v-model="showAnalysisDetial" @change="change">
+		<AnalysisDetial :detialData="detialData" v-model="showAnalysisDetial">
 		</AnalysisDetial>
 	</view>
 </template>
@@ -44,8 +44,8 @@
 		},
 		data() {
 			return {
-				// url: '8- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihVGccPx/ 4@5.com :3pm',
-				// url: '4- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihpLEcWT/ 4@8.com :1pm',
+				// url: '0- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihtXpy4e/ 0@1.com :9pm',
+				// url: '0- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihtXKEAk/ 9@8.com :2pm',
 				url: "",
 				detialData: {},
 				showAnalysisDetial: false,
