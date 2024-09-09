@@ -4,6 +4,7 @@
 			:close-able="true"></u-alert-tips>
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
+				<!-- <u-input v-model="url" placeholder="此处粘贴视频分享链接" border></u-input> -->
 				<uni-easyinput type="textarea" v-model="url" placeholder="此处粘贴视频分享链接" :clearable="true"></uni-easyinput>
 				<view class="u-flex">
 					<button class="u-m-t-16 btn" @click="watermark">单个解析</button>
@@ -26,7 +27,7 @@
 			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
-		<AnalysisDetial :detialData="detialData" v-model="showAnalysisDetial">
+		<AnalysisDetial :detialData="detialData" v-model="showAnalysisDetial" v-if="showAnalysisDetial">
 		</AnalysisDetial>
 	</view>
 </template>
@@ -45,7 +46,7 @@
 		data() {
 			return {
 				// url: '0- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihtXpy4e/ 0@1.com :9pm',
-				// url: '0- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ihtXKEAk/ 9@8.com :2pm',
+				// url: 'https://v.douyin.com/ihtXKEAk/',
 				url: "",
 				detialData: {},
 				showAnalysisDetial: false,
@@ -127,6 +128,19 @@
 					}
 					this.showAnalysisDetial = true
 				}).catch(err => {})
+			},
+			extractDouyinLink(str) {
+				// 使用正则表达式匹配抖音链接的格式  
+				const regex = /https:\/\/v\.douyin\.com\/[^\s]+/g;
+				const matches = str.match(regex);
+
+				// 如果找到了匹配项，则返回第一个（因为可能有多条链接，但这里我们只取第一条）  
+				if (matches && matches.length > 0) {
+					return matches[0];
+				}
+
+				// 如果没有找到匹配项，则返回null或其他合适的值  
+				return null;
 			},
 			//批量解析
 			authorWorkWatermark() {

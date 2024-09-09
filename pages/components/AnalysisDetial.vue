@@ -37,9 +37,7 @@
 			</view>
 		</view>
 	</u-popup>
-
 </template>
-
 <script>
 	// #ifdef MP-WEIXIN
 	const fs = wx.getFileSystemManager()
@@ -86,9 +84,9 @@
 				});
 			},
 			//处理解析后的数据
-			handleDownloads(imageUrls, type) {
+			handleDownloads(url, type) {
 				var downloadTask = uni.downloadFile({
-					url: imageUrls,
+					url: url,
 					success: (res) => {
 						if (res.statusCode === 200) {
 							if (type === 'img') this.saveImage(res.tempFilePath)
