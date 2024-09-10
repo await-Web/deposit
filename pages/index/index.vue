@@ -25,6 +25,9 @@
 			<view class="u-m-t-20">
 				<button type="primary" open-type="contact">不懂就问</button>
 			</view>
+			<view class="u-m-t-20">
+				<button type="primary" @click="jumWebview">测试</button>
+			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
 		<AnalysisDetial :detialData="detialData" v-model="showAnalysisDetial" v-if="showAnalysisDetial">
@@ -126,6 +129,11 @@
 					}
 					this.showAnalysisDetial = true
 				}).catch(err => {})
+			},
+			jumWebview() {
+				uni.navigateTo({
+					url: '/pages/webview/index'
+				});
 			},
 			//批量解析
 			authorWorkWatermark() {
