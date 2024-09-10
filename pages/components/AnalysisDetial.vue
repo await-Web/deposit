@@ -102,7 +102,12 @@
 								confirmText: "复制链接",
 								showCancel: false
 							})
+							return
 						}
+						uni.showToast({
+							title: "下载失败，请复制链接去浏览器下载",
+							icon: "none"
+						})
 					}
 				});
 				downloadTask.onProgressUpdate((res) => {
