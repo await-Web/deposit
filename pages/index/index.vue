@@ -4,12 +4,14 @@
 			:close-able="true"></u-alert-tips>
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
-				<!-- <u-input v-model="url" placeholder="此处粘贴视频分享链接" border></u-input> -->
 				<uni-easyinput type="textarea" v-model="url" placeholder="此处粘贴视频分享链接" :clearable="true"></uni-easyinput>
 				<view class="u-flex">
 					<button class="u-m-t-16 btn" @click="watermark">单个解析</button>
 					<button class="u-m-t-16 btn" type="warn" @click="url = ''">清空</button>
 				</view>
+			</view>
+			<view class="u-m-t-20">
+				<button type="primary" @click="jumWebview">这是教程</button>
 			</view>
 			<view class="batch u-m-t-20 u-m-b-20" @click="authorWorkWatermark">
 				<text>主页批量解析</text>
@@ -24,9 +26,6 @@
 			</view>
 			<view class="u-m-t-20">
 				<button type="primary" open-type="contact">不懂就问</button>
-			</view>
-			<view class="u-m-t-20">
-				<button type="primary" @click="jumWebview">测试</button>
 			</view>
 			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
