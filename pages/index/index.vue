@@ -11,7 +11,10 @@
 				</view>
 			</view>
 			<view class="u-m-t-20">
-				<button type="primary" @click="jumWebview">这是教程</button>
+				<button type="primary" @click="jumWebview('1')">获取更多壁纸</button>
+			</view>
+			<view class="u-m-t-20">
+				<button type="primary" @click="jumWebview('2')">这是教程</button>
 			</view>
 			<view class="batch u-m-t-20 u-m-b-20" @click="authorWorkWatermark">
 				<text>主页批量解析</text>
@@ -129,10 +132,21 @@
 					this.showAnalysisDetial = true
 				}).catch(err => {})
 			},
-			jumWebview() {
-				uni.navigateTo({
-					url: '/pages/webview/index'
-				});
+			jumWebview(type) {
+				if (type == '1') {
+					uni.navigateToMiniProgram({
+						appId: 'wx51f6121324b84fa8', //目标小程序appid
+						path: '/pages/index/index', //需要打开的目标路径
+						envVersion: 'release', //小程序版本：develop（开发版），trial（体验版），release（正式版）
+						success(res) {
+							// 打开成功
+						}
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/webview/index'
+					});
+				}
 			},
 			//批量解析
 			authorWorkWatermark() {
