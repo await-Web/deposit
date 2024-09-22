@@ -21,7 +21,7 @@
 					<view class="username">{{username}}</view>
 				</view>
 			</view>
-			<view class="right" @click="jumPage('/pages/my/personalDetails')">
+			<view class="right" @click="jumPage('/pages/my/personalDetails/index')">
 				<view class="text">编辑资料</view>
 				<view class="icon">
 					<uni-icons type="right" size="20" color="#999"></uni-icons>
@@ -31,13 +31,18 @@
 		<view class=" my-group-box">
 			<view class="my-group-box-inner">
 				<u-cell-group :border="false" class="cell-group">
-					<u-cell-item title="历史记录" @click="openPage('/pages/my/dataLog')" :title-style="titleStyle">
+					<u-cell-item title="历史记录" @click="openPage('/pages/my/dataLog/index')" :title-style="titleStyle">
 						<template #icon>
 							<text class="icon-kx icon-kx-jilu u-m-r-16 u-font-32" />
 						</template>
 					</u-cell-item>
 				</u-cell-group>
 			</view>
+		</view>
+		<view class="wx-ad">
+			<!-- <video class="ad-video" ad-unit-id="adunit-a702b9c32c152cb0" bindadplay="onAdplay" bindadload="onAdload"
+				bindadclose="onAdclose" bindaderror="onAdError"></video> -->
+			<ad unit-id="adunit-a702b9c32c152cb0" ad-type="video" ad-theme="white"></ad>
 		</view>
 	</view>
 </template>
@@ -73,6 +78,34 @@
 				this.avatar = this.userData.userInfo.avatar
 				this.username = this.userData.userInfo.username
 				this.register_date = this.tools.daysFromTimestamp(this.userData.userInfo.register_date)
+				// this.wxAd()
+			},
+			/* 激励广告位 */
+			wxAd() {
+				// 在页面onLoad回调事件中创建激励视频广告实例
+				let videoAd = null
+				if (wx.createRewardedVideoAd) {
+					videoAd = wx.createRewardedVideoAd({
+						adUnitId: 'adunit-65679c2214dc62c7'
+					})
+					videoAd.onLoad(() => {})
+					videoAd.onError((err) => {
+						console.error('激励视频光告加载失败', err)
+					})
+					videoAd.onClose((res) => {})
+				}
+
+				// 用户触发广告后，显示激励视频广告
+				if (videoAd) {
+					videoAd.show().catch(() => {
+						// 失败重试
+						videoAd.load()
+							.then(() => videoAd.show())
+							.catch(err => {
+								console.error('激励视频 广告显示失败', err)
+							})
+					})
+				}
 			},
 			/* 上传头像 */
 			onChooseAvatar(e) {
@@ -116,6 +149,17 @@
 		background: $page-bg-color;
 		min-height: 100vh;
 		padding-bottom: 20rpx;
+
+		.wx-ad {
+			width: 100%;
+			margin-top: 20rpx;
+			padding: 0 20rpx;
+
+			.ad-video {
+				width: 100%;
+				border-radius: 10rpx;
+			}
+		}
 
 		.userinfo {
 			display: flex;

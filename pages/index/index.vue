@@ -1,16 +1,14 @@
 <template>
 	<view class="tool-v">
 		<view class="statement u-text-center u-m-t-20">所有视频,图片归平台及作者所有，本应用不储存任何内容</view>
-		<!-- 	<view class="wrap">
-			<u-swiper :list="list"></u-swiper>
-		</view> -->
 		<view class="u-m-b-20 u-m-t-20">
 			<ad-custom unit-id="adunit-82d9c74417201fca" ad-intervals="30"></ad-custom>
 		</view>
+		<u-toast ref="uToast" />
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
 				<kxSwitch @change="switchChange"></kxSwitch>
-				<kxInput v-model="url" placeholder="此处粘贴视频分享链接" addonAfter="批量解析" @afterClick="authorWorkWatermark"
+				<kxInput v-model="url" placeholder="此处粘贴视频分享链接" addonAfter="主页解析" @afterClick="authorWorkWatermark"
 					v-if="isBach" />
 				<kxInput v-model="url" placeholder="此处粘贴视频分享链接" addonAfter="解析" @afterClick="watermark" v-else />
 			</view>
@@ -61,47 +59,28 @@
 		<button class="com-addBtn" open-type="contact">
 			<u-icon name="kefu-ermai" size="48" color="#fff" />
 		</button>
-		<AnalysisDetial :detialData="detialData" v-model="showAnalysisDetial" v-if="showAnalysisDetial">
-		</AnalysisDetial>
 	</view>
 </template>
 <script>
+	const db = uniCloud.database();
+	const analysisTable = db.collection('analysis-dataLog')
 	import {
 		getVoucher,
 		watermark,
 		authorWorkWatermark
 	} from "@/api/external.js";
-	import AnalysisDetial from '@/components/AnalysisDetial.vue'
 	const subscribemsg = uniCloud.importObject('subscribeMessage')
 	export default {
-		components: {
-			AnalysisDetial
-		},
 		data() {
 			return {
-				list: [{
-						image: "https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/1.jpg"
-					},
-					{
-						image: 'https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/2.jpg'
+				// url: "5 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 tfV4QR6Wqo0X0LZ 😆 http://xhslink.com/a/tyU2rTEncSiW，复制本条信息，打开【小红书】App查看精彩内容！",
+				// url: 'https://v.kuaishou.com/X8x7xF 出租半边床位"你附近100米的人 "你的女神已上线 "夸她就行 该作品在快手被播放过2.2万次，点击链接，打开【快手】直接观看！',
+				// url: '58 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 aCBhfKrXNijYQME 😆 https://xhslink.com/a/2bcRfA1WOyjW，复制本条信息，打开【小红书】App查看精彩内容！',
+				url: '5- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ik4XMwp7/ 7@1.com :7pm',
 
-					},
-					{
-						image: 'https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/3.jpg'
-
-					},
-					{
-						image: 'https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/4.jpg'
-
-					},
-					{
-						image: 'https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/5.jpg'
-
-					}
-				],
-				url: "",
+				todayCount: 0,
+				allCount: 0,
 				detialData: {},
-				showAnalysisDetial: false,
 				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk'],
 				isBach: false
 			}
@@ -160,6 +139,13 @@
 
 			//批量解析开关
 			switchChange(e) {
+				if (e) {
+					this.$refs.uToast.show({
+						title: '主页解析目前仅支持抖音',
+						type: 'warning',
+						duration: 2500
+					})
+				}
 				this.isBach = e
 			},
 
@@ -167,10 +153,9 @@
 			watermark() {
 				//订阅
 				if (!this.url) return this.$u.toast("分享链接不能为空")
-				let data = {
+				watermark({
 					link: this.url
-				}
-				watermark(data).then(res => {
+				}).then(res => {
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
 					let imgUrl = this.ensureHttps(data.imageSrc)
 					let videoUrl = this.ensureHttps(data.videoSrc)
@@ -181,9 +166,27 @@
 						videoSrc: videoUrl,
 						imageAtlas: imageAtlas
 					}
-					this.showAnalysisDetial = true
+					console.log(this.detialData);
+					this.setDataLog()
+					uni.navigateTo({
+						url: '/pages/analysis/analysisDetial/index?config=' + encodeURIComponent(JSON
+							.stringify(this.detialData))
+					})
 				}).catch(err => {})
 			},
+			/* 添加解析记录 */
+			async setDataLog() {
+				let todayCount = ++this.todayCount
+				let allCount = ++this.allCount
+				await analysisTable.add({
+					dateTimestamp: this.tools.getCurrentDateTime('timestamp'),
+					date: this.tools.getCurrentDateTime(),
+					watermarkObj: this.detialData,
+					todayCount,
+					allCount
+				})
+			},
+			/* 跳转相关 */
 			jumWebview(type) {
 				if (type == '1') {
 					uni.navigateToMiniProgram({
@@ -205,11 +208,11 @@
 					})
 				} else if (type == '3') {
 					uni.navigateTo({
-						url: '/pages/mdFive/index'
+						url: '/pages/analysis/mdFive/index'
 					});
 				} else {
 					uni.navigateTo({
-						url: '/pages/webview/index'
+						url: '/pages/analysis/tutorial/index'
 					});
 				}
 			},
@@ -225,7 +228,7 @@
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
 					if (res.code == '1') {
 						uni.navigateTo({
-							url: '/pages/batch/index?config=' + encodeURIComponent(JSON
+							url: '/pages/analysis/batch/index?config=' + encodeURIComponent(JSON
 								.stringify(data))
 						})
 					}

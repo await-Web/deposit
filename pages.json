@@ -13,22 +13,9 @@
 			}
 		},
 		{
-
-			"path": "pages/mdFive/index",
-			"style": {
-				"navigationBarTitleText": "修改MD5"
-			}
-		},
-		{
 			"path": "pages/index/my",
 			"style": {
 				"navigationBarTitleText": "个人中心"
-			}
-		},
-		{
-			"path": "pages/my/personalDetails",
-			"style": {
-				"navigationBarTitleText": "编辑个人资料"
 			}
 		},
 		{
@@ -38,31 +25,58 @@
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
-		},
-		{
-			"path": "pages/batch/index",
+		}
+	],
+	"subPackages": [{
+		"root": "pages/analysis",
+		"pages": [{
+			"path": "analysisDetial/index",
+			"style": {
+				"navigationBarTitleText": "提取完毕"
+			}
+		}, {
+			"path": "batch/index",
 			"style": {
 				"navigationBarTitleText": "批量解析"
 			}
-		},
-		{
-			"path": "pages/webview/index",
+		}, {
+			"path": "mdFive/index",
+			"style": {
+				"navigationBarTitleText": "修改MD5"
+			}
+		}, {
+			"path": "tutorial/index",
 			"style": {
 				"navigationBarTitleText": "教程"
 			}
-		},
-		{
-			"path": "pages/my/dataLog",
-			"style": {
-				"navigationBarTitleText": "历史记录"
+		}]
+	}, {
+		"root": "pages/my",
+		"pages": [{
+				"path": "dataLog/index",
+				"style": {
+					"navigationBarTitleText": "历史记录"
+				}
+			},
+			{
+				"path": "personalDetails/index",
+				"style": {
+					"navigationBarTitleText": "个人信息"
+				}
 			}
-		}
-	],
+		]
+	}],
 	"preloadRule": {
-		"pages/index/my": {
+		"pages/my/dataLog/index": {
 			"network": "all",
 			"packages": [
-				"pages/my"
+				"__APP__"
+			]
+		},
+		"pages/my/personalDetails/index": {
+			"network": "all",
+			"packages": [
+				"__APP__"
 			]
 		}
 	},

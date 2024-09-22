@@ -12,12 +12,9 @@
 				</view>
 			</view>
 		</mescroll-body>
-		<AnalysisDetial :detialData="detialData" v-model="showAnalysisDetial">
-		</AnalysisDetial>
 	</view>
 </template>
 <script>
-	import AnalysisDetial from '@/components/AnalysisDetial.vue'
 	// #ifdef MP-WEIXIN
 	const fs = wx.getFileSystemManager()
 	// #endif
@@ -28,12 +25,8 @@
 	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	export default {
 		mixins: [MescrollMixin],
-		components: {
-			AnalysisDetial
-		},
 		data() {
 			return {
-				showAnalysisDetial: false,
 				dataList: [],
 				bathData: {},
 				downOption: {
@@ -74,7 +67,10 @@
 					videoSrc: videoUrl,
 					imageAtlas: imageAtlas
 				}
-				this.showAnalysisDetial = true
+				uni.navigateTo({
+					url: '/pages/analysis/analysisDetial/index?config=' + encodeURIComponent(JSON
+						.stringify(this.detialData))
+				})
 			},
 			ensureHttps(url) {
 				return url.replace(/^http:\/\//i, 'https://');

@@ -12,16 +12,15 @@
 			"description": "ID，系统自动生成"
 		},
 		"user_id": {
-			"bsonType": "string",
-			"description": "打卡存钱",
-			"foreignKey": "uni-id-users._id",
-			"defaultValue": {
+			"forceDefaultValue": {
 				"$env": "uid"
 			}
 		},
-		"calendar_data": {
-			"bsonType": "array",
-			"description": "打卡日历"
+		"ip": {
+			"bsonType": "string",
+			"forceDefaultValue": {
+				"$env": "clientIP"
+			}
 		},
 		"date": {
 			"bsonType": "string",
@@ -31,16 +30,17 @@
 			"bsonType": "timestamp",
 			"description": "签到的日期"
 		},
-		"info": {
-			"bsonType": "string",
-			"description": "记录文本"
+		"watermarkObj": {
+			"bsonType": "object",
+			"description": "解析结果"
 		},
-		"ip": {
-			"bsonType": "string",
-			"forceDefaultValue": {
-				"$env": "clientIP"
-			}
+		"todayCount": {
+			"bsonType": "number",
+			"description": "当然次数"
+		},
+		"allCount": {
+			"bsonType": "number",
+			"description": "总次数"
 		}
-	},
-	"version": "0.0.1"
+	}
 }
