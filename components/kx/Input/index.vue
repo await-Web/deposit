@@ -170,8 +170,8 @@
 			.input-right {
 				flex-shrink: 0;
 				width: 128rpx;
-				background-color: #f5f7fa;
-				color: #909399;
+				background-color: #008cff;
+				color: #fff;
 				padding: 0 10rpx;
 				text-align: center;
 				display: flex;
@@ -181,12 +181,12 @@
 
 			.input-left {
 				border-right: 1rpx solid #dcdfe6;
-				border-radius: 10rpx 0 0 10rpx;
+				border-radius: 8rpx 0 0 8rpx;
 			}
 
 			.input-right {
 				border-left: 1rpx solid #dcdfe6;
-				border-radius: 0px 10px 10px 0px;
+				border-radius: 0px 8rpx 8rpx 0px;
 			}
 
 			.icon-ym-scanCode1 {

@@ -7,9 +7,6 @@
 		<view class="u-m-b-20 u-m-t-20">
 			<ad-custom unit-id="adunit-82d9c74417201fca" ad-intervals="30"></ad-custom>
 		</view>
-		<!-- <view class=" u-m-t-20 u-m-b-20" style="width: 100%;background-color: antiquewhite;">
-			<ad-custom unit-id="adunit-3d5d8bfadac4e954" ad-intervals="30"></ad-custom>
-		</view> -->
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
 				<kxSwitch @change="switchChange"></kxSwitch>
@@ -53,6 +50,12 @@
 						</view>
 					</view>
 				</view>
+			</view>
+			<view class=" u-m-t-20 u-m-b-20">
+				<ad-custom unit-id="adunit-3d5d8bfadac4e954" ad-intervals="30"></ad-custom>
+			</view>
+			<view class=" u-m-t-20 u-m-b-20">
+				<ad-custom unit-id="adunit-4a47ba5eacd6fa5d" ad-intervals="30"></ad-custom>
 			</view>
 		</view>
 		<button class="com-addBtn" open-type="contact">
@@ -262,6 +265,7 @@
 				background-color: #fff;
 				padding: 20rpx;
 				border-radius: 10rpx;
+				box-shadow: 1rpx 1rpx 2rpx 1rpx rgba(0, 0, 0, 0.1);
 			}
 		}
 	}

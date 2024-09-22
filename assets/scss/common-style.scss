@@ -13,6 +13,9 @@ image{
 		background-color: #fff;
 		margin-top: 20rpx;
 		border-radius: 10rpx;
+		 // box-shadow: 0 -2rpx 8rpx #e1e5ec;
+		 // box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
+		 box-shadow: 1rpx 1rpx 2rpx 1rpx rgba(0, 0, 0, 0.1);
 		.part{
 			background: #fff;
 			margin-bottom: 20rpx;
@@ -29,6 +32,7 @@ image{
 				.item {
 					padding-top: 0.8rem;
 					width: 20%;
+					box-shadow: 1px 0 2px rgba(0, 0, 0, 0.1);
 					.shareBtn{
 						padding: 0 !important;
 						margin-bottom: 8rpx;
