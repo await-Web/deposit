@@ -1,37 +1,63 @@
 <template>
 	<view class="tool-v">
-		<u-alert-tips :show="true" type="error" @close="showTips = false" title="主页链接请点击红色的批量解析按钮,目前仅支持抖音平台"
-			:close-able="true"></u-alert-tips>
+		<view class="statement u-text-center u-m-t-20">所有视频,图片归平台及作者所有，本应用不储存任何内容</view>
+		<!-- 	<view class="wrap">
+			<u-swiper :list="list"></u-swiper>
+		</view> -->
+		<view class="u-m-b-20 u-m-t-20">
+			<ad-custom unit-id="adunit-82d9c74417201fca" ad-intervals="30"></ad-custom>
+		</view>
+		<!-- <view class=" u-m-t-20 u-m-b-20" style="width: 100%;background-color: antiquewhite;">
+			<ad-custom unit-id="adunit-3d5d8bfadac4e954" ad-intervals="30"></ad-custom>
+		</view> -->
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
-				<uni-easyinput type="textarea" v-model="url" placeholder="此处粘贴视频分享链接" :clearable="true"></uni-easyinput>
-				<view class="u-flex">
-					<button class="u-m-t-16 btn" @click="watermark">单个解析</button>
-					<button class="u-m-t-16 btn" type="warn" @click="url = ''">清空</button>
+				<kxSwitch @change="switchChange"></kxSwitch>
+				<kxInput v-model="url" placeholder="此处粘贴视频分享链接" addonAfter="批量解析" @afterClick="authorWorkWatermark"
+					v-if="isBach" />
+				<kxInput v-model="url" placeholder="此处粘贴视频分享链接" addonAfter="解析" @afterClick="watermark" v-else />
+			</view>
+			<view class="apply-list">
+				<view class="part">
+					<view class="caption u-line-1">
+						更多功能
+					</view>
+					<view class="item-box">
+						<view class="u-flex u-flex-wrap">
+							<view class="item u-flex-col u-col-center" @click="jumWebview('1')">
+								<text class="u-font-40 item-icon icon-kx icon-kx-check-circle"
+									:style="{ background:  '#00ff00' }" />
+								<text class="u-font-24 u-line-1 item-text">无广告版</text>
+							</view>
+							<view class="item u-flex-col u-col-center" @click="jumWebview('2')">
+								<text class="u-font-40 item-icon icon-kx icon-kx-bizhi3"
+									:style="{ background:  '#55ffff' }" />
+								<text class="u-font-24 u-line-1 item-text">更多壁纸</text>
+							</view>
+							<view class="item u-flex-col u-col-center" @click="jumWebview('3')">
+								<text class="u-font-40 item-icon icon-kx icon-kx-MD51"
+									:style="{ background:  '#008cff' }" />
+								<text class="u-font-24 u-line-1 item-text">修改MD5</text>
+							</view>
+							<view class="item u-flex-col u-col-center" @click="jumWebview('4')">
+								<text class="u-font-40 item-icon icon-kx icon-kx-jilu_"
+									:style="{ background:  '#f2b0ff' }" />
+								<text class="u-font-24 u-line-1 item-text">使用教程</text>
+							</view>
+							<view class="item u-flex-col u-col-center">
+								<button class="shareBtn" open-type="share">
+									<text class="item-icon icon-kx icon-kx-wechat-fill"></text>
+								</button>
+								<text class="u-font-24 u-line-1 item-text">分享</text>
+							</view>
+						</view>
+					</view>
 				</view>
 			</view>
-			<view class="u-m-t-20">
-				<button type="primary" @click="jumWebview('1')">获取更多壁纸</button>
-			</view>
-			<view class="u-m-t-20">
-				<button type="primary" @click="jumWebview('2')">这是教程</button>
-			</view>
-			<view class="batch u-m-t-20 u-m-b-20" @click="authorWorkWatermark">
-				<text>主页批量解析</text>
-			</view>
-			<view class="share u-flex-col">
-				<view class="u-flex share-inner">
-					<button open-type="share">
-						<image src="../../static/image/wx.png" mode=""></image>
-						<text class="u-m-l-10 u-m-r-10 u-font-30">分享给好友，共同解锁有趣的视频</text>
-					</button>
-				</view>
-			</view>
-			<view class="u-m-t-20">
-				<button type="primary" open-type="contact">不懂就问</button>
-			</view>
-			<view class="statement">视频归平台及作者所有，本应用不储存任何视频及图片</view>
 		</view>
+		<button class="com-addBtn" open-type="contact">
+			<u-icon name="kefu-ermai" size="48" color="#fff" />
+		</button>
 		<AnalysisDetial :detialData="detialData" v-model="showAnalysisDetial" v-if="showAnalysisDetial">
 		</AnalysisDetial>
 	</view>
@@ -42,7 +68,7 @@
 		watermark,
 		authorWorkWatermark
 	} from "@/api/external.js";
-	import AnalysisDetial from '../components/AnalysisDetial.vue'
+	import AnalysisDetial from '@/components/AnalysisDetial.vue'
 	const subscribemsg = uniCloud.importObject('subscribeMessage')
 	export default {
 		components: {
@@ -50,10 +76,31 @@
 		},
 		data() {
 			return {
+				list: [{
+						image: "https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/1.jpg"
+					},
+					{
+						image: 'https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/2.jpg'
+
+					},
+					{
+						image: 'https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/3.jpg'
+
+					},
+					{
+						image: 'https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/4.jpg'
+
+					},
+					{
+						image: 'https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/banner/5.jpg'
+
+					}
+				],
 				url: "",
 				detialData: {},
 				showAnalysisDetial: false,
-				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk']
+				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk'],
+				isBach: false
 			}
 		},
 		onShareAppMessage() {
@@ -108,12 +155,14 @@
 				}).then(res => {});
 			},
 
+			//批量解析开关
+			switchChange(e) {
+				this.isBach = e
+			},
+
 			//短视频解析
 			watermark() {
 				//订阅
-				// uni.requestSubscribeMessage({
-				// 	tmplIds: this.subscribeId
-				// });
 				if (!this.url) return this.$u.toast("分享链接不能为空")
 				let data = {
 					link: this.url
@@ -142,6 +191,19 @@
 							// 打开成功
 						}
 					})
+				} else if (type == '2') {
+					uni.navigateToMiniProgram({
+						appId: 'wx51f6121324b84fa8', //目标小程序appid
+						path: '/pages/index/wallpaper', //需要打开的目标路径
+						envVersion: 'release', //小程序版本：develop（开发版），trial（体验版），release（正式版）
+						success(res) {
+							// 打开成功
+						}
+					})
+				} else if (type == '3') {
+					uni.navigateTo({
+						url: '/pages/mdFive/index'
+					});
 				} else {
 					uni.navigateTo({
 						url: '/pages/webview/index'
@@ -173,7 +235,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	page {
 		background-color: #f0f2f6;
 	}
@@ -183,102 +245,23 @@
 		height: 100%;
 		padding: 0 20rpx;
 
-		.tool-content {
+		.statement {
+			width: 100%;
+			color: red;
+		}
 
-			.batch {
-				width: 100%;
-				height: 120rpx;
-				background-image: linear-gradient(45deg, #ff9700, #ed1c24);
-				color: #ffffff;
-				border-radius: 20rpx;
-				text-align: center;
-				line-height: 120rpx;
-				font-size: 32rpx;
-			}
+		.wrap {
+			padding: 20rpx 0;
+		}
+
+		.tool-content {
+			padding-bottom: 20rpx;
 
 			.url-input {
-				.btn {
-					width: 46%;
-					background-color: #16afc3;
-					color: #fff;
-					font-size: 32rpx;
-				}
-			}
-
-			.del-watermark {
 				width: 100%;
-				justify-content: space-between;
-				margin-top: 20rpx;
-
-				.block {
-					width: 350rpx;
-					height: 160rpx;
-					background-color: blue;
-					color: #fff;
-					border-radius: 20rpx;
-					align-items: center;
-					justify-content: center;
-					font-size: 28rpx;
-
-					.txt-top {
-						font-size: 46rpx;
-					}
-
-					.txt-bottom {
-						font-size: 28rpx;
-					}
-				}
-
-				.course {
-					background-color: blue;
-				}
-
-				.invitation {
-					background-color: red;
-				}
-			}
-
-			.share {
-				.share-inner {
-					width: 100%;
-
-					button {
-						display: flex;
-						width: 100% !important;
-						height: 180rpx;
-						border-radius: 20rpx;
-						justify-content: center;
-						align-items: center;
-						color: #fff;
-						background: radial-gradient(60% 200px at right top, #19b2bc, transparent),
-							radial-gradient(20% 200px at left top, #0a96e4, transparent),
-							radial-gradient(80% 200px at left top, #048af4, transparent);
-
-						image {
-							width: 84rpx;
-							height: 84rpx;
-						}
-					}
-				}
-
-				width: 100%;
-				height: 180rpx;
-				margin-top: 20rpx;
-				border-radius: 20rpx;
-				background: radial-gradient(60% 200px at right top, #19b2bc, transparent),
-				radial-gradient(20% 200px at left top, #0a96e4, transparent),
-				radial-gradient(80% 200px at left top, #048af4, transparent);
-
-				justify-content: center;
-				align-items: center;
-			}
-
-			.statement {
-				width: 100%;
-				height: 80rpx;
-				line-height: 80rpx;
-				text-align: center;
-				color: red;
+				background-color: #fff;
+				padding: 20rpx;
+				border-radius: 10rpx;
 			}
 		}
 	}

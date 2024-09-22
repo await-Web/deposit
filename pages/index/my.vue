@@ -28,21 +28,15 @@
 				</view>
 			</view>
 		</view>
-		<view class="cardLayout">
-			<view class="list block">
-				<view class="item">
-					<view class="left">
-						<view class="icon"
-							style="background-image: linear-gradient(to right,rgba(181,207,216,1),rgba(181,207,216,0.5))">
-							<uni-icons custom-prefix="iconfont" type="xxm-pushpin-fill" size="18"
-								color="#fff"></uni-icons>
-						</view>
-						<view class="name">历史记录</view>
-					</view>
-					<view class="right">
-						<uni-icons type="right" size="22" color="#999"></uni-icons>
-					</view>
-				</view>
+		<view class=" my-group-box">
+			<view class="my-group-box-inner">
+				<u-cell-group :border="false" class="cell-group">
+					<u-cell-item title="历史记录" @click="openPage('/pages/my/dataLog')" :title-style="titleStyle">
+						<template #icon>
+							<text class="icon-kx icon-kx-jilu u-m-r-16 u-font-32" />
+						</template>
+					</u-cell-item>
+				</u-cell-group>
 			</view>
 		</view>
 	</view>
@@ -60,7 +54,10 @@
 				percentCompleted: 0,
 				avatar: '',
 				username: '',
-				register_date: 0
+				register_date: 0,
+				titleStyle: {
+					color: '#606266'
+				},
 			}
 		},
 		computed: {
@@ -99,6 +96,12 @@
 			},
 			/* 跳转详情页 */
 			jumPage(path) {
+				if (!path) return
+				uni.navigateTo({
+					url: path
+				})
+			},
+			openPage(path) {
 				if (!path) return
 				uni.navigateTo({
 					url: path
@@ -234,51 +237,17 @@
 			margin-top: 20rpx;
 		}
 
-		.cardLayout {
-			background: #fff;
-			border-radius: 20rpx;
-			padding: 0 20rpx;
-			margin: 0 20rpx;
+		.my-group-box {
+			.my-group-box-inner {
+				background-color: #fff;
 
-			.list {
-				.item {
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					padding: 34rpx 0;
-					border-bottom: 1px solid $border-color-light;
-
-					&:last-child {
-						border: none;
+				.cell-group {
+					.icon-kx-jilu {
+						color: #6071F5;
 					}
 
-					.left {
-						display: flex;
-						align-items: center;
-
-						.icon {
-							width: 50rpx;
-							height: 50rpx;
-							background: #fff;
-							border-radius: 50%;
-							overflow: hidden;
-							display: flex;
-							align-items: center;
-							justify-content: center;
-						}
-
-						.name {
-							font-size: 28rpx;
-							padding-left: 20rpx;
-							color: #333;
-						}
-					}
-
-					.right {
-						display: flex;
-						align-items: center;
-						font-size: 26rpx;
-						color: #999;
+					.icon-kx-QQ {
+						color: #fe9468;
 					}
 				}
 			}

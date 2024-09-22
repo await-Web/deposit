@@ -1,8 +1,8 @@
 @font-face {
-	font-family: 'icon-kx';
-	src: url('https://at.alicdn.com/t/c/font_4662280_3r2u86m3pmi.woff2?t=1726840868341') format('woff2'),
-		url('https://at.alicdn.com/t/c/font_4662280_3r2u86m3pmi.woff?t=1726840868341') format('woff'),
-		url('https://at.alicdn.com/t/c/font_4662280_3r2u86m3pmi.ttf?t=1726840868341') format('truetype');
+	font-family: "icon-kx";
+	src: url('https://at.alicdn.com/t/c/font_4662280_4kkkmcc4d8d.woff2?t=1726987436138') format('woff2'),
+		url('https://at.alicdn.com/t/c/font_4662280_4kkkmcc4d8d.woff?t=1726987436138') format('woff'),
+		url('https://at.alicdn.com/t/c/font_4662280_4kkkmcc4d8d.ttf?t=1726987436138') format('truetype');
 }
 
 .icon-kx {
@@ -11,6 +11,78 @@
 	font-style: normal;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-kx-bizhi1:before {
+	content: "\e63f";
+}
+
+.icon-kx-bizhi2:before {
+	content: "\e615";
+}
+
+.icon-kx-bizhi3:before {
+	content: "\e601";
+}
+
+.icon-kx-tupianbizhi:before {
+	content: "\e6c6";
+}
+
+.icon-kx-bizhi11:before {
+	content: "\e602";
+}
+
+.icon-kx-kefu:before {
+	content: "\e671";
+}
+
+.icon-kx-kefu1:before {
+	content: "\e603";
+}
+
+.icon-kx-kefu2:before {
+	content: "\e741";
+}
+
+.icon-kx-kefu3:before {
+	content: "\e65a";
+}
+
+.icon-kx-kefu4:before {
+	content: "\e643";
+}
+
+.icon-kx-kefu5:before {
+	content: "\e625";
+}
+
+.icon-kx-kefu6:before {
+	content: "\e62e";
+}
+
+.icon-kx-MD:before {
+	content: "\e654";
+}
+
+.icon-kx-MD1:before {
+	content: "\e606";
+}
+
+.icon-kx-MD2:before {
+	content: "\e706";
+}
+
+.icon-kx-MD5:before {
+	content: "\e67d";
+}
+
+.icon-kx-MD3:before {
+	content: "\e600";
+}
+
+.icon-kx-MD51:before {
+	content: "\e8bb";
 }
 
 .icon-kx-jilu:before {

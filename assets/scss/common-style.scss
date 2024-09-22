@@ -9,3 +9,68 @@ image{
   width: 100%;
   height: env(safe-area-inset-bottom);
 }
+	.apply-list {
+		background-color: #fff;
+		margin-top: 20rpx;
+		border-radius: 10rpx;
+		.part{
+			background: #fff;
+			margin-bottom: 20rpx;
+			border-radius: 10rpx;
+			.caption {
+				padding:  20rpx 20rpx 0 20rpx;
+				font-size: 28rpx;
+				font-weight: bold;
+			}
+			.item-box{
+				max-height: 320rpx;
+				overflow-y: scroll;
+				padding-bottom: 20rpx;
+				.item {
+					padding-top: 0.8rem;
+					width: 20%;
+					.shareBtn{
+						padding: 0 !important;
+						margin-bottom: 8rpx;
+						width: 80rpx;height: 80rpx;
+						background-color: #ffaa00;
+					}
+					.item-icon {
+						width: 80rpx;
+						height: 80rpx;
+						margin-bottom: 8rpx;
+						line-height: 80rpx;
+						text-align: center;
+						border-radius: 10rpx;
+						color: #fff;
+						font-size: 54rpx;
+				
+						&.more {
+							background: #ececec;
+							color: #666666;
+							font-size: 50rpx;
+						}
+					}
+				
+					.item-text {
+						width: 100%;
+						text-align: center;
+						padding: 0 16rpx;
+					}
+				}
+			}
+		}
+	}
+	.com-addBtn {
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 50%;
+		background-color: rgba(41, 121, 255, 0.7);
+		position: fixed;
+		bottom: 240rpx;
+		right: 24rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 10;
+	}

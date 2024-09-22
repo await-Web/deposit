@@ -17,7 +17,7 @@
 	</view>
 </template>
 <script>
-	import AnalysisDetial from '../components/AnalysisDetial.vue'
+	import AnalysisDetial from '@/components/AnalysisDetial.vue'
 	// #ifdef MP-WEIXIN
 	const fs = wx.getFileSystemManager()
 	// #endif
