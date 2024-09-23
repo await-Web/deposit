@@ -1,14 +1,18 @@
-view,text,swiper,swiper-item,input,textarea{
-	box-sizing: border-box;
-}
-image{
-	width: 100rpx;
-	height: 100rpx;
-}
-.safe-area-bottom{
-  width: 100%;
-  height: env(safe-area-inset-bottom);
-}
+	view,text,swiper,swiper-item,input,textarea{
+		box-sizing: border-box;
+	}
+	image{
+		width: 100rpx;
+		height: 100rpx;
+	}
+	.safe-area-bottom{
+	  width: 100%;
+	  height: env(safe-area-inset-bottom);
+	}
+	/* 阴影 */
+	.shadow{
+		box-shadow: 0 1rpx 4rpx -4rpx rgba(0, 0, 0, .16), 0 6rpx 12rpx rgba(0, 0, 0, .12), 0 4rpx 16rpx 4rpx rgba(0, 0, 0, .09);
+	}
 	.apply-list {
 		background-color: #fff;
 		margin-top: 20rpx;

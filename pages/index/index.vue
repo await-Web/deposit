@@ -101,18 +101,12 @@
 			this.share()
 			this.getVoucher()
 		},
-		onShareAppMessage() {
-			return {
-				title: '免费去水印,不限次数',
-				path: '/pages/index/index'
-			}
-		},
 		methods: {
 			share() {
 				//分享
 				// #ifdef MP-WEIXIN
 				wx.showShareMenu({
-					withShareTicket: true,
+					withShareTicket: false,
 					menus: ['shareAppMessage', 'shareTimeline']
 				})
 				// #endif
