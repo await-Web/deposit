@@ -22,10 +22,10 @@
 				<video id="myVideo" :src="detialData.videoSrc" controls></video>
 			</view>
 			<!-- 描述 -->
-			<view class="u-flex-col u-m-t-10">
+			<!-- <view class="u-flex-col u-m-t-10">
 				<text class="u-font-30 u-m-b-10">{{detialData.title}}</text>
 				<text>{{detialData.description}}</text>
-			</view>
+			</view> -->
 			<view class="u-flex btn-box" v-if="detialData.videoSrc">
 				<u-button type="primary" size="medium"
 					@click="handleDownloads(detialData.videoSrc,'video')">下载视频</u-button>
@@ -253,7 +253,7 @@
 			border-radius: 8rpx;
 
 			.scroll-Y {
-				max-height: 800rpx;
+				max-height: 1000rpx;
 
 				.scroll-box {
 					flex-wrap: wrap;
@@ -263,7 +263,7 @@
 				.img-item {
 					position: relative;
 					width: 48%;
-					height: 400rpx;
+					height: 460rpx;
 					align-items: center;
 					flex-wrap: wrap;
 					justify-content: space-between;
