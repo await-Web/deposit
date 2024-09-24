@@ -135,6 +135,7 @@
 				})
 			},
 			openPage(path) {
+				return this.$u.toast("功能开发中敬请期待")
 				if (!path) return
 				uni.navigateTo({
 					url: path

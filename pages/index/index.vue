@@ -19,6 +19,11 @@
 					</view>
 					<view class="item-box">
 						<view class="u-flex u-flex-wrap">
+							<view class="item u-flex-col u-col-center" @click="jumWebview('5')">
+								<text class="u-font-40 item-icon icon-kx icon-kx-duanju"
+									:style="{ background:  '#f2b0ff' }" />
+								<text class="u-font-24 u-line-1 item-text">热播短剧</text>
+							</view>
 							<view class="item u-flex-col u-col-center" @click="jumWebview('1')">
 								<text class="u-font-40 item-icon icon-kx icon-kx-check-circle"
 									:style="{ background:  '#00ff00' }" />
@@ -64,6 +69,7 @@
 <script>
 	const db = uniCloud.database();
 	const analysisTable = db.collection('analysis-dataLog')
+	const setJumpAppletTable = db.collection('jump-applet')
 	import {
 		getVoucher,
 		watermark,
@@ -76,8 +82,7 @@
 				// url: "5 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 tfV4QR6Wqo0X0LZ 😆 http://xhslink.com/a/tyU2rTEncSiW，复制本条信息，打开【小红书】App查看精彩内容！",
 				// url: 'https://v.kuaishou.com/X8x7xF 出租半边床位"你附近100米的人 "你的女神已上线 "夸她就行 该作品在快手被播放过2.2万次，点击链接，打开【快手】直接观看！',
 				// url: '58 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 aCBhfKrXNijYQME 😆 https://xhslink.com/a/2bcRfA1WOyjW，复制本条信息，打开【小红书】App查看精彩内容！',
-				url: '5- 长按复制此条消息，打开抖音搜索，查看TA的更多作品。 https://v.douyin.com/ik4XMwp7/ 7@1.com :7pm',
-
+				url: '',
 				todayCount: 0,
 				allCount: 0,
 				detialData: {},
@@ -160,7 +165,6 @@
 						videoSrc: videoUrl,
 						imageAtlas: imageAtlas
 					}
-					console.log(this.detialData);
 					this.setDataLog()
 					uni.navigateTo({
 						url: '/pages/analysis/analysisDetial/index?config=' + encodeURIComponent(JSON
@@ -204,11 +208,32 @@
 					uni.navigateTo({
 						url: '/pages/analysis/mdFive/index'
 					});
+				} else if (type == '5') {
+					// 打开成功
+					this.jumpApplet()
+					uni.navigateToMiniProgram({
+						appId: 'wxda2c3eef7d7e3413', //目标小程序appid
+						path: '/pages/home/index?id=1817925578915618817&memberId=1825489540767150081', //需要打开的目标路径
+						envVersion: 'release', //小程序版本：develop（开发版），trial（体验版），release（正式版）
+						success(res) {
+							console.log(res, 33);
+
+						},
+						fail(err) {
+							console.log(err, 24154);
+						}
+					})
 				} else {
 					uni.navigateTo({
 						url: '/pages/analysis/tutorial/index'
 					});
 				}
+			},
+			async jumpApplet() {
+				await setJumpAppletTable.add({
+					dateTimestamp: this.tools.getCurrentDateTime('timestamp'),
+					date: this.tools.getCurrentDateTime()
+				})
 			},
 			//批量解析
 			authorWorkWatermark() {

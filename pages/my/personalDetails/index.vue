@@ -27,6 +27,10 @@
 						{{this.illustrate}}
 					</view>
 				</view> -->
+
+				<view class="adContainer">
+					<ad unit-id="adunit-4a528e994a5a03c9" ad-type="video" ad-theme="white"></ad>
+				</view>
 			</view>
 			<view class="" style="position: fixed;bottom: 0;width: 100%;">
 				<button type="primary" @click="submit()" :loading="loading">提交</button>
@@ -51,36 +55,6 @@
 				show: false,
 				depositValue: '',
 				loading: false,
-				illustrate: '第1天存1元，第2天存2元，依次类推。每递增1元，第365天存365元。1年下来能存下66795元。适合人群:任何人。',
-				depositTypeList: [{
-					fullName: '365存钱法',
-					id: '0',
-					illustrate: '第1天存1元，第2天存2元，依次类推。每递增1元，第365天存365元。1年下来能存下66795元。适合人群:任何人。'
-				}, {
-					fullName: '333存钱法',
-					id: '1',
-					illustrate: '每个月收入分成3份。1份开支、1份储蓄、1份投资理财，比例可以是333、631、532。一定要先存钱再消费。适合人群:任何人。'
-				}, {
-					fullName: '存零法',
-					id: '2',
-					illustrate: '每天晚上回家把身上的100元整数倍之外的所有零钱存起来!比如你身上有158元钱就存58元,有329元就存29元只留100元的整数倍的钱。适合人群:现金族'
-				}, {
-					fullName: '52周存钱法',
-					id: '3',
-					illustrate: '第1周存10元，第2周20元，依次类推，每周递增10元。第52周存520元。52周刚好一年，一年就能存13780元。适合人群:月光族，学生党、刚参加工作的职场新人，tou资小白，理财新手。'
-				}, {
-					fullName: '星期存钱法',
-					id: '4',
-					illustrate: '星期一存10元，星期二存20元，依次递增到星期天存70元。每周可存下280元1年可以存下14560元。适用人群:学生党，职场人士。'
-				}, {
-					fullName: '10%强制存钱法',
-					id: '5',
-					illustrate: '每个月发工资后，强制存下工资的10%。存钱比例可以根据自身情况增加或降低。目的是无痛存钱，先行动起来。慢慢养成存钱的习惯。适合人群:月光族、学生党和低收入人群存钱很痛苦的人群。'
-				}, {
-					fullName: '30天倒数法',
-					id: '6',
-					illustrate: '每月1号存30元，2号存29元。依次递减，到30号存1元。每个月这样存。1年可以存下5580元。适合人群:青少年儿童、学生党、小白'
-				}],
 				genderList: [{
 					text: '男',
 					value: 0
@@ -127,13 +101,7 @@
 							required: true,
 							errorMessage: '请选择性别',
 						}]
-					},
-					depositType: {
-						rules: [{
-							required: true,
-							errorMessage: '请选择存钱类型',
-						}]
-					},
+					}
 				}
 			}
 		},
@@ -142,7 +110,7 @@
 			this.$nextTick(() => {
 				this.$refs.form.setRules(this.rules)
 			})
-
+			this.wxAd()
 		},
 		onShow() {
 			this.init()
@@ -153,6 +121,35 @@
 			}
 		},
 		methods: {
+			wxAd() {
+				// 若在开发者工具中无法预览广告，请切换开发者工具中的基础库版本
+				// 在页面中定义激励视频广告
+				let videoAd = null
+
+				// 在页面onLoad回调事件中创建激励视频广告实例
+				if (wx.createRewardedVideoAd) {
+					videoAd = wx.createRewardedVideoAd({
+						adUnitId: 'adunit-61b3b48b7c3d1760'
+					})
+					videoAd.onLoad(() => {})
+					videoAd.onError((err) => {
+						console.error('激励视频光告加载失败', err)
+					})
+					videoAd.onClose((res) => {})
+				}
+
+				// 用户触发广告后，显示激励视频广告
+				if (videoAd) {
+					videoAd.show().catch(() => {
+						// 失败重试
+						videoAd.load()
+							.then(() => videoAd.show())
+							.catch(err => {
+								console.error('激励视频 广告显示失败', err)
+							})
+					})
+				}
+			},
 			/* 初始化 */
 			init() {
 				this.formData = {
