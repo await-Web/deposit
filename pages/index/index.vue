@@ -2,8 +2,12 @@
 	<view class="tool-v">
 		<view class="statement u-text-center u-m-t-20">所有视频,图片归平台及作者所有，本应用不储存任何内容</view>
 		<!-- 首页banner1 -->
-		<view class="u-m-b-20 u-m-t-20">
+		<!-- <view class="u-m-b-20 u-m-t-20">
 			<ad-custom unit-id="adunit-82d9c74417201fca" ad-intervals="30"></ad-custom>
+		</view> -->
+		<!-- 首页 -->
+		<view class=" u-m-t-20 u-m-b-20">
+			<ad unit-id="adunit-7e1857e697875fb9" ad-type="video" ad-theme="black"></ad>
 		</view>
 		<u-toast ref="uToast" />
 		<view class="tool-content">
@@ -56,13 +60,13 @@
 				</view>
 			</view>
 			<!-- 首页banner2 -->
-			<view class=" u-m-t-20 u-m-b-20">
+			<!-- 	<view class=" u-m-t-20 u-m-b-20">
 				<ad-custom unit-id="adunit-3d5d8bfadac4e954" ad-intervals="30"></ad-custom>
-			</view>
+			</view> -->
 			<!-- 首页banner3 -->
-			<view class=" u-m-t-20 u-m-b-20">
+			<!-- <view class=" u-m-t-20 u-m-b-20">
 				<ad-custom unit-id="adunit-4a47ba5eacd6fa5d" ad-intervals="30"></ad-custom>
-			</view>
+			</view> -->
 		</view>
 		<button class="com-addBtn" open-type="contact">
 			<u-icon name="kefu-ermai" size="48" color="#fff" />

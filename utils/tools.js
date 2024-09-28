@@ -143,15 +143,7 @@ const tools = {
 			interstitialAd = wx.createInterstitialAd({
 				adUnitId: adId
 			})
-			interstitialAd.onLoad(() => {
-				console.log('onLoad event emit')
-			})
-			interstitialAd.onError((err) => {
-				console.log('onError event emit', err)
-			})
-			interstitialAd.onClose((res) => {
-				console.log('onClose event emit', res)
-			})
+			interstitialAd.show().catch((err) => {})
 		}
 	}
 }
