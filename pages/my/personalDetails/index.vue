@@ -96,7 +96,6 @@
 			this.$nextTick(() => {
 				this.$refs.form.setRules(this.rules)
 			})
-			this.wxAd()
 		},
 		onShow() {
 			this.init()
