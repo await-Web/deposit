@@ -35,8 +35,7 @@
 				formData: {
 					username: '',
 					age: "28",
-					gender: 0,
-					depositType: "0"
+					gender: 0
 				},
 				show: false,
 				depositValue: '',

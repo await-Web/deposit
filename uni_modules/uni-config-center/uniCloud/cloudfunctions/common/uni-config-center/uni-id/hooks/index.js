@@ -5,7 +5,7 @@ function beforeRegister({
 	clientInfo
 } = {}) {
 	userRecord.username = '去水印' + (Math.random().toString(26).substring(3, 9))
-	userRecord.watermark_count = 10
+	userRecord.watermark_count = 0
 	userRecord.cumulative = 0
 	return userRecord // 务必返回处理后的userRecord
 }

@@ -33,14 +33,6 @@
 		"watermarkObj": {
 			"bsonType": "object",
 			"description": "解析结果"
-		},
-		"todayCount": {
-			"bsonType": "number",
-			"description": "当然次数"
-		},
-		"allCount": {
-			"bsonType": "number",
-			"description": "总次数"
 		}
 	}
 }
