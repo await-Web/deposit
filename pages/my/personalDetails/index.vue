@@ -13,21 +13,7 @@
 					<uni-forms-item label="性别" required>
 						<uni-data-checkbox v-model="formData.gender" :localdata="genderList" name="gender" />
 					</uni-forms-item>
-					<!-- <uni-forms-item label="选择存钱类型" required label-width="200">
-						<ZjfSelect :options="depositTypeList" v-model="formData.depositType" @change="selectChange"
-							name="depositType">
-						</ZjfSelect>
-					</uni-forms-item> -->
 				</uni-forms>
-				<!-- <view
-					style="width: 100%;height: 100%;border-radius: 8rpx;background-color: #d9d9d8;margin-bottom: 20rpx;padding: 20rpx;">
-					<text style="color: #333;font-size: 36rpx; font-weight: 600;"
-						class="title">{{depositValue+'说明'}}</text>
-					<view class="" style="margin-top: 20rpx;letter-spacing: 2px;line-height: 56rpx;font-size: 32rpx;">
-						{{this.illustrate}}
-					</view>
-				</view> -->
-
 				<view class="adContainer">
 					<ad unit-id="adunit-4a528e994a5a03c9" ad-type="video" ad-theme="white"></ad>
 				</view>
@@ -114,6 +100,7 @@
 		},
 		onShow() {
 			this.init()
+			this.tools.wxAd('adunit-bf8c3f5c7164b61b')
 		},
 		computed: {
 			userInfo() {
@@ -121,35 +108,6 @@
 			}
 		},
 		methods: {
-			wxAd() {
-				// 若在开发者工具中无法预览广告，请切换开发者工具中的基础库版本
-				// 在页面中定义激励视频广告
-				let videoAd = null
-
-				// 在页面onLoad回调事件中创建激励视频广告实例
-				if (wx.createRewardedVideoAd) {
-					videoAd = wx.createRewardedVideoAd({
-						adUnitId: 'adunit-61b3b48b7c3d1760'
-					})
-					videoAd.onLoad(() => {})
-					videoAd.onError((err) => {
-						console.error('激励视频光告加载失败', err)
-					})
-					videoAd.onClose((res) => {})
-				}
-
-				// 用户触发广告后，显示激励视频广告
-				if (videoAd) {
-					videoAd.show().catch(() => {
-						// 失败重试
-						videoAd.load()
-							.then(() => videoAd.show())
-							.catch(err => {
-								console.error('激励视频 广告显示失败', err)
-							})
-					})
-				}
-			},
 			/* 初始化 */
 			init() {
 				this.formData = {

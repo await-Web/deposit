@@ -39,8 +39,9 @@
 				@click="showTips('有效解决视频的唯一性，防重检测，达到原创效果，轻松上热门')">
 				修改MD5可以干嘛？
 			</view>
+			<!-- MD5banner -->
+			<ad-custom unit-id="adunit-2c5c8c2c8eabc901" ad-intervals="30"></ad-custom>
 		</view>
-		<!-- <ad class="mt50" v-if="config.adVideo" ad-type="video" :unit-id="config.adVideo" :ad-intervals="30"></ad> -->
 	</view>
 </template>
 
@@ -58,7 +59,8 @@
 			}
 		},
 		onLoad() {
-
+			/* 插屏广告 */
+			this.tools.wxAd('adunit-01e6071545c4bd0e')
 		},
 		methods: {
 			showTips(msg) {

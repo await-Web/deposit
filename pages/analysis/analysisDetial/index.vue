@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class=" u-m-t-20 u-m-b-20">
-			<ad-custom unit-id="adunit-4a47ba5eacd6fa5d" ad-intervals="30"></ad-custom>
+			<ad-custom unit-id="adunit-3632b21645b42b52" ad-intervals="30"></ad-custom>
 		</view>
 		<view class="u-flex-col content  u-p-l-20 u-p-r-20">
 			<!-- 图片 -->
@@ -52,6 +52,8 @@
 		},
 		onLoad(e) {
 			this.detialData = JSON.parse(decodeURIComponent(e.config));
+			/* 插屏广告 */
+			this.tools.wxAd('adunit-4396c45df56802c9')
 		},
 		methods: {
 			// 预览图片

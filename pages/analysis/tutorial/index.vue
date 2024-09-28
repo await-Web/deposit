@@ -10,7 +10,6 @@
 			</text>
 			<text style="color: red;padding-bottom: 40rpx;font-size: 22px;">快手，抖音，B站操作方法一样的，找到作品分享链接复制链接即可</text>
 		</view>
-
 	</view>
 </template>
 
@@ -20,6 +19,10 @@
 			return {
 				src: ['/static/image/1.jpg', '/static/image/2.jpg', '/static/image/3.jpg', '/static/image/4.jpg']
 			}
+		},
+		onLoad() {
+			/* 插屏广告 */
+			this.tools.wxAd('adunit-9156fed958d6c7e0')
 		},
 		methods: {
 			// 预览图片
