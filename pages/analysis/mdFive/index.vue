@@ -58,7 +58,7 @@
 				videosize: ""
 			}
 		},
-		onLoad() {
+		onShow() {
 			/* 插屏广告 */
 			this.tools.wxAd('adunit-01e6071545c4bd0e')
 		},

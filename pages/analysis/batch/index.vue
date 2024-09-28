@@ -52,6 +52,10 @@
 				},
 			}
 		},
+		onShow() {
+			/* 插屏广告 */
+			this.tools.wxAd('adunit-96019007c902fedd')
+		},
 		onLoad(e) {
 			this.bathData = JSON.parse(decodeURIComponent(e.config));
 			this.dataList = this.bathData.aweme_list

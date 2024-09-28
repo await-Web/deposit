@@ -20,7 +20,7 @@
 				src: ['/static/image/1.jpg', '/static/image/2.jpg', '/static/image/3.jpg', '/static/image/4.jpg']
 			}
 		},
-		onLoad() {
+		onShow() {
 			/* 插屏广告 */
 			this.tools.wxAd('adunit-9156fed958d6c7e0')
 		},

@@ -50,7 +50,7 @@
 				detialData: {}
 			}
 		},
-		onLoad(e) {
+		onShow(e) {
 			this.detialData = JSON.parse(decodeURIComponent(e.config));
 			/* 插屏广告 */
 			this.tools.wxAd('adunit-4396c45df56802c9')
