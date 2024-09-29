@@ -50,10 +50,12 @@
 				detialData: {}
 			}
 		},
-		onShow(e) {
-			this.detialData = JSON.parse(decodeURIComponent(e.config));
+		onShow() {
 			/* 插屏广告 */
 			this.tools.wxAd('adunit-4396c45df56802c9')
+		},
+		onLoad(e) {
+			this.detialData = JSON.parse(decodeURIComponent(e.config));
 		},
 		methods: {
 			// 预览图片

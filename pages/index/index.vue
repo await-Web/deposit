@@ -13,9 +13,9 @@
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
 				<kxSwitch @change="switchChange"></kxSwitch>
-				<kxInput v-model="url" placeholder="此处粘贴视频分享链接" addonAfter="主页解析" @afterClick="authorWorkWatermark"
+				<kxInput v-model="url" placeholder="此处粘贴主页分享链接" addonAfter="主页解析" @afterClick="authorWorkWatermark"
 					v-if="isBach" />
-				<kxInput v-model="url" placeholder="此处粘贴视频分享链接" addonAfter="解析" @afterClick="watermark" v-else />
+				<kxInput v-model="url" placeholder="此处粘贴作品分享链接" addonAfter="解析" @afterClick="watermark" v-else />
 			</view>
 			<view class="apply-list">
 				<view class="part">
@@ -146,6 +146,7 @@
 			//批量解析开关
 			switchChange(e) {
 				if (e) {
+					this.url = '';
 					this.$refs.uToast.show({
 						title: '主页解析目前仅支持抖音',
 						type: 'warning',

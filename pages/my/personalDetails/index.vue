@@ -97,8 +97,10 @@
 			})
 		},
 		onShow() {
-			this.init()
 			this.tools.wxAd('adunit-bf8c3f5c7164b61b')
+		},
+		onLoad() {
+			this.init()
 		},
 		computed: {
 			userInfo() {
