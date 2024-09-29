@@ -44,6 +44,9 @@
 				bindadclose="onAdclose" bindaderror="onAdError"></video> -->
 			<ad unit-id="adunit-a702b9c32c152cb0" ad-type="video" ad-theme="white"></ad>
 		</view>
+		<view v-if="isAdmin" style="position: fixed;bottom: 20rpx;left: 0; right: 0; text-align: center;">
+			{{version}}
+		</view>
 	</view>
 </template>
 
@@ -63,16 +66,26 @@
 				titleStyle: {
 					color: '#606266'
 				},
+				version: ''
 			}
 		},
 		computed: {
 			userData() {
 				return userStore
+			},
+			isAdmin() {
+				return this.tools.isAdminRole()
 			}
 		},
 		onShow() {
-			this.init()
 			this.tools.wxAd('adunit-234bb9ed27692ab4')
+		},
+		onLoad() {
+			this.init()
+			// #ifdef MP-WEIXIN
+			const accountInfo = wx.getAccountInfoSync();
+			this.version = accountInfo.miniProgram.version
+			// #endif
 		},
 		methods: {
 			init() {
