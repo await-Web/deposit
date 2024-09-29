@@ -77,6 +77,11 @@
 	const db = uniCloud.database();
 	const analysisTable = db.collection('analysis-dataLog')
 	const setJumpAppletTable = db.collection('jump-applet')
+	const usersTable = db.collection('uni-id-users')
+	import {
+		useUserStore
+	} from "@/store/user.js"
+	const userStore = useUserStore()
 	import {
 		getVoucher,
 		watermark,
@@ -107,13 +112,36 @@
 			currentUser() {
 				let hostUserInfo = uni.getStorageSync('uni-id-pages-userInfo') || {}
 				return hostUserInfo
-			}
+			},
+			userData() {
+				return userStore.userInfo
+			},
 		},
 		onLoad() {
 			this.share()
 			this.getVoucher()
+			// this.getUserList()
+			// this.upDateUserInfo()
 		},
 		methods: {
+			async upDateUserInfo() {
+				const dbCmd = db.command
+				let res = await usersTable.where({
+					watermark_count: dbCmd.eq(1),
+					cumulative: dbCmd.eq(1)
+				}).update({
+					watermark_count: 0,
+					cumulative: 0,
+				})
+			},
+			// getUserList() {
+			// 	uniCloud.callFunction({
+			// 		name: 'getUserList',
+			// 	}).then(res => {
+
+			// 	});
+			// },
+
 			share() {
 				//分享
 				// #ifdef MP-WEIXIN
@@ -158,11 +186,18 @@
 
 			//短视频解析
 			watermark() {
+				let todayCount = this.userData.watermark_count++
+				let allCount = this.userData.cumulative++
+				let updateData = {
+					watermark_count: todayCount,
+					cumulative: allCount
+				}
 				//订阅
 				if (!this.url) return this.$u.toast("分享链接不能为空")
 				watermark({
 					link: this.url
 				}).then(res => {
+					// userStore.updateUserInfo(updateData)
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
 					let imgUrl = this.ensureHttps(data.imageSrc)
 					let videoUrl = this.ensureHttps(data.videoSrc)
@@ -182,14 +217,10 @@
 			},
 			/* 添加解析记录 */
 			async setDataLog() {
-				let todayCount = ++this.todayCount
-				let allCount = ++this.allCount
 				await analysisTable.add({
 					dateTimestamp: this.tools.getCurrentDateTime('timestamp'),
 					date: this.tools.getCurrentDateTime(),
-					watermarkObj: this.detialData,
-					todayCount,
-					allCount
+					watermarkObj: this.detialData
 				})
 			},
 			/* 跳转相关 */

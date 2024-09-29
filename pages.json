@@ -49,6 +49,11 @@
 			"style": {
 				"navigationBarTitleText": "教程"
 			}
+		}, {
+			"path": "wallpaper/index",
+			"style": {
+				"navigationBarTitleText": ""
+			}
 		}]
 	}, {
 		"root": "pages/my",
