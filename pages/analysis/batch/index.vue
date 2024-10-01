@@ -12,6 +12,7 @@
 				</view>
 			</view>
 		</mescroll-body>
+		<kxCustomer></kxCustomer>
 	</view>
 </template>
 <script>

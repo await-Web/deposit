@@ -22,6 +22,7 @@
 				<button type="primary" @click="submit()" :loading="loading">提交</button>
 			</view>
 		</uni-section>
+		<kxCustomer></kxCustomer>
 	</view>
 </template>
 <script>

@@ -1,10 +1,6 @@
 <template>
 	<view class="tool-v">
 		<view class="statement u-text-center u-m-t-20">所有视频,图片归平台及作者所有，本应用不储存任何内容</view>
-		<!-- 首页banner1 -->
-		<!-- <view class="u-m-b-20 u-m-t-20">
-			<ad-custom unit-id="adunit-82d9c74417201fca" ad-intervals="30"></ad-custom>
-		</view> -->
 		<!-- 首页 -->
 		<view class=" u-m-t-20 u-m-b-20">
 			<ad unit-id="adunit-7e1857e697875fb9" ad-type="video" ad-theme="black"></ad>
@@ -28,6 +24,11 @@
 								<text class="u-font-40 item-icon icon-kx icon-kx-duanju"
 									:style="{ background:  '#f2b0ff' }" />
 								<text class="u-font-24 u-line-1 item-text">热播短剧</text>
+							</view>
+							<view class="item u-flex-col u-col-center" @click="jumWebview('6')">
+								<text class="u-font-40 item-icon icon-kx icon-kx-jilu"
+									:style="{ background:  '#ff0000' }" />
+								<text class="u-font-24 u-line-1 item-text">历史记录</text>
 							</view>
 							<view class="item u-flex-col u-col-center" @click="jumWebview('1')">
 								<text class="u-font-40 item-icon icon-kx icon-kx-check-circle"
@@ -64,13 +65,11 @@
 				<ad-custom unit-id="adunit-3d5d8bfadac4e954" ad-intervals="30"></ad-custom>
 			</view> -->
 			<!-- 首页banner3 -->
-			<!-- <view class=" u-m-t-20 u-m-b-20">
+			<view class=" u-m-t-20 u-m-b-20">
 				<ad-custom unit-id="adunit-4a47ba5eacd6fa5d" ad-intervals="30"></ad-custom>
-			</view> -->
+			</view>
 		</view>
-		<button class="com-addBtn" open-type="contact">
-			<u-icon name="kefu-ermai" size="48" color="#fff" />
-		</button>
+		<kxCustomer></kxCustomer>
 	</view>
 </template>
 <script>
@@ -93,8 +92,8 @@
 			return {
 				// url: "5 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 tfV4QR6Wqo0X0LZ 😆 http://xhslink.com/a/tyU2rTEncSiW，复制本条信息，打开【小红书】App查看精彩内容！",
 				// url: 'https://v.kuaishou.com/X8x7xF 出租半边床位"你附近100米的人 "你的女神已上线 "夸她就行 该作品在快手被播放过2.2万次，点击链接，打开【快手】直接观看！',
-				// url: '58 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 aCBhfKrXNijYQME 😆 https://xhslink.com/a/2bcRfA1WOyjW，复制本条信息，打开【小红书】App查看精彩内容！',
-				url: '',
+				url: '58 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 aCBhfKrXNijYQME 😆 https://xhslink.com/a/2bcRfA1WOyjW，复制本条信息，打开【小红书】App查看精彩内容！',
+				// url: '',
 				todayCount: 0,
 				allCount: 0,
 				detialData: {},
@@ -225,49 +224,52 @@
 			},
 			/* 跳转相关 */
 			jumWebview(type) {
-				if (type == '1') {
+				const navigateToMiniProgram = (appId, path, envVersion = 'release') => {
 					uni.navigateToMiniProgram({
-						appId: 'wx51f6121324b84fa8', //目标小程序appid
-						path: '/pages/index/index', //需要打开的目标路径
-						envVersion: 'release', //小程序版本：develop（开发版），trial（体验版），release（正式版）
+						appId,
+						path,
+						envVersion,
 						success(res) {
-							// 打开成功
-						}
-					})
-				} else if (type == '2') {
-					uni.navigateToMiniProgram({
-						appId: 'wx51f6121324b84fa8', //目标小程序appid
-						path: '/pages/index/wallpaper', //需要打开的目标路径
-						envVersion: 'release', //小程序版本：develop（开发版），trial（体验版），release（正式版）
-						success(res) {
-							// 打开成功
-						}
-					})
-				} else if (type == '3') {
-					uni.navigateTo({
-						url: '/pages/analysis/mdFive/index'
-					});
-				} else if (type == '5') {
-					// 打开成功
-					this.jumpApplet()
-					uni.navigateToMiniProgram({
-						appId: 'wxda2c3eef7d7e3413', //目标小程序appid
-						path: '/pages/home/index?id=1817925578915618817&memberId=1825489540767150081', //需要打开的目标路径
-						envVersion: 'release', //小程序版本：develop（开发版），trial（体验版），release（正式版）
-						success(res) {
-							console.log(res, 33);
-
+							// 可以在这里添加统一的成功处理逻辑  
+							console.log('小程序打开成功', res);
 						},
 						fail(err) {
-							console.log(err, 24154);
+							// 可以在这里添加统一的失败处理逻辑  
+							console.error('小程序打开失败', err);
 						}
-					})
-				} else {
-					uni.navigateTo({
-						url: '/pages/analysis/tutorial/index'
 					});
+				};
+
+				switch (type) {
+					case '1':
+						navigateToMiniProgram('wx51f6121324b84fa8', '/pages/index/index');
+						break;
+					case '2':
+						navigateToMiniProgram('wx51f6121324b84fa8', '/pages/index/wallpaper');
+						break;
+					case '3':
+						uni.navigateTo({
+							url: '/pages/analysis/mdFive/index'
+						});
+						break;
+					case '5':
+						this.jumpApplet();
+						navigateToMiniProgram('wxda2c3eef7d7e3413',
+							'/pages/home/index?id=1817925578915618817&memberId=1825489540767150081');
+						break;
+					case '6':
+						uni.navigateTo({
+							url: '/pages/my/dataLog/index'
+						});
+						break;
+					default:
+						uni.navigateTo({
+							url: '/pages/analysis/tutorial/index'
+						});
+						break;
 				}
 			},
+			//跳转到短剧小程序
 			async jumpApplet() {
 				await setJumpAppletTable.add({
 					dateTimestamp: this.tools.getCurrentDateTime('timestamp'),

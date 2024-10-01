@@ -40,13 +40,16 @@
 			</view>
 		</view>
 		<view class="wx-ad">
-			<!-- <video class="ad-video" ad-unit-id="adunit-a702b9c32c152cb0" bindadplay="onAdplay" bindadload="onAdload"
-				bindadclose="onAdclose" bindaderror="onAdError"></video> -->
 			<ad unit-id="adunit-a702b9c32c152cb0" ad-type="video" ad-theme="white"></ad>
+		</view>
+		<!-- my2 -->
+		<view class="wx-ad u-m-b-20 u-m-t-20">
+			<ad-custom unit-id="adunit-82d9c74417201fca" ad-intervals="30"></ad-custom>
 		</view>
 		<view v-if="isAdmin" style="position: fixed;bottom: 20rpx;left: 0; right: 0; text-align: center;">
 			{{version}}
 		</view>
+		<kxCustomer></kxCustomer>
 	</view>
 </template>
 

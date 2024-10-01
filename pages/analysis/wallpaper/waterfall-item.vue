@@ -8,6 +8,7 @@
 				<view class="img-tip-btn">放大</view>
 			</view>
 		</view>
+		<kxCustomer></kxCustomer>
 	</view>
 </template>
 <script>

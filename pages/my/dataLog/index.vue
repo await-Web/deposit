@@ -1,6 +1,6 @@
 <template>
 	<view class="wallpaper">
-		<view class="dataLog-tabs u-m-t-20">
+		<view class="dataLog-tabs u-m-t-20 notice-warp">
 			<u-tabs :list="list" :is-scroll="false" v-model="current" @change="change"></u-tabs>
 		</view>
 		<mescroll-body ref="mescrollRef" @down="downCallback" :down="downOption" :sticky="false" @up="upCallback"
@@ -16,6 +16,7 @@
 				</view>
 			</view>
 		</mescroll-body>
+		<kxCustomer></kxCustomer>
 	</view>
 </template>
 <script>
@@ -61,6 +62,9 @@
 					textNoMore: "没有更多数据",
 				},
 			}
+		},
+		onShow() {
+			this.tools.wxAd('adunit-8aeaed1b11c8ec0d')
 		},
 		computed: {
 			currentUser() {
@@ -159,6 +163,7 @@
 					name: 'getDataLog',
 					data: query,
 				}).then(res => {
+					this.tools.wxAd('adunit-8aeaed1b11c8ec0d')
 					let list = res.result.data || []
 					this.mescroll.endSuccess(list.length);
 					if (page.num == 1) this.imgList = [];
@@ -168,7 +173,6 @@
 		}
 	}
 </script>
-
 <style lang="scss">
 	page {
 		background-color: #09081a;
@@ -177,13 +181,27 @@
 	.wallpaper {
 		padding: 0 20rpx 20rpx 20rpx;
 
+		.notice-warp {
+			z-index: 9;
+			position: fixed;
+			top: var(--window-top);
+			left: 0;
+			width: 100%;
+			height: 80rpx;
+			/*对应mescroll-body的top值*/
+			font-size: 26rpx;
+			text-align: center;
+			border-radius: 100rpx;
+		}
+
 		.dataLog-tabs {
 			width: 100%;
-			height: 100%;
+			padding: 0 20rpx;
 
 			::v-deep .u-tabs {
 				border-radius: 100rpx;
-				opacity: 0.6;
+				opacity: 0.8;
+				background-color: #09081a;
 			}
 		}
 

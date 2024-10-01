@@ -1,40 +1,43 @@
 <template>
 	<view>
-		<view class=" u-m-t-20 u-m-b-20">
-			<ad-custom unit-id="adunit-3632b21645b42b52" ad-intervals="30"></ad-custom>
-		</view>
-		<view class="u-flex-col content  u-p-l-20 u-p-r-20">
-			<!-- 图片 -->
-			<view class="imgs-box u-flex" v-if="detialData?.imageAtlas?.length">
-				<scroll-view scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
-					@scroll="scroll">
-					<view class="u-flex scroll-box">
-						<view class="img-item " v-for="(item,index) in detialData.imageAtlas" :key="index">
-							<image :src="item" class="image-sty" @tap="previewImage(index)"></image>
-							<u-button type="primary" size="mini" @click="handleDownloads(item,'img')"
-								style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
+		<view class="">
+			<view class=" u-m-t-20 u-m-b-20">
+				<ad-custom unit-id="adunit-3632b21645b42b52" ad-intervals="30"></ad-custom>
+			</view>
+			<view class="u-flex-col content  u-p-l-20 u-p-r-20">
+				<!-- 图片 -->
+				<view class="imgs-box u-flex" v-if="detialData?.imageAtlas?.length">
+					<scroll-view scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
+						@scroll="scroll">
+						<view class="u-flex scroll-box">
+							<view class="img-item " v-for="(item,index) in detialData.imageAtlas" :key="index">
+								<image :src="item" class="image-sty" @tap="previewImage(index)"></image>
+								<u-button type="primary" size="mini" @click="handleDownloads(item,'img')"
+									style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
+							</view>
 						</view>
-					</view>
-				</scroll-view>
-			</view>
-			<!-- 视频 -->
-			<view class="u-m-t-20 video-box" v-else>
-				<video id="myVideo" :src="detialData.videoSrc" controls></video>
-			</view>
-			<!-- 描述 -->
-			<!-- <view class="u-flex-col u-m-t-10">
-				<text class="u-font-30 u-m-b-10">{{detialData.title}}</text>
-				<text>{{detialData.description}}</text>
-			</view> -->
-			<view class="u-flex btn-box" v-if="detialData.videoSrc">
-				<u-button type="primary" size="medium"
-					@click="handleDownloads(detialData.videoSrc,'video')">下载视频</u-button>
-				<u-button type="primary" size="medium"
-					@click="handleDownloads(detialData.imageSrc,'img')">下载封面</u-button>
-				<u-button type="success" size="medium" @click="copy(detialData.videoSrc)">复制无水印视频链接</u-button>
-				<u-button type="success" size="medium" @click="copy(detialData.imageSrc)">复制无水印封面链接</u-button>
+					</scroll-view>
+				</view>
+				<!-- 视频 -->
+				<view class="u-m-t-20 video-box" v-else>
+					<video id="myVideo" :src="detialData.videoSrc" controls></video>
+				</view>
+				<!-- 描述 -->
+				<!-- <view class="u-flex-col u-m-t-10">
+					<text class="u-font-30 u-m-b-10">{{detialData.title}}</text>
+					<text>{{detialData.description}}</text>
+				</view> -->
+				<view class="u-flex btn-box" v-if="detialData.videoSrc">
+					<u-button type="primary" size="medium"
+						@click="handleDownloads(detialData.videoSrc,'video')">下载视频</u-button>
+					<u-button type="primary" size="medium"
+						@click="handleDownloads(detialData.imageSrc,'img')">下载封面</u-button>
+					<u-button type="success" size="medium" @click="copy(detialData.videoSrc)">复制无水印视频链接</u-button>
+					<u-button type="success" size="medium" @click="copy(detialData.imageSrc)">复制无水印封面链接</u-button>
+				</view>
 			</view>
 		</view>
+		<kxCustomer></kxCustomer>
 	</view>
 </template>
 <script>
