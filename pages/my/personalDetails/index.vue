@@ -14,6 +14,7 @@
 						<uni-data-checkbox v-model="formData.gender" :localdata="genderList" name="gender" />
 					</uni-forms-item>
 				</uni-forms>
+				<!-- 个人信息详情页 -->
 				<view class="adContainer">
 					<ad unit-id="adunit-4a528e994a5a03c9" ad-type="video" ad-theme="white"></ad>
 				</view>

@@ -44,7 +44,7 @@
 				<ad unit-id="adunit-4433522faa41f728" ad-type="video" ad-theme="black"></ad>
 			</view>
 			<!-- MD5banner -->
-			<ad-custom unit-id="adunit-2c5c8c2c8eabc901" ad-intervals="30"></ad-custom>
+			<!-- <ad-custom unit-id="adunit-2c5c8c2c8eabc901" ad-intervals="30"></ad-custom> -->
 		</view>
 		<kxCustomer></kxCustomer>
 	</view>

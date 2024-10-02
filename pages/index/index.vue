@@ -30,6 +30,11 @@
 									:style="{ background:  '#ff0000' }" />
 								<text class="u-font-24 u-line-1 item-text">历史记录</text>
 							</view>
+							<!-- 	<view class="item u-flex-col u-col-center" @click="jumWebview('7')">
+								<text class="u-font-40 item-icon icon-kx icon-kx-jilu"
+									:style="{ background:  '#ff0000' }" />
+								<text class="u-font-24 u-line-1 item-text">美团红包</text>
+							</view> -->
 							<view class="item u-flex-col u-col-center" @click="jumWebview('1')">
 								<text class="u-font-40 item-icon icon-kx icon-kx-check-circle"
 									:style="{ background:  '#00ff00' }" />
@@ -65,9 +70,9 @@
 				<ad-custom unit-id="adunit-3d5d8bfadac4e954" ad-intervals="30"></ad-custom>
 			</view> -->
 			<!-- 首页banner3 -->
-			<view class=" u-m-t-20 u-m-b-20">
+			<!-- <view class=" u-m-t-20 u-m-b-20">
 				<ad-custom unit-id="adunit-4a47ba5eacd6fa5d" ad-intervals="30"></ad-custom>
-			</view>
+			</view> -->
 		</view>
 		<kxCustomer></kxCustomer>
 	</view>
@@ -262,6 +267,9 @@
 							url: '/pages/my/dataLog/index'
 						});
 						break;
+						// case '7':
+						// 	navigateToMiniProgram('wxfd2e340553ce980d', '/pages/home/index');
+						// 	break;
 					default:
 						uni.navigateTo({
 							url: '/pages/analysis/tutorial/index'
