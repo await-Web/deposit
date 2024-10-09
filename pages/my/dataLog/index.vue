@@ -2,9 +2,13 @@
 	<view class="wallpaper">
 		<view class="dataLog-tabs u-m-t-20 notice-warp">
 			<u-tabs :list="list" :is-scroll="false" v-model="current" @change="change"></u-tabs>
+			<view class=" u-m-t-20 u-m-b-20">
+				<!-- 首页历史记录页横屏 -->
+				<ad-custom unit-id="adunit-4a47ba5eacd6fa5d" ad-intervals="30"></ad-custom>
+			</view>
 		</view>
 		<mescroll-body ref="mescrollRef" @down="downCallback" :down="downOption" :sticky="false" @up="upCallback"
-			:up="upOption" :bottombar="false" @init="mescrollInit" top="20">
+			:up="upOption" :bottombar="false" @init="mescrollInit" top="370">
 			<view class="content">
 				<view class="u-flex img-item-box">
 					<view class="img-item u-flex" v-for="(item,index) in imgList" :key="index"
@@ -42,14 +46,13 @@
 					use: false,
 					auto: false,
 				},
-				pageSize: 20,
 				skipNumber: 1,
 				upOption: {
 					use: true,
 					auto: true,
 					page: {
 						num: 0,
-						size: 10,
+						size: 20,
 						time: null,
 					},
 					empty: {
@@ -81,7 +84,8 @@
 				path: '/pages/analysis/wallpaper/index'
 			}
 		},
-		onLoad() {
+		onLoad(e) {
+			this.current = e.index || 0
 			this.getVoucher()
 			this.share()
 		},
@@ -168,6 +172,18 @@
 					this.mescroll.endSuccess(list.length);
 					if (page.num == 1) this.imgList = [];
 					this.imgList = this.imgList.concat(list);
+					const uniqueByWatermarkLink = (arr) => {
+						const seenLinks = new Set();
+						return arr.filter(item => {
+							const link = item.watermarkObj.link;
+							if (!seenLinks.has(link)) {
+								seenLinks.add(link);
+								return true;
+							}
+							return false;
+						});
+					};
+					this.imgList = uniqueByWatermarkLink(this.imgList);
 				});
 			}
 		}

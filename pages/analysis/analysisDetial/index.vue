@@ -16,6 +16,9 @@
 								<u-button type="primary" size="mini" @click="handleDownloads(item,'img')"
 									style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
 							</view>
+							<view class="glare-effect" @click="jump">
+								更多壁纸
+							</view>
 						</view>
 					</scroll-view>
 				</view>
@@ -60,6 +63,11 @@
 			this.detialData = JSON.parse(decodeURIComponent(e.config));
 		},
 		methods: {
+			jump() {
+				uni.navigateTo({
+					url: '/pages/my/dataLog/index?index=1'
+				});
+			},
 			// 预览图片
 			previewImage(i) {
 				uni.previewImage({
@@ -199,6 +207,10 @@
 </script>
 
 <style lang="scss" scoped>
+	page {
+		background-color: #f0f2f6;
+	}
+
 	.title-box {
 		display: flex;
 		align-items: center;
@@ -219,6 +231,8 @@
 	}
 
 	.content {
+		background-color: #f0f2f6;
+
 		.notice-bar-box {
 			border-radius: 40rpx;
 			margin-top: 20rpx;
@@ -279,6 +293,33 @@
 						width: 100%;
 						height: 100%;
 					}
+				}
+
+				.glare-effect {
+					position: relative;
+					width: 48%;
+					height: 460rpx;
+					/* 根据需要设置高度 */
+					background-color: rgba(255, 255, 255, 0.8);
+					/* 背景颜色 */
+					backdrop-filter: blur(10px);
+					/* 模糊度 */
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 56rpx;
+					letter-spacing: 8px;
+				}
+
+				.glare-effect::before {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					backdrop-filter: blur(10px);
+					// background-color: rgba(255, 255, 255, 0.6);
 				}
 			}
 		}
