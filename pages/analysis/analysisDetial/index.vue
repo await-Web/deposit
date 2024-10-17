@@ -302,25 +302,28 @@
 					/* 根据需要设置高度 */
 					background-color: rgba(255, 255, 255, 0.8);
 					/* 背景颜色 */
-					backdrop-filter: blur(10px);
+					backdrop-filter: blur(8rpx);
 					/* 模糊度 */
 					display: flex;
 					align-items: center;
 					justify-content: center;
 					font-size: 56rpx;
-					letter-spacing: 8px;
+					letter-spacing: 8rpx;
+
+
+					&::before {
+						content: '';
+						position: absolute;
+						top: 0;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						backdrop-filter: blur(2rpx);
+						// background-color: rgba(255, 255, 255, 0.4);
+					}
 				}
 
-				.glare-effect::before {
-					content: '';
-					position: absolute;
-					top: 0;
-					left: 0;
-					right: 0;
-					bottom: 0;
-					backdrop-filter: blur(10px);
-					// background-color: rgba(255, 255, 255, 0.6);
-				}
+
 			}
 		}
 	}
