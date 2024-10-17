@@ -17,7 +17,7 @@
 									style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
 							</view>
 							<view class="glare-effect" @click="jump">
-								更多壁纸
+								查看更多壁纸
 							</view>
 						</view>
 					</scroll-view>
@@ -307,8 +307,9 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					font-size: 56rpx;
+					font-size: 36rpx;
 					letter-spacing: 8rpx;
+					color: orangered;
 
 
 					&::before {
@@ -318,7 +319,7 @@
 						left: 0;
 						right: 0;
 						bottom: 0;
-						backdrop-filter: blur(2rpx);
+						// backdrop-filter: blur(2rpx);
 						// background-color: rgba(255, 255, 255, 0.4);
 					}
 				}
