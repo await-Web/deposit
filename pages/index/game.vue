@@ -3,12 +3,12 @@
 		<!-- 对战信息 -->
 		<view class="goBang-user u-flex">
 			<view class="box u-flex-col">
-				<u-icon class="goBang-chess" name="/static/image/black.png" size="50"></u-icon>
+				<view class="piece piece-color-black"></view>
 				<view class="u-m-t-20 fontBold c757575">电脑</view>
 			</view>
 			<view class="u-font-40">VS</view>
 			<view class="u-flex-col box">
-				<u-icon class="goBang-chess" name="/static/image/white.png" size="80"></u-icon>
+				<view class="piece piece-color-white"></view>
 				<view class="u-m-t-20 fontBold c757575">玩家</view>
 			</view>
 		</view>
@@ -33,7 +33,8 @@
 					<view class="goBang-check-tr" v-for="(item1,index1) in chessBoard" :key="index1">
 						<view class="goBang-check-td" v-for="(item2,index2) in item1" :key="index2"
 							@click="playerChess(index1,index2)">
-							<image class="goBang-check-chess" :src="player[item2]" v-if="item2!=0"></image>
+							<view class="piece" v-if="item2!=0"
+								:class="item2 == 2 ? 'piece-color-white' : 'piece-color-black'"></view>
 						</view>
 					</view>
 				</view>
@@ -68,11 +69,6 @@
 	export default {
 		data() {
 			return {
-				player: { // 0=没有子  1=电脑  2=玩家
-					0: null,
-					1: '/static/image/black.png',
-					2: '/static/image/white.png'
-				},
 				chessBoard: [], // 棋盘数组
 				isWho: true, // 该谁下
 				isOver: false, // 游戏是否结束
@@ -473,6 +469,8 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
+
+
 			}
 
 			.goBang-check-chess {
@@ -484,12 +482,26 @@
 		}
 	}
 
+	.piece {
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		box-shadow: 0 2rpx 10rpx 0rpx rgba(0, 0, 0, .5);
+	}
+
+	.piece-color-white {
+		background-color: white;
+	}
+
+	.piece-color-black {
+		background-color: black;
+	}
+
 	.goBang-btns {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		position: fixed;
-		bottom: 30rpx;
 		right: 0;
 		left: 0;
 		padding: 30rpx;
