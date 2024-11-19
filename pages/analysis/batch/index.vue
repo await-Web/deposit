@@ -20,6 +20,7 @@
 	const fs = wx.getFileSystemManager()
 	// #endif
 	import {
+		watermark,
 		authorWorkWatermark
 	} from "@/api/external.js";
 	import waterfallItem from './waterfall-item.vue'
@@ -62,7 +63,23 @@
 			this.dataList = this.bathData.aweme_list
 		},
 		methods: {
+			watermark(url) {
+				watermark({
+					link: url
+				}).then(res => {
+					let data = JSON.parse(JSON.stringify(res.data)) || {}
+					this.jumpDetial(data)
+				}).catch(err => {})
+			},
+			/* 查看详情 */
 			goDetails(item) {
+				if (this.bathData.linkPlatform === 'xiaohongshu') {
+					this.watermark(item.awemeLink)
+				} else {
+					this.jumpDetial(item)
+				}
+			},
+			jumpDetial(item) {
 				let imgUrl = this.ensureHttps(item.imageSrc)
 				let videoUrl = this.ensureHttps(item.videoSrc)
 				let imageAtlas = item.imageAtlas.map(o => this.ensureHttps(o))
