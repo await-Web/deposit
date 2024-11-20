@@ -40,11 +40,11 @@
 									:style="{ background:  '#00ff00' }" />
 								<text class="u-font-24 u-line-1 item-text">无广告版</text>
 							</view>
-							<view class="item u-flex-col u-col-center" @click="jumWebview('2')">
+							<!-- <view class="item u-flex-col u-col-center" @click="jumWebview('2')">
 								<text class="u-font-40 item-icon icon-kx icon-kx-bizhi3"
 									:style="{ background:  '#55ffff' }" />
 								<text class="u-font-24 u-line-1 item-text">更多壁纸</text>
-							</view>
+							</view> -->
 							<view class="item u-flex-col u-col-center" @click="jumWebview('3')">
 								<text class="u-font-40 item-icon icon-kx icon-kx-MD51"
 									:style="{ background:  '#008cff' }" />
@@ -65,10 +65,6 @@
 					</view>
 				</view>
 			</view>
-			<!-- 首页banner2 -->
-			<!-- 	<view class=" u-m-t-20 u-m-b-20">
-				<ad-custom unit-id="adunit-3d5d8bfadac4e954" ad-intervals="30"></ad-custom>
-			</view> -->
 		</view>
 		<kxCustomer></kxCustomer>
 	</view>
@@ -176,7 +172,7 @@
 				if (e) {
 					this.url = '';
 					this.$refs.uToast.show({
-						title: '主页解析目前仅支持抖音',
+						title: '主页解析支持抖音,快手,小红书',
 						type: 'warning',
 						duration: 2500
 					})
@@ -209,10 +205,21 @@
 						imageAtlas: imageAtlas
 					}
 					this.setDataLog()
-					uni.navigateTo({
-						url: '/pages/analysis/analysisDetial/index?config=' + encodeURIComponent(JSON
-							.stringify(this.detialData))
-					})
+					this.url = ""
+					uni.showModal({
+						title: '提示',
+						content: '取壁纸的小伙伴注意一下，这个方法不仅可以取我发布的作品！其他博主的发布的也是可以通过此方法获取到,包括快手，抖音等平台',
+						showCancel: false,
+						success: (res) => {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: '/pages/analysis/analysisDetial/index?config=' +
+										encodeURIComponent(JSON
+											.stringify(this.detialData))
+								})
+							}
+						}
+					});
 				}).catch(err => {})
 			},
 			/* 添加解析记录 */
@@ -246,7 +253,7 @@
 						navigateToMiniProgram('wx51f6121324b84fa8', '/pages/index/index');
 						break;
 					case '2':
-						navigateToMiniProgram('wx51f6121324b84fa8', '/pages/index/wallpaper');
+						// navigateToMiniProgram('wx51f6121324b84fa8', '/pages/index/wallpaper');
 						break;
 					case '3':
 						uni.navigateTo({
@@ -291,10 +298,21 @@
 				authorWorkWatermark(data).then(res => {
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
 					if (res.code == '1') {
-						uni.navigateTo({
-							url: '/pages/analysis/batch/index?config=' + encodeURIComponent(JSON
-								.stringify(data))
-						})
+						this.url = ""
+						uni.showModal({
+							title: '提示',
+							content: '取壁纸的小伙伴注意一下，这个方法不仅可以取我发布的作品！其他博主的发布的也是可以通过此方法获取到,包括快手，抖音等平台',
+							showCancel: false,
+							success: (res) => {
+								if (res.confirm) {
+									uni.navigateTo({
+										url: '/pages/analysis/batch/index?config=' +
+											encodeURIComponent(JSON
+												.stringify(data))
+									})
+								}
+							}
+						});
 					}
 				})
 			},
