@@ -157,7 +157,8 @@
 				})
 			},
 			//处理视频文件
-			handleVideoFile(dir, filePath, tempFilePath) {
+			async handleVideoFile(dir, filePath, tempFilePath) {
+				await fs.rmdirSync(`${wx.env.USER_DATA_PATH}/video/`, true)
 				this.handleDirectory(dir)
 				this.$nextTick(() => {
 					fs.saveFile({
@@ -167,6 +168,15 @@
 							this.saveVideoFile(res.savedFilePath)
 						},
 						fail(res) {
+							if (res.errMsg ==
+								'saveFile:fail exceeded the maximum size of the file storage limit') {
+								uni.showModal({
+									title: "保存失败",
+									content: "小程序缓存内存不足，请复制链接到浏览器下载",
+									showCancel: false
+								})
+								return
+							}
 							uni.showToast({
 								title: '下载失败，请查看是否打开下载相册权限或联系客服',
 								icon: "none"
@@ -183,9 +193,7 @@
 				} catch (e) {
 					try {
 						fs.mkdirSync(`${wx.env.USER_DATA_PATH}/${url}`, true)
-					} catch (e) {
-						console.error('fsmkdir', e)
-					}
+					} catch (e) {}
 				}
 			},
 			//复制
