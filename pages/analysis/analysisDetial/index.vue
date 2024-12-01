@@ -143,6 +143,7 @@
 				uni.saveVideoToPhotosAlbum({
 					filePath: tempFilePath,
 					success: (res) => {
+						this.delContents()
 						uni.showToast({
 							title: '已保存在手机相册中',
 							icon: 'none',
@@ -157,10 +158,18 @@
 					}
 				})
 			},
+			/* 删除目录 */
+			delContents() {
+				try {
+					fs.rmdirSync(`${wx.env.USER_DATA_PATH}/video`, true)
+				} catch (e) {
+					console.error('fsrmdir', e)
+				}
+			},
 			//处理视频文件
 			async handleVideoFile(dir, filePath, tempFilePath) {
-				await fs.rmdirSync(`${wx.env.USER_DATA_PATH}/video/`, true)
-				this.handleDirectory(dir)
+				await this.delContents()
+				await this.handleDirectory(dir)
 				this.$nextTick(() => {
 					fs.saveFile({
 						tempFilePath,
