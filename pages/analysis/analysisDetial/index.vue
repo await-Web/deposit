@@ -7,14 +7,25 @@
 			</view>
 			<view class="u-flex-col content  u-p-l-20 u-p-r-20">
 				<!-- 图片 -->
-				<view class="imgs-box u-flex" v-if="detialData?.imageAtlas?.length">
+				<view class="u-m-t-20 u-flex top-btn" v-if="imageAtlas?.length">
+					<u-button size="mini" type="primary" @click="batchDownload">批量下载</u-button>
+					<u-button size="mini" type="primary" class="u-m-l-10"
+						@click="multipleDownload">多选下载{{`(${multipleUrlList.length})`}}</u-button>
+				</view>
+				<view class="imgs-box u-flex" v-if="imageAtlas?.length">
 					<scroll-view scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
 						@scroll="scroll">
 						<view class="u-flex scroll-box">
-							<view class="img-item " v-for="(item,index) in detialData.imageAtlas" :key="index">
-								<image :src="item" class="image-sty" @tap="previewImage(index)"></image>
-								<u-button type="primary" size="mini" @click="handleDownloads(item,'img')"
-									style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
+							<view class="img-item-box" v-for="(item,index) in imageAtlas" :key="index">
+								<view class="img-item">
+									<view class="" style="position: absolute;top: 0;left: 4rpx;">
+										<u-checkbox @change="checkboxChange($event,item)" v-model="item.checked"
+											:name="index"></u-checkbox>
+									</view>
+									<image :src="item.url" class="image-sty" @tap="previewImage(index)"></image>
+									<u-button type="primary" size="mini" @click="handleDownloads(index,'img')"
+										style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
+								</view>
 							</view>
 							<view class="glare-effect" @click="jump">
 								查看更多壁纸
@@ -54,15 +65,99 @@
 				show: false,
 				showTips: false,
 				newTime: +new Date(),
-				detialData: {}
+				detialData: {},
+				batchCont: 0,
+				imageAtlas: [],
+				multipleUrlList: [],
+				isBatch: false,
+				isMultiple: false
 			}
 		},
 		onLoad(e) {
 			/* 插屏广告 */
 			this.tools.wxAd('adunit-4396c45df56802c9')
 			this.detialData = JSON.parse(decodeURIComponent(e.config));
+			this.imageAtlas = JSON.parse(JSON.stringify(this.detialData.imageAtlas))
+			this.handleImageAtlas()
 		},
 		methods: {
+			//处理图片数据
+			handleImageAtlas() {
+				if (this.imageAtlas?.length) {
+					this.imageAtlas = this.imageAtlas.map((element, i) => {
+						if (element) {
+							return {
+								url: element,
+								name: i
+							}
+						}
+					}).filter(item => item !== null)
+				}
+			},
+			// 批量下载
+			batchDownload() {
+				this.isBatch = true
+				this.batchCont = 0
+				this.$nextTick(() => {
+					this.showVideoAd()
+				})
+			},
+			// 多选下载
+			multipleDownload() {
+				this.isMultiple = true
+				this.batchCont = 0
+				if (!this.multipleUrlList.length) return this.$u.toast("至少选择一张")
+				this.$nextTick(() => {
+					this.showVideoAd()
+				})
+			},
+			//多选
+			checkboxChange(e, item) {
+				if (e.value) {
+					this.multipleUrlList.push(item)
+				} else {
+					this.multipleUrlList = this.multipleUrlList.filter(o => o.url != item.url)
+				}
+				this.multipleUrlList = [...new Set(this.multipleUrlList)]
+			},
+			// 激励广告
+			showVideoAd() {
+				let videoAd = null
+				if (wx.createRewardedVideoAd) {
+					videoAd = wx.createRewardedVideoAd({
+						adUnitId: 'adunit-61b3b48b7c3d1760'
+					})
+					videoAd.onLoad(() => {})
+					videoAd.onError((err) => {})
+					videoAd.onClose((res) => {
+						if (!res.isEnded) return uni.showModal({
+							title: "下载失败",
+							content: "还没看完呢！不能偷懒哦！",
+							confirmText: "重新开始",
+							success: (res) => {
+								if (res.confirm) this.showVideoAd()
+								if (res.cancel) this.resetValue()
+							}
+						})
+						this.handleDownloads(this.batchCont, 'img')
+					})
+				}
+				// 用户触发广告后，显示激励视频广告
+				if (videoAd) {
+					videoAd.show().catch(() => {
+						// 失败重试
+						videoAd.load().then(() => videoAd.show()).catch(err => {
+							console.error('激励视频 广告显示失败', err)
+						})
+					})
+				}
+			},
+			//重置部分值
+			resetValue() {
+				this.isBatch = false;
+				this.isMultiple = false
+				this.batchCont = 0
+			},
 			jump() {
 				uni.navigateTo({
 					url: '/pages/my/dataLog/index?index=1'
@@ -85,7 +180,9 @@
 				});
 			},
 			//处理解析后的数据
-			handleDownloads(url, type) {
+			handleDownloads(index, type) {
+				let imgData = this.isMultiple ? this.multipleUrlList : this.imageAtlas
+				let url = type === 'img' ? imgData[index].url : index
 				var downloadTask = uni.downloadFile({
 					url: url,
 					timeout: 6000000,
@@ -97,6 +194,7 @@
 						}
 					},
 					fail: (err) => {
+						this.resetValue()
 						if (err.errMsg == 'downloadFile:fail exceed max file size') {
 							uni.showModal({
 								title: "下载失败",
@@ -121,15 +219,32 @@
 			},
 			// 保存图片
 			saveImage(tempFilePath) {
+				let imgData = this.isMultiple ? this.multipleUrlList : this.imageAtlas
 				uni.saveImageToPhotosAlbum({
 					filePath: tempFilePath,
 					success: () => {
+						if ((this.isMultiple || this.isBatch) && this.batchCont < imgData.length) {
+							this.batchCont++
+							if (this.batchCont >= imgData.length) {
+								this.resetValue()
+								uni.showToast({
+									title: '已保存在手机相册中',
+									icon: 'none',
+								});
+								return
+							}
+							this.handleDownloads(this.batchCont, 'img')
+						}
 						uni.showToast({
 							title: '已保存在手机相册中',
 							icon: 'none',
 						});
 					},
 					fail: (err) => {
+						if (err.errMsg === 'saveImageToPhotosAlbum:fail cancel') {
+							this.isMultiple && (this.batchCont = 0, this.isMultiple = false);
+							return;
+						}
 						uni.showToast({
 							title: '无法保存到手机,复制无水印视频链接',
 							icon: 'none',
@@ -251,6 +366,15 @@
 	.content {
 		background-color: #f0f2f6;
 
+		.top-btn {
+			padding: 0 20rpx;
+			justify-content: flex-start;
+			border-radius: 8rpx;
+			width: 100%;
+			height: 88rpx;
+			background-color: #fff;
+		}
+
 		.notice-bar-box {
 			border-radius: 40rpx;
 			margin-top: 20rpx;
@@ -296,12 +420,16 @@
 				.scroll-box {
 					flex-wrap: wrap;
 					justify-content: space-between;
+
+					.img-item-box {
+						width: 48%;
+					}
 				}
 
 				.img-item {
 					position: relative;
-					width: 48%;
-					height: 460rpx;
+					width: 100%;
+					height: 440rpx;
 					align-items: center;
 					flex-wrap: wrap;
 					justify-content: space-between;
@@ -346,10 +474,4 @@
 			}
 		}
 	}
-
-
-
-
-
-	.content {}
 </style>
