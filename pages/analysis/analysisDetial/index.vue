@@ -18,7 +18,7 @@
 						<view class="u-flex scroll-box">
 							<view class="img-item-box" v-for="(item,index) in imageAtlas" :key="index">
 								<view class="img-item">
-									<view class="" style="position: absolute;top: 0;left: 4rpx;">
+									<view class="img-item-checkbox">
 										<u-checkbox @change="checkboxChange($event,item)" v-model="item.checked"
 											:name="index"></u-checkbox>
 									</view>
@@ -441,6 +441,20 @@
 					flex-wrap: wrap;
 					justify-content: space-between;
 					margin-bottom: 10rpx;
+
+					.img-item-checkbox {
+						position: absolute;
+						top: 8rpx;
+						left: 8rpx;
+
+						::v-deep .u-checkbox {
+							.u-checkbox__icon-wrap {
+								width: 48rpx !important;
+								height: 48rpx !important;
+								box-shadow: 2rpx 0rpx 7rpx 0rpx rgba(0, 0, 0, .23);
+							}
+						}
+					}
 
 					.image-sty {
 						width: 100%;

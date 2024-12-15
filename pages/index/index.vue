@@ -2,17 +2,23 @@
 	<view class="tool-v">
 		<view class="statement u-text-center u-m-t-20">所有视频,图片归平台及作者所有，本应用不储存任何内容</view>
 		<!-- 首页 -->
-		<view class=" u-m-t-20 u-m-b-20">
+		<view class=" u-m-t-20 u-m-b-20" v-if="!isAdmin">
 			<ad unit-id="adunit-7e1857e697875fb9" ad-type="video" ad-theme="black"></ad>
 		</view>
 		<u-toast ref="uToast" />
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
-				<kxSwitch @change="switchChange"></kxSwitch>
+				<view class="u-flex">
+					<kxSwitch @change="switchChange" labelColor="#008cff"></kxSwitch>
+					<kxSwitch @change="openTutorial" label="使用教程" class="u-m-l-10" labelColor="#07c160"></kxSwitch>
+				</view>
 				<kxInput v-model="url" placeholder="此处粘贴主页分享链接" addonAfter="主页解析" @afterClick="authorWorkWatermark"
 					v-if="isBach" />
 				<kxInput v-model="url" placeholder="此处粘贴作品分享链接" addonAfter="解析" @afterClick="watermark" v-else />
 			</view>
+			<video style="width: 100%;" class="u-m-t-20"
+				src="https://sns-video-al.xhscdn.com/stream/110/258/01e711ef7412e40b01037001929e0f7064_258.mp4"
+				v-if="tutorial" autoplay></video>
 			<view class="apply-list">
 				<view class="part">
 					<view class="caption u-line-1">
@@ -88,14 +94,15 @@
 		data() {
 			return {
 				// url: "5 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 tfV4QR6Wqo0X0LZ 😆 http://xhslink.com/a/tyU2rTEncSiW，复制本条信息，打开【小红书】App查看精彩内容！",
-				// url: 'https://v.kuaishou.com/X8x7xF 出租半边床位"你附近100米的人 "你的女神已上线 "夸她就行 该作品在快手被播放过2.2万次，点击链接，打开【快手】直接观看！',
+				// url: 'https://v.kuaishou.com/bSspZe "电动伐竹剪 该作品在快手被播放过74.3万次，点击链接，打开【快手】直接观看！',
 				// url: '50 手机壁纸分享官发布了一篇小红书笔记，快来看吧！ 😆 27o3wSkEhcyOObw 😆 http://xhslink.com/a/DnIo1pY0MID1，复制本条信息，打开【小红书】App查看精彩内容！',
 				url: '',
 				todayCount: 0,
 				allCount: 0,
 				detialData: {},
 				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk'],
-				isBach: false
+				isBach: false,
+				tutorial: false
 			}
 		},
 		onShareAppMessage() {
@@ -112,6 +119,9 @@
 			userData() {
 				return userStore.userInfo
 			},
+			isAdmin() {
+				return this.tools.isAdminRole()
+			}
 		},
 		onLoad() {
 			this.share()
@@ -178,8 +188,12 @@
 					})
 				}
 				this.isBach = e
-			},
 
+			},
+			//打开使用教程
+			openTutorial(e) {
+				this.tutorial = e
+			},
 			//短视频解析
 			watermark() {
 				let todayCount = this.userData.watermark_count++
