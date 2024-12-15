@@ -24,7 +24,7 @@
 									</view>
 									<image :src="item.url" class="image-sty" @tap="previewImage(index)"></image>
 									<u-button type="primary" size="mini" @click="handleDownloads(index,'img')"
-										style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
+										style="position: absolute;bottom: 8rpx;left: 8rpx;" v-if="isAdmin">下载</u-button>
 								</view>
 							</view>
 							<view class="glare-effect" @click="jump">
@@ -80,6 +80,11 @@
 			this.imageAtlas = JSON.parse(JSON.stringify(this.detialData.imageAtlas))
 			this.handleImageAtlas()
 		},
+		computed: {
+			isAdmin() {
+				return this.tools.isAdminRole()
+			}
+		},
 		methods: {
 			//处理图片数据
 			handleImageAtlas() {
@@ -99,6 +104,7 @@
 				this.isBatch = true
 				this.batchCont = 0
 				this.$nextTick(() => {
+					if (this.isAdmin) return this.handleDownloads(this.batchCont, 'img')
 					this.showVideoAd()
 				})
 			},
@@ -108,6 +114,7 @@
 				this.batchCont = 0
 				if (!this.multipleUrlList.length) return this.$u.toast("至少选择一张")
 				this.$nextTick(() => {
+					if (this.isAdmin) return this.handleDownloads(this.batchCont, 'img')
 					this.showVideoAd()
 				})
 			},
