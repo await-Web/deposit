@@ -18,7 +18,7 @@
 			</view>
 			<video style="width: 100%;" class="u-m-t-20"
 				src="https://sns-video-al.xhscdn.com/stream/110/258/01e711ef7412e40b01037001929e0f7064_258.mp4"
-				v-if="tutorial" autoplay></video>
+				v-if="tutorial"></video>
 			<view class="apply-list">
 				<view class="part">
 					<view class="caption u-line-1">
