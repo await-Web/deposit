@@ -8,16 +8,18 @@
 		<u-toast ref="uToast" />
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
-				<view class="u-flex">
-					<kxSwitch @change="switchChange" labelColor="#008cff"></kxSwitch>
+				<view class="u-flex u-m-b-10">
+					<kxSwitch @change="switchChange"></kxSwitch>
 					<kxSwitch @change="openTutorial" label="使用教程" class="u-m-l-10" labelColor="#07c160"></kxSwitch>
 				</view>
-				<kxInput v-model="url" placeholder="此处粘贴主页分享链接" addonAfter="主页解析" @afterClick="authorWorkWatermark"
-					v-if="isBach" />
-				<kxInput v-model="url" placeholder="此处粘贴作品分享链接" addonAfter="解析" @afterClick="watermark" v-else />
+				<u-input v-model="url" type="textarea" :border="true" :clearable="true" placeholder="此处粘贴分享链接" />
+				<view class="u-flex btn-box">
+					<u-button v-if="isBach" size="mini" type="primary" @click="processUrl">粘贴并解析</u-button>
+					<u-button size="mini" type="primary" @click="processUrl" v-else>粘贴并解析</u-button>
+				</view>
 			</view>
 			<video style="width: 100%;" class="u-m-t-20"
-				src="https://sns-video-al.xhscdn.com/stream/110/258/01e711ef7412e40b01037001929e0f7064_258.mp4"
+				src="https://mp-89c324e5-79a8-4fa7-ab60-b83b46b5dd6b.cdn.bspapp.com/tutorial/94069d034ceff71eefa709524a998643.mp4"
 				v-if="tutorial"></video>
 			<view class="apply-list">
 				<view class="part">
@@ -96,13 +98,14 @@
 				// url: "5 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 tfV4QR6Wqo0X0LZ 😆 http://xhslink.com/a/tyU2rTEncSiW，复制本条信息，打开【小红书】App查看精彩内容！",
 				// url: 'https://v.kuaishou.com/bSspZe "电动伐竹剪 该作品在快手被播放过74.3万次，点击链接，打开【快手】直接观看！',
 				// url: '50 手机壁纸分享官发布了一篇小红书笔记，快来看吧！ 😆 27o3wSkEhcyOObw 😆 http://xhslink.com/a/DnIo1pY0MID1，复制本条信息，打开【小红书】App查看精彩内容！',
-				url: '',
+				url: '50 手机壁纸分享官发布了一篇小红书笔记，快来看吧！ 😆 27o3wSkEhcyOObw 😆 http://xhslink.com/a/DnIo1pY0MID1，复制本条信息，打开【小红书】App查看精彩内容！',
 				todayCount: 0,
 				allCount: 0,
 				detialData: {},
 				subscribeId: ['UU3SfNdbK8zevjVTLyDd43aqeGvdO4V6ND-VcoIRTYk'],
 				isBach: false,
-				tutorial: false
+				tutorial: false,
+				isMP: false
 			}
 		},
 		onShareAppMessage() {
@@ -130,6 +133,37 @@
 			// this.upDateUserInfo()
 		},
 		methods: {
+			//读取剪切板
+			processUrl() {
+				if (!this.url) {
+					this.tryGetClipboardUrl();
+				} else {
+					this.handleWatermark();
+				}
+			},
+			tryGetClipboardUrl() {
+				uni.getClipboardData({
+					success: (res) => {
+						this.url = res.data;
+						if (!this.url) {
+							this.$u.toast("分享链接不能为空");
+							return;
+						}
+						this.handleWatermark();
+					},
+					fail: () => {
+						this.$u.toast("无法从剪贴板获取分享链接");
+					}
+				});
+			},
+			// 提取的公共方法
+			handleWatermark() {
+				if (this.isBach) {
+					this.authorWorkWatermark();
+				} else {
+					this.watermark();
+				}
+			},
 			async upDateUserInfo() {
 				const dbCmd = db.command
 				let res = await usersTable.where({
@@ -218,22 +252,25 @@
 						videoSrc: videoUrl,
 						imageAtlas: imageAtlas
 					}
-					this.setDataLog()
-					this.url = ""
-					uni.showModal({
-						title: '提示',
-						content: '取壁纸的小伙伴注意一下，这个方法不仅可以取我发布的作品！其他博主的发布的也是可以通过此方法获取到,包括快手，抖音等平台',
-						showCancel: false,
-						success: (res) => {
-							if (res.confirm) {
-								uni.navigateTo({
-									url: '/pages/analysis/analysisDetial/index?config=' +
-										encodeURIComponent(JSON
-											.stringify(this.detialData))
-								})
-							}
+					// 如果 isMP 为真，则处理 videoUrl 中的图像链接
+					if (this.isMP) {
+						const imgSrcHttpsRegex =
+							/<img\s+[^>]*?src=['"](https:[^'"]*)['"][^>]*?>/g;
+						const urls = [];
+						let match;
+						while ((match = imgSrcHttpsRegex.exec(videoUrl)) !== null) {
+							urls.push(match[1]);
 						}
-					});
+						// 只更新 imageAtlas 属性
+						this.detialData.imageAtlas = urls;
+					}
+					if (!this.isMP) this.setDataLog()
+					this.url = ""
+					uni.navigateTo({
+						url: '/pages/analysis/analysisDetial/index?config=' +
+							encodeURIComponent(JSON
+								.stringify(this.detialData))
+					})
 				}).catch(err => {})
 			},
 			/* 添加解析记录 */
@@ -313,20 +350,11 @@
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
 					if (res.code == '1') {
 						this.url = ""
-						uni.showModal({
-							title: '提示',
-							content: '取壁纸的小伙伴注意一下，这个方法不仅可以取我发布的作品！其他博主的发布的也是可以通过此方法获取到,包括快手，抖音等平台',
-							showCancel: false,
-							success: (res) => {
-								if (res.confirm) {
-									uni.navigateTo({
-										url: '/pages/analysis/batch/index?config=' +
-											encodeURIComponent(JSON
-												.stringify(data))
-									})
-								}
-							}
-						});
+						uni.navigateTo({
+							url: '/pages/analysis/batch/index?config=' +
+								encodeURIComponent(JSON
+									.stringify(data))
+						})
 					}
 				})
 			},
@@ -365,6 +393,11 @@
 				padding: 20rpx;
 				border-radius: 10rpx;
 				box-shadow: 1rpx 1rpx 2rpx 1rpx rgba(0, 0, 0, 0.1);
+
+				.btn-box {
+					justify-content: flex-end;
+					margin-top: 20rpx;
+				}
 			}
 		}
 	}

@@ -9,8 +9,6 @@
 				<!-- 图片 -->
 				<view class="u-m-t-20 u-flex top-btn" v-if="imageAtlas?.length">
 					<u-button size="mini" type="primary" @click="batchDownload">批量下载</u-button>
-					<u-button size="mini" type="primary" class="u-m-l-10"
-						@click="multipleDownload">多选下载{{`(${multipleUrlList.length})`}}</u-button>
 				</view>
 				<view class="imgs-box u-flex" v-if="imageAtlas?.length">
 					<scroll-view scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
@@ -24,7 +22,7 @@
 									</view>
 									<image :src="item.url" class="image-sty" @tap="previewImage(index)"></image>
 									<u-button type="primary" size="mini" @click="handleDownloads(index,'img')"
-										style="position: absolute;bottom: 8rpx;left: 8rpx;" v-if="isAdmin">下载</u-button>
+										style="position: absolute;bottom: 8rpx;left: 8rpx;">下载</u-button>
 								</view>
 							</view>
 							<view class="glare-effect" @click="jump">
@@ -69,8 +67,7 @@
 				batchCont: 0,
 				imageAtlas: [],
 				multipleUrlList: [],
-				isBatch: false,
-				isMultiple: false
+				isBatch: false
 			}
 		},
 		onLoad(e) {
@@ -83,6 +80,9 @@
 		computed: {
 			isAdmin() {
 				return this.tools.isAdminRole()
+			},
+			isMultiple() {
+				return this.multipleUrlList.length
 			}
 		},
 		methods: {
@@ -99,25 +99,6 @@
 					}).filter(item => item !== null)
 				}
 			},
-			// 批量下载
-			batchDownload() {
-				this.isBatch = true
-				this.batchCont = 0
-				this.$nextTick(() => {
-					if (this.isAdmin) return this.handleDownloads(this.batchCont, 'img')
-					this.showVideoAd()
-				})
-			},
-			// 多选下载
-			multipleDownload() {
-				this.isMultiple = true
-				this.batchCont = 0
-				if (!this.multipleUrlList.length) return this.$u.toast("至少选择一张")
-				this.$nextTick(() => {
-					if (this.isAdmin) return this.handleDownloads(this.batchCont, 'img')
-					this.showVideoAd()
-				})
-			},
 			//多选
 			checkboxChange(e, item) {
 				if (e.value) {
@@ -126,6 +107,15 @@
 					this.multipleUrlList = this.multipleUrlList.filter(o => o.url != item.url)
 				}
 				this.multipleUrlList = [...new Set(this.multipleUrlList)]
+			},
+			// 批量下载
+			batchDownload() {
+				this.isBatch = true
+				this.batchCont = 0
+				this.$nextTick(() => {
+					if (this.isAdmin) return this.handleDownloads(this.batchCont, 'img')
+					this.showVideoAd()
+				})
 			},
 			// 激励广告
 			showVideoAd() {
@@ -162,7 +152,6 @@
 			//重置部分值
 			resetValue() {
 				this.isBatch = false;
-				this.isMultiple = false
 				this.batchCont = 0
 			},
 			jump() {
