@@ -213,6 +213,7 @@
 
 			//批量解析开关
 			switchChange(e) {
+				this.url = '';
 				if (e) {
 					this.url = '';
 					this.$refs.uToast.show({
@@ -349,7 +350,8 @@
 				authorWorkWatermark(data).then(res => {
 					let data = JSON.parse(JSON.stringify(res.data)) || {}
 					if (res.code == '1') {
-						this.url = ""
+						this.url = "";
+						this.isBach = false
 						uni.navigateTo({
 							url: '/pages/analysis/batch/index?config=' +
 								encodeURIComponent(JSON
