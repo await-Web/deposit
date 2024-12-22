@@ -98,7 +98,7 @@
 				// url: "5 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 tfV4QR6Wqo0X0LZ 😆 http://xhslink.com/a/tyU2rTEncSiW，复制本条信息，打开【小红书】App查看精彩内容！",
 				// url: 'https://v.kuaishou.com/bSspZe "电动伐竹剪 该作品在快手被播放过74.3万次，点击链接，打开【快手】直接观看！',
 				// url: '50 手机壁纸分享官发布了一篇小红书笔记，快来看吧！ 😆 27o3wSkEhcyOObw 😆 http://xhslink.com/a/DnIo1pY0MID1，复制本条信息，打开【小红书】App查看精彩内容！',
-				url: '50 手机壁纸分享官发布了一篇小红书笔记，快来看吧！ 😆 27o3wSkEhcyOObw 😆 http://xhslink.com/a/DnIo1pY0MID1，复制本条信息，打开【小红书】App查看精彩内容！',
+				url: '',
 				todayCount: 0,
 				allCount: 0,
 				detialData: {},
@@ -223,7 +223,6 @@
 					})
 				}
 				this.isBach = e
-
 			},
 			//打开使用教程
 			openTutorial(e) {
