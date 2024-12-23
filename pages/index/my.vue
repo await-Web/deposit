@@ -47,8 +47,9 @@
 		<!-- 	<view class="wx-ad u-m-b-20 u-m-t-20">
 			<ad-custom unit-id="adunit-82d9c74417201fca" ad-intervals="30"></ad-custom>
 		</view> -->
-		<view v-if="isAdmin" style="position: fixed;bottom: 20rpx;left: 0; right: 0; text-align: center;">
-			{{version}}
+		<view style="position: fixed;bottom: 20rpx;left: 0; right: 0; text-align: center;">
+			<text>{{version}}</text>
+			<text @click="setClipboardData">{{`uid:${uid}`}}</text>
 		</view>
 		<kxCustomer></kxCustomer>
 	</view>
@@ -79,6 +80,9 @@
 			},
 			isAdmin() {
 				return this.tools.isAdminRole()
+			},
+			uid() {
+				return uniCloud.getCurrentUserInfo().uid
 			}
 		},
 		onShow() {
@@ -92,6 +96,13 @@
 			// #endif
 		},
 		methods: {
+			/* 复制uid */
+			setClipboardData() {
+				uni.setClipboardData({
+					data: this.uid,
+					success: function() {}
+				});
+			},
 			init() {
 				this.avatar = this.userData.userInfo.avatar
 				this.username = this.userData.userInfo.username
