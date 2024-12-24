@@ -74,7 +74,7 @@
 				imageAtlas: [],
 				multipleUrlList: [],
 				isBatch: false,
-				userIds: ['66c2d6bfee97eff9841d5892']
+				userIds: ['66f7b4d87c8de454cfb60c7b']
 			}
 		},
 		onLoad(e) {
