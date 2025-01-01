@@ -233,6 +233,7 @@
 			watermark() {
 				let todayCount = this.userData.watermark_count++
 				let allCount = this.userData.cumulative++
+				this.isMP = this.url.includes("mp.weixin.qq.com");
 				let updateData = {
 					watermark_count: todayCount,
 					cumulative: allCount
