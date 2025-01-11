@@ -1,11 +1,10 @@
 <template>
 	<view class="tool-v">
 		<view class="statement u-text-center u-m-t-20">所有视频,图片归平台及作者所有，本应用不储存任何内容</view>
-		<!-- 首页 -->
-		<view class=" u-m-t-20 u-m-b-20" v-if="!isAdmin">
-			<ad unit-id="adunit-7e1857e697875fb9" ad-type="video" ad-theme="black"></ad>
-		</view>
 		<u-toast ref="uToast" />
+		<view class="u-m-t-20" style="background-color: #fff;border-radius: 18rpx;">
+			<u-swiper :list="imgList"></u-swiper>
+		</view>
 		<view class="tool-content">
 			<view class="u-m-t-20 url-input">
 				<view class="u-flex u-m-b-10">
@@ -96,9 +95,16 @@
 	export default {
 		data() {
 			return {
-				// url: "5 365去水印助手发布了一篇小红书笔记，快来看吧！ 😆 tfV4QR6Wqo0X0LZ 😆 http://xhslink.com/a/tyU2rTEncSiW，复制本条信息，打开【小红书】App查看精彩内容！",
-				// url: 'https://v.kuaishou.com/bSspZe "电动伐竹剪 该作品在快手被播放过74.3万次，点击链接，打开【快手】直接观看！',
-				// url: '50 手机壁纸分享官发布了一篇小红书笔记，快来看吧！ 😆 27o3wSkEhcyOObw 😆 http://xhslink.com/a/DnIo1pY0MID1，复制本条信息，打开【小红书】App查看精彩内容！',
+				imgList: [{
+					image: 'https://mp-13dd589c-4432-4fb1-866e-9e4ead5819bb.cdn.bspapp.com/carousel/969.jpg',
+					id: 1
+				}, {
+					image: 'https://mp-13dd589c-4432-4fb1-866e-9e4ead5819bb.cdn.bspapp.com/carousel/99.jpg',
+					id: 2
+				}, {
+					image: 'https://mp-13dd589c-4432-4fb1-866e-9e4ead5819bb.cdn.bspapp.com/carousel/kEm74VfIMVSV75mxEd4G73Xvz4SIvg.jpg',
+					id: 3
+				}]
 				url: '',
 				todayCount: 0,
 				allCount: 0,
