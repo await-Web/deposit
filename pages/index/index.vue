@@ -104,7 +104,7 @@
 				}, {
 					image: 'https://mp-13dd589c-4432-4fb1-866e-9e4ead5819bb.cdn.bspapp.com/carousel/kEm74VfIMVSV75mxEd4G73Xvz4SIvg.jpg',
 					id: 3
-				}]
+				}],
 				url: '',
 				todayCount: 0,
 				allCount: 0,
