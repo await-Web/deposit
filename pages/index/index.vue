@@ -133,46 +133,7 @@
 				return this.tools.isAdminRole()
 			}
 		},
-		onShow() {
-			uni.showModal({
-				title: '重要提示',
-				content: '因存在重大业务调整，需要将当前运营的小程序（“365去水印助手”）完全废弃，现将该小程序下的业务及用户转移到新的小程序（灯泡去水印）。点击确定立即跳转至灯泡去水印',
-				success: function(res) {
-					if (res.confirm) {
-						uni.navigateToMiniProgram({
-							appId: "wx307a4b6152c1100f",
-							path: "/pages/index/index",
-							envVersion: "release",
-							success(res) {
-								// 可以在这里添加统一的成功处理逻辑  
-								console.log('小程序打开成功', res);
-							},
-							fail(err) {
-								// 可以在这里添加统一的失败处理逻辑  
-								console.error('小程序打开失败', err);
-							}
-						});
-					} else if (res.cancel) {
-						uni.navigateToMiniProgram({
-							appId: "wx307a4b6152c1100f",
-							path: "/pages/index/index",
-							envVersion: "release",
-							success(res) {
-								// 可以在这里添加统一的成功处理逻辑  
-								console.log('小程序打开成功', res);
-							},
-							fail(err) {
-								// 可以在这里添加统一的失败处理逻辑  
-								console.error('小程序打开失败', err);
-							}
-						});
-					}
-				}
-			});
-		},
 		onLoad() {
-
-
 			this.share()
 			this.getVoucher()
 			// this.getUserList()
